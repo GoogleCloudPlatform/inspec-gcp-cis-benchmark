@@ -1,0 +1,52 @@
+# Copyright 2019 The inspec-gcp-cis-benchmark Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+name: inspec-gcp-cis-benchmark
+title: "Inspec GCP CIS 1.0 Benchmark"
+maintainer: 
+copyright: Google
+copyright_email: copyright@google.com
+license: Apache-2.0
+summary: "Inspec Google Cloud Platform Center for Internet Security Benchmark v1.0 Profile"
+version: "0.1.0"
+attributes:
+- name: gcp_project_id
+  description: 'The GCP project identifier.'
+  type: string
+  value: "replace_with_your_gcp_project_id"
+- name: cis_version
+  description: 'The short version of the GCP CIS Benchmark'
+  value: '1.0'
+  type: string
+- name: cis_url
+  description: 'The URL to the GCP CIS Benchmark'
+  value: 'https://www.cisecurity.org/benchmark/google_cloud_computing_platform/'
+  type: string
+- name: sa_key_older_than_seconds
+  description: 'How many seconds SA keys should not be older than'
+  value: 7776000
+  type: numeric
+- name: kms_rotation_period_seconds
+  description: 'How many seconds KMS Keys should be last rotated (1 year)'
+  value: 31536000
+  type: numeric
+- name: bucket_logging_ignore_regex
+  description: 'Ignore this bucket by regex from requiring logging to be enabled'
+  # example = "-logging"
+  value: "replace-with-bucket-name-or-partial-match"
+  type: string
+depends:
+- name: inspec-gcp
+  git: https://github.com/inspec/inspec-gcp.git
+  tag: v0.21.4
