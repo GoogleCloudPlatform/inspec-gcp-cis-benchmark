@@ -16,10 +16,13 @@
 title 'Ensure VM disks for critical VMs are encrypted with CustomerSupplied Encryption Keys (CSEK)'
 
 gcp_project_id = attribute('gcp_project_id')
+gce_zones = attribute('gce_zones')
 cis_version = attribute('cis_version')
 cis_url = attribute('cis_url')
 control_id = "4.6"
 control_abbrev = "vms"
+
+gce_instances = get_gce_instances(gcp_project_id, gce_zones)
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 1.0
@@ -46,13 +49,11 @@ At least business critical VMs should have VM disks encrypted with CSEK."
   ref "GCP Docs", url: "https://cloud.google.com/compute/docs/reference/rest/v1/disks/get"
   ref "GCP Docs", url: "https://cloud.google.com/compute/docs/disks/customer-supplied-encryption#key_file"
 
-  google_compute_zones(project: gcp_project_id).zone_names.each do |zone|
-    google_compute_instances(project: gcp_project_id, zone: zone).instance_names.each do |instance|
-      next if instance =~ /^gke-/
-      describe "[#{gcp_project_id}] #{zone}/#{instance}" do
-        subject { google_compute_instance(project: gcp_project_id, zone: zone, name: instance) }
-        it { should have_disks_encrypted_with_csek }
-      end
+  gce_instances.each do |instance|
+    next if instance[:name] =~ /^gke-/
+    describe "[#{gcp_project_id}] Instance #{instance[:zone]}/#{instance[:name]}" do
+      subject { google_compute_instance(project: gcp_project_id, zone: instance[:zone], name: instance[:name]) }
+      it { should have_disks_encrypted_with_csek }
     end
   end
 
