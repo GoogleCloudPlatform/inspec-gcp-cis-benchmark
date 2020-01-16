@@ -44,7 +44,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   gke_clusters.each do |gke_cluster|
     describe "[#{gcp_project_id}] Cluster #{gke_cluster[:location]}/#{gke_cluster[:cluster_name]}" do
       subject { google_container_regional_cluster(project: gcp_project_id, location: gke_cluster[:location], name: gke_cluster[:cluster_name]) }
-      its('master_auth.client_certificate') { should cmp nil }
+      its('master_auth.client_certificate') { should_not cmp nil }
     end
   end
 end
