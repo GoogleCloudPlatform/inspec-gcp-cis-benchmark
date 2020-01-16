@@ -46,6 +46,11 @@ attributes:
   # example = "-logging"
   value: "replace-with-bucket-name-or-partial-match"
   type: string
+- name: gcp_gke_locations
+  description: 'The list of regions and/or zone names where GKE clusters are running. An empty array searches all locations'
+  type: array
+  value:
+    - ""
 depends:
 - name: inspec-gcp
   git: https://github.com/inspec/inspec-gcp.git

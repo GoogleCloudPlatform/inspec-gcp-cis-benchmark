@@ -16,12 +16,13 @@
 title 'Ensure Kubernetes Cluster is created with Client Certificate enabled'
 
 gcp_project_id = attribute('gcp_project_id')
+gcp_gke_locations = attribute('gcp_gke_locations')
 cis_version = attribute('cis_version')
 cis_url = attribute('cis_url')
 control_id = "7.12"
 control_abbrev = "gke"
 
-gke_clusters = get_gke_clusters(gcp_project_id)
+gke_clusters = get_gke_clusters(gcp_project_id, gcp_gke_locations)
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 1.0
@@ -43,7 +44,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   gke_clusters.each do |gke_cluster|
     describe "[#{gcp_project_id}] Cluster #{gke_cluster[:location]}/#{gke_cluster[:cluster_name]}" do
       subject { google_container_regional_cluster(project: gcp_project_id, location: gke_cluster[:location], name: gke_cluster[:cluster_name]) }
-      its('master_auth.client_certificate') { should_not cmp nil }
+      its('master_auth.client_certificate') { should cmp nil }
     end
   end
 end

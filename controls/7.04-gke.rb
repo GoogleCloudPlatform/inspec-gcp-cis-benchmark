@@ -16,12 +16,13 @@
 title 'Ensure Master authorized networks is set to Enabled on Kubernetes Engine Clusters'
 
 gcp_project_id = attribute('gcp_project_id')
+gcp_gke_locations = attribute('gcp_gke_locations')
 cis_version = attribute('cis_version')
 cis_url = attribute('cis_url')
 control_id = "7.4"
 control_abbrev = "gke"
 
-gke_clusters = get_gke_clusters(gcp_project_id)
+gke_clusters = get_gke_clusters(gcp_project_id, gcp_gke_locations)
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 1.0
@@ -48,8 +49,8 @@ Restricting access to an authorized network can provide additional security bene
   gke_clusters.each do |gke_cluster|
     describe "[#{gcp_project_id}] Cluster #{gke_cluster[:location]}/#{gke_cluster[:cluster_name]}" do
       subject { google_container_regional_cluster(project: gcp_project_id, location: gke_cluster[:location], name: gke_cluster[:cluster_name]) }
-      # TODO Inspec-GCP support
-      its('master_authorized_networks_config.cidr_blocks') { should exist }
+      its('master_authorized_networks_config.cidr_blocks') { should_not be_empty }
+      its('master_authorized_networks_config.cidr_blocks.to_s') { should_not match /0.0.0.0\/0/ }
     end
   end
 
