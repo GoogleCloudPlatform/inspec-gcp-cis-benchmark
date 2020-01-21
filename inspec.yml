@@ -51,6 +51,11 @@ attributes:
   type: array
   value:
     - ""
+- name: gce_zones
+  description: 'The list of zone names where GCE instances are running. An empty array searches all locations'
+  type: array
+  value:
+    - ""
 depends:
 - name: inspec-gcp
   git: https://github.com/inspec/inspec-gcp.git

@@ -16,10 +16,13 @@
 title 'Ensure that instances are not configured to use the default service account with full access to all Cloud APIs'
 
 gcp_project_id = attribute('gcp_project_id')
+gce_zones = attribute('gce_zones')
 cis_version = attribute('cis_version')
 cis_url = attribute('cis_url')
 control_id = "4.1"
 control_abbrev = "vms"
+
+gce_instances = get_gce_instances(gcp_project_id, gce_zones)
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 1.0
@@ -45,12 +48,10 @@ When an instance is configured with Compute Engine default service account with 
   ref "GCP Docs", url: "https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances"
   ref "GCP Docs", url: "https://cloud.google.com/compute/docs/access/service-accounts"
 
-  google_compute_zones(project: gcp_project_id).zone_names.each do |zone|
-    google_compute_instances(project: gcp_project_id, zone: zone).instance_names.each do |instance|
-      describe "[#{gcp_project_id}] #{zone}/#{instance}" do
-        subject { google_compute_instance(project: gcp_project_id, zone: zone, name: instance) }
-        its('service_account_scopes') { should_not include 'https://www.googleapis.com/auth/cloud-platform' }
-      end
+  gce_instances.each do |instance|
+    describe "[#{gcp_project_id}] Instance #{instance[:zone]}/#{instance[:name]}" do
+      subject { google_compute_instance(project: gcp_project_id, zone: instance[:zone], name: instance[:name]) }
+      its('service_account_scopes') { should_not include 'https://www.googleapis.com/auth/cloud-platform' }
     end
   end
 
