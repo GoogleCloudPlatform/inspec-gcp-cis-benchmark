@@ -16,12 +16,13 @@
 title 'Ensure Legacy Authorization is set to Disabled on Kubernetes Engine Clusters'
 
 gcp_project_id = attribute('gcp_project_id')
+gcp_gke_locations = attribute('gcp_gke_locations')
 cis_version = attribute('cis_version')
 cis_url = attribute('cis_url')
 control_id = "7.3"
 control_abbrev = "gke"
 
-gke_clusters = get_gke_clusters(gcp_project_id)
+gke_clusters = get_gke_clusters(gcp_project_id, gcp_gke_locations)
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 1.0
