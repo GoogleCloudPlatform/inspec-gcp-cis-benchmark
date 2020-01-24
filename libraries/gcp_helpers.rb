@@ -17,6 +17,8 @@ module GcpHelpers
 
     @gke_clusters_cached = false
     @gke_locations = []
+    @gce_instances_cached = false
+    @gce_zones = []
 
     def get_gke_clusters(gcp_project_id, gcp_gke_locations)
       unless @gke_clusters_cached == true
@@ -24,7 +26,7 @@ module GcpHelpers
         @cached_gke_clusters = []
         begin
           # If we weren't passed a specific list/array of zones/region names from inputs, search everywhere 
-          if gcp_gke_locations.empty?
+          if gcp_gke_locations.join.empty?
             @gke_locations = google_compute_zones(project: gcp_project_id).zone_names
             @gke_locations += google_compute_regions(project: gcp_project_id).region_names
           else
@@ -53,7 +55,7 @@ module GcpHelpers
         @cached_gce_instances = []
         begin
           # If we weren't passed a specific list/array of zone names from inputs, search everywhere 
-          if gce_zones.empty?
+          if gce_zones.join.empty?
             @gce_zones = google_compute_zones(project: gcp_project_id).zone_names
           else
             @gce_zones = gce_zones
