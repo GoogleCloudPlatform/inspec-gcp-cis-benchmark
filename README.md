@@ -26,6 +26,13 @@ The following GCP CIS v1.0 Benchmark Controls are not covered:
 * **sa_key_older_than_seconds** - (Default: 7776000, type: int, CIS IAM 1.6) - The maximum allowed age of GCP User-managed Service Account Keys (90 days in seconds).
 * **kms_rotation_period_seconds** - (Default: 31536000, type: int, CIS IAM 1.8) - The maximum allowed age of KMS keys (1 year in seconds).
 
+
+### Cloud Shell Walkthrough
+
+Use this Cloud Shell walkthrough for a hands-on example.
+
+[![Open this project in Cloud Shell](http://gstatic.com/cloudssh/images/open-btn.png)](https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/GoogleCloudPlatform/inspec-gcp-cis-benchmark&page=editor&tutorial=walkthrough.md)
+
 ### CLI Example
 
 ```
