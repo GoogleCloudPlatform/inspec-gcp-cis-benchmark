@@ -41,17 +41,7 @@ Pick a project where you have sufficient permissions. We'll use your user creden
 
 <walkthrough-project-setup></walkthrough-project-setup>
 
-To confirm that a project was selected, run the following command:
-
-```bash
-echo $GOOGLE_CLOUD_PROJECT
-```
-
-The output should be the project you selected. If the output is different, you can try select a project with this command:
-
-```bash
-gcloud config set project <YOUR-PROJECT-ID>
-```
+The project you selected is **{{project-id}}**. If this is blank, make sure you selected a project using the dropdown box above.
 
 Hit Next after you successfully selected your project.
 
@@ -61,7 +51,7 @@ Hit Next after you successfully selected your project.
 To scan your project against the CIS GCP Benchmark with InSpec, run:
 
 ```bash
-~/.gems/bin/inspec exec https://github.com/GoogleCloudPlatform/inspec-gcp-cis-benchmark.git -t gcp:// --input gcp_project_id=$GOOGLE_CLOUD_PROJECT
+~/.gems/bin/inspec exec https://github.com/GoogleCloudPlatform/inspec-gcp-cis-benchmark.git -t gcp:// --input gcp_project_id={{project-id}}
 ```
 
 This should take about two minutes to complete.
@@ -74,6 +64,10 @@ Test Summary: 107 successful, 88 failures, 7 skipped
 ```
 
 You can scroll up to see the details of passing and failing tests.
+
+To scan another project, press the Previous button and select a different project.
+
+Press Next if you're done scanning projects.
 
 ## Congratulations
 
