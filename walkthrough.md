@@ -51,7 +51,7 @@ Hit Next after you successfully selected your project.
 To scan your project against the CIS GCP Benchmark with InSpec, run:
 
 ```bash
-~/.gems/bin/inspec exec https://github.com/GoogleCloudPlatform/inspec-gcp-cis-benchmark.git -t gcp:// --input gcp_project_id={{project-id}}
+CHEF_LICENSE=accept-no-persist ~/.gems/bin/inspec exec https://github.com/GoogleCloudPlatform/inspec-gcp-cis-benchmark.git -t gcp:// --input gcp_project_id={{project-id}}
 ```
 
 This should take about two minutes to complete.
