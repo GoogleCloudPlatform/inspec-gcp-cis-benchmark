@@ -51,7 +51,7 @@ Hit Next after you successfully selected your project.
 To scan your project against the CIS GCP Benchmark with InSpec, run:
 
 ```bash
-CHEF_LICENSE=accept-no-persist ~/.gems/bin/inspec exec https://github.com/GoogleCloudPlatform/inspec-gcp-cis-benchmark.git -t gcp:// --input gcp_project_id={{project-id}}
+CHEF_LICENSE=accept-no-persist inspec exec https://github.com/GoogleCloudPlatform/inspec-gcp-cis-benchmark.git -t gcp:// --input gcp_project_id={{project-id}}
 ```
 
 This should take about two minutes to complete.
@@ -63,7 +63,7 @@ Profile Summary: 14 successful controls, 34 control failures, 7 controls skipped
 Test Summary: 107 successful, 88 failures, 7 skipped
 ```
 
-You can scroll up to see the details of passing and failing tests.
+You can scroll up to see the details of passing and failing controls.
 
 To scan another project, press the Previous button and select a different project.
 
