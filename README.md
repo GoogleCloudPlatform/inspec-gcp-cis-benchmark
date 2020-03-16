@@ -36,16 +36,24 @@ Use this Cloud Shell walkthrough for a hands-on example.
 ### CLI Example
 
 ```
-$ git clone https://github.com/googlecloudplatform/inspec-gcp-cis-benchmark
-$ cd inspec-gcp-cis-benchmark
-$ cat attrs.yml 
-gcp_project_id: <your-project-id>
-sa_key_older_than_seconds: 7776000
-kms_rotation_period_seconds: 31536000
+#install inspec
+$ gem install inspec-bin -v 4.18.51 --no-document --quiet
 ```
 
 ```
-$ inspec exec . -t gcp:// --attrs attrs.yml
+# make sure you're authenticated to GCP
+$ gcloud auth list
+
+# make sure that you selected a project to scan
+$ gcloud config list project 
+
+# with a project selected, this env var gets the right value
+$ echo $GOOGLE_CLOUD_PROJECT
+```
+
+```
+# scan your project with this profile
+$ CHEF_LICENSE=accept-no-persist inspec exec https://github.com/GoogleCloudPlatform/inspec-gcp-cis-benchmark.git -t gcp:// --input gcp_project_id=$GOOGLE_CLOUD_PROJECT
 ...snip...
 Profile Summary: 48 successful controls, 5 control failures, 7 controls skipped
 Test Summary: 166 successful, 7 failures, 7 skipped
