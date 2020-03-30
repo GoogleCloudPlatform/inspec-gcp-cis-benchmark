@@ -13,26 +13,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title 'Ensure user-managed/external keys for service accounts are rotated every 90 days or less'
+title 'Ensure that IAM users are not assigned Service Account User role at project level'
 
 gcp_project_id = attribute('gcp_project_id')
 cis_version = attribute('cis_version')
 cis_url = attribute('cis_url')
 control_id = "1.6"
 control_abbrev = "iam"
-sa_key_older_than_seconds = attribute('sa_key_older_than_seconds')
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 1.0
 
-  title "[#{control_abbrev.upcase}] Ensure user-managed/external keys for service accounts are rotated every 90 days or less"
+  title "[#{control_abbrev.upcase}] Ensure that IAM users are not assigned Service Account User role at project level"
 
-  desc "Service Account keys consist of a key ID (Private_key_Id) and Private key, which are used to sign programmatic requests that you make to Google cloud services accessible to that particular Service account. It is recommended that all Service Account keys are regularly rotated."
-  desc "rationale", "Rotating Service Account keys will reduce the window of opportunity for an access key that is associated with a compromised or terminated account to be used. Service Account keys should be rotated to ensure that data cannot be accessed with an old key which might have been lost, cracked, or stolen.
+  desc "It is recommended to assign Service Account User (iam.serviceAccountUser) role to a
+user for a specific service account rather than assigning the role to a user at project level."
+  desc "rationale", "A service account is a special Google account that belongs to application or a virtual machine (VM), instead of to an individual end user. Application/VM-Instance uses the service account to call the Google API of a service, so that the users aren't directly involved.  In addition to being an identity, a service account is a resource which has IAM policies attached to it. These policies determine who can use the service account.
 
-Each service account is associated with a key pair, which is managed by Google Cloud Platform (GCP). It is used for service-to-service authentication within GCP. Google rotates the keys daily.
+Users with IAM roles to update the App Engine and Compute Engine instances (such as App Engine Deployer or Compute Instance Admin) can effectively run code as the service accounts used to run these instances, and indirectly gain access to all the resources for which the service accounts has access. Similarly, SSH access to a Compute Engine instance may also provide the ability to execute code as that instance/Service account.
 
-GCP provides option to create one or more user-managed (also called as external key pairs) key pairs for use from outside GCP (for example, for use with Application Default Credentials). When a new key pair is created, user is enforced download the private key (which is not retained by Google). With external keys, users are responsible for security of the private key and other management operations such as key rotation. External keys can be managed by the IAM API, gcloud command-line tool, or the Service Accounts page in the Google Cloud Platform Console. GCP facilitates up to 10 external service account keys per service account to facilitate key rotation."
+As per business needs, there could be multiple user-managed service accounts configured for a project. Granting the iam.serviceAccountUser role to a user for a project gives the user access to all service accounts in the project, including service accounts that may be created in the future. This can result into elevation of privileges by using service accounts and corresponding Compute Engine instances.
+
+In order to implement least privileges best practices, IAM users should not be assigned Service Account User role at project level. Instead iam.serviceAccountUser role should be assigned to a user for a specific service account giving a user access to the service account."
 
   tag cis_scored: true
   tag cis_level: 1
@@ -41,17 +43,14 @@ GCP provides option to create one or more user-managed (also called as external 
   tag project: "#{gcp_project_id}"
 
   ref "CIS Benchmark", url: "#{cis_url}"
-  ref "GCP Docs", url: "https://cloud.google.com/iam/docs/understanding-service-accounts#managing_service_account_keys"
-  ref "GCP Docs", url: "https://cloud.google.com/sdk/gcloud/reference/iam/service-accounts/keys/list"
   ref "GCP Docs", url: "https://cloud.google.com/iam/docs/service-accounts"
+  ref "GCP Docs", url: "https://cloud.google.com/iam/docs/granting-roles-to-service-accounts"
+  ref "GCP Docs", url: "https://cloud.google.com/iam/docs/understanding-roles"
+  ref "GCP Docs", url: "https://cloud.google.com/iam/docs/granting-changing-revoking-access"
 
-  google_service_accounts(project: gcp_project_id).service_account_names.each do |name|
-    if google_service_account_keys(service_account: name).key_names.count > 1
-      describe "[#{gcp_project_id}] ServiceAccount Keys for #{name.to_s.sub('projects/', '').sub('serviceAccounts/','')} older than #{sa_key_older_than_seconds} seconds" do
-        subject { google_service_account_keys(service_account: name).where { (Time.now - sa_key_older_than_seconds > valid_after_time) } }
-        it { should_not exist }
-      end
-    end
+  describe "[#{gcp_project_id}] A project-level binding of ServiceAccountUser" do
+    subject { google_project_iam_bindings(project: gcp_project_id).where(iam_binding_role: 'roles/iam.serviceAccountUser') }
+    it { should_not exist }
   end
 
 end

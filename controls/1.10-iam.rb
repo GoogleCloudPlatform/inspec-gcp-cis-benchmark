@@ -13,42 +13,53 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title 'Ensure API keys are not created for a project'
+title 'Ensure Encryption keys are rotated within a period of 90 days'
 
 gcp_project_id = attribute('gcp_project_id')
 cis_version = attribute('cis_version')
 cis_url = attribute('cis_url')
 control_id = "1.10"
 control_abbrev = "iam"
+kms_rotation_period_seconds = attribute('kms_rotation_period_seconds')
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 1.0
 
-  title "[#{control_abbrev.upcase}] Ensure API keys are not created for a project"
+  title "[#{control_abbrev.upcase}] Ensure Encryption keys are rotated within a period of 90 days"
 
-  desc "Keys are insecure because they can be viewed publicly, such as from within a browser, or they can be accessed on a device where the key resides. It is recommended to use standard authentication flow instead."
-  desc "rationale", "Security risks involved in using API-Keys are below:
+  desc "Google Cloud Key Management Service stores cryptographic keys in a hierarchical structure designed for useful and elegant access control management. Access to resources.
 
-- API keys are a simple encrypted strings
-- API keys do not identify the user or the application making the API request
-- API keys are typically accessible to clients, making it easy to discover and steal an API key
+The format for the rotation schedule depends on the client library that is used. For the gcloud command-line tool, the next rotation time must be in ISO or RFC3339 format, and the rotation period must be in the form INTEGER[UNIT], where units can be one of seconds (s), minutes (m), hours (h) or days (d)."
 
-To avoid security risk by using API keys, it is recommended to use standard authentication
-flow instead."
+  desc "rationale", "Set a key rotation period and starting time. A key can be created with a specified rotation period, which is the time between when new key versions are generated automatically. A key can also be created with a specified next rotation time. A key is a named object representing a cryptographic key used for a specific purpose. The key material, the actual bits used for encryption, can change over time as new key versions are created.
 
-  tag cis_score: false
-  tag cis_level: 2
+A key is used to protect some corpus of data. You could encrypt a collection of files with the same key, and people with decrypt permissions on that key would be able to decrypt those files. Hence it's necessary to make sure rotation period is set to specific time."
+
+  tag cis_scored: true
+  tag cis_level: 1
   tag cis_gcp: "#{control_id}"
   tag cis_version: "#{cis_version}"
   tag project: "#{gcp_project_id}"
 
   ref "CIS Benchmark", url: "#{cis_url}"
-  ref "GCP Docs", url: "https://cloud.google.com/docs/authentication/api-keys"
+  ref "GCP Docs", url: "https://cloud.google.com/kms/docs/key-rotation#frequency_of_key_rotation"
 
-  describe "Not scored" do
-    before do
-      skip
+  # Get all "normal" regions and add "global"
+  locations = google_compute_regions(project: gcp_project_id).region_names
+  locations << 'global'
+ 
+  locations.each do |location|
+    google_kms_key_rings(project: gcp_project_id, location: location).key_ring_names.each do |keyring|
+      google_kms_crypto_keys(project: gcp_project_id, location: location, key_ring_name: keyring).crypto_key_names.each do |keyname|
+        key = google_kms_crypto_key(project: gcp_project_id, location: location, key_ring_name: keyring, name: keyname)
+        if key.primary_state == "ENABLED"
+          describe "[#{gcp_project_id}] #{key.name.to_s.sub('projects/', '').sub('locations/','').sub('keyRings/','')}" do
+            subject { key }
+            its('rotation_period_seconds') { should be <= kms_rotation_period_seconds }
+            its('next_rotation_time_date') { should be <= (Time.now + kms_rotation_period_seconds) }
+          end
+        end
+      end
     end
-    it {should eq "Not scored"}
   end
 end
