@@ -18,7 +18,7 @@ title 'Ensure VPC Flow logs is enabled for every subnet in VPC Network'
 gcp_project_id = attribute('gcp_project_id')
 cis_version = attribute('cis_version')
 cis_url = attribute('cis_url')
-control_id = "3.9"
+control_id = "3.8"
 control_abbrev = "networking"
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do

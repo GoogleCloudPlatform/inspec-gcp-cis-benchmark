@@ -19,7 +19,7 @@ gcp_project_id = attribute('gcp_project_id')
 gce_zones = attribute('gce_zones')
 cis_version = attribute('cis_version')
 cis_url = attribute('cis_url')
-control_id = "4.5"
+control_id = "4.6"
 control_abbrev = "vms"
 
 gce_instances = get_gce_instances(gcp_project_id, gce_zones)
