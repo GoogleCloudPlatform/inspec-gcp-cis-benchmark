@@ -18,7 +18,7 @@ title 'Ensure oslogin is enabled for a Project'
 gcp_project_id = attribute('gcp_project_id')
 cis_version = attribute('cis_version')
 cis_url = attribute('cis_url')
-control_id = "4.3"
+control_id = "4.4"
 control_abbrev = "vms"
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
