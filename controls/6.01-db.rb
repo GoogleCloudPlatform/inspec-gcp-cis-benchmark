@@ -13,21 +13,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title 'Ensure that Cloud SQL database instance requires all incoming connections to use SSL'
+title 'Ensure that MySql database instances are secure.'
+
+#title 'Ensure that MySql database instance does not allow anyone to connect with administrative privileges.'
 
 gcp_project_id = attribute('gcp_project_id')
 cis_version = attribute('cis_version')
 cis_url = attribute('cis_url')
-control_id = "6.1"
+control_id = "6.01"
 control_abbrev = "db"
+
+# 6.1.1
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 1.0
 
-  title "[#{control_abbrev.upcase}] Ensure that Cloud SQL database instance requires all incoming connections to use SSL"
+  title "[#{control_abbrev.upcase}] Ensure that MySql database instance does not allow anyone to connect with administrative privileges."
 
-  desc "It is recommended to enforce all incoming connections to SQL database instance to use SSL."
-  desc "rationale", "SQL database connections if successfully trapped (MITM); can reveal sensitive data like credentials, database queries, query outputs etc. For security, it is recommended to always use SSL encryption when connecting to your instance. This recommendation is applicable for Postgresql, MySql generation 1 and MySql generation 2 Instances."
+  desc "It is recommended to set a password for the administrative user (root by default) to prevent unauthorized access to the SQL database Instances.
+        This recommendation is applicable only for MySql Instances. PostgreSQL does not offer any setting for No Password from cloud console."
+  desc "rationale", "At the time of MySql Instance creation, not providing a administrative password allows anyone to connect to the SQL database instance with administrative privileges. Root password should be set to ensure only authorized users have these privileges."
 
   tag cis_scored: true
   tag cis_level: 1
@@ -36,12 +41,47 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   tag project: "#{gcp_project_id}"
 
   ref "CIS Benchmark", url: "#{cis_url}"
-  ref "GCP Docs", url: "https://cloud.google.com/sql/docs/postgres/configure-ssl-instance"
+  ref "GCP Docs", url: "https://cloud.google.com/sql/docs/mysql/create-manage-users"
+  ref "GCP Docs", url: "https://cloud.google.com/sql/docs/mysql/create-instance"
+
+  describe "Not scored" do
+    before do
+      skip
+    end
+    it {should eq "Not scored"}
+  end
+
+end
+
+# 6.1.2
+
+control "cis-gcp-#{control_id}-#{control_abbrev}" do
+  impact 1.1
+
+  title "[#{control_abbrev.upcase}] Ensure that the 'local_infile' database flag for a Cloud SQL Mysql instance is set to 'off'"
+
+  desc "It is recommended to set the local_infile database flag for a Cloud SQL MySQL instance to off."
+  desc "rationale", "The local_infile flag controls the server-side LOCAL capability for LOAD DATA statements. Depending on the local_infile setting, the server refuses or permits local data loading by clients that have LOCAL enabled on the client side."
+
+  tag cis_scored: true
+  tag cis_level: 1
+  tag cis_gcp: "#{control_id}"
+  tag cis_version: "#{cis_version}"
+  tag project: "#{gcp_project_id}"
+
+  ref "CIS Benchmark", url: "#{cis_url}"
+  ref "GCP Docs", url: "https://cloud.google.com/sql/docs/postgres/flags#setting_a_database_flag"
 
   google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
-    describe "[#{gcp_project_id}] CloudSQL #{db}" do
-      subject { google_sql_database_instance(project: gcp_project_id, database: db) }
-      it { should have_ip_configuration_require_ssl }
-    end
-  end
-end
+    describe.one do
+      google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.each do |flag|
+        puts flag.name
+        puts flag.value
+        describe flag.item do
+          it { should include(:name => 'local_infile') }
+          it { should include(:value => 'off') }
+        end
+      end
+	  end
+  end 
+end 

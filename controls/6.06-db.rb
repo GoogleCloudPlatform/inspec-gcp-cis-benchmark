@@ -13,21 +13,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title 'Ensure that Cloud SQL database instance requires all incoming connections to use SSL'
+title 'Ensure that Cloud SQL database instances do not have public IPs'
 
 gcp_project_id = attribute('gcp_project_id')
 cis_version = attribute('cis_version')
 cis_url = attribute('cis_url')
-control_id = "6.04"
+control_id = "6.06"
 control_abbrev = "db"
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 1.0
 
-  title "[#{control_abbrev.upcase}] Ensure that Cloud SQL database instance requires all incoming connections to use SSL"
+  title "[#{control_abbrev.upcase}] Ensure that Cloud SQL database instances do not have public IPs"
 
-  desc "It is recommended to enforce all incoming connections to SQL database instance to use SSL."
-  desc "rationale", "SQL database connections if successfully trapped (MITM); can reveal sensitive data like credentials, database queries, query outputs etc. For security, it is recommended to always use SSL encryption when connecting to your instance. This recommendation is applicable for Postgresql, MySql generation 1 and MySql generation 2 Instances."
+  desc "It is recommended to configure Second Generation Sql instance to use private IPs instead of public IPs."
+  desc "rationale", "To lower the organization's attack surface, Cloud SQL databases should not have public IPs. Private IPs provide improved network security and lower latency for your application."
 
   tag cis_scored: true
   tag cis_level: 1
@@ -39,9 +39,11 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   ref "GCP Docs", url: "https://cloud.google.com/sql/docs/postgres/configure-ssl-instance"
 
   google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
-    describe "[#{gcp_project_id}] CloudSQL #{db}" do
-      subject { google_sql_database_instance(project: gcp_project_id, database: db) }
-      it { should have_ip_configuration_require_ssl }
+    google_sql_database_instance(project: gcp_project_id, database: db).ip_addresses.each do |ip_address|
+      describe "[#{gcp_project_id}] CloudSQL #{db}" do
+        subject { ip_address }
+          its('type') { should_not include('PRIMARY') }  
+      end
     end
   end
 end
