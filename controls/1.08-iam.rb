@@ -45,11 +45,17 @@ Any user(s) should not have Service Account Admin and Service Account User, both
   ref "GCP Docs", url: "https://cloud.google.com/iam/docs/granting-roles-to-service-accounts"
 
   sa_admins = google_project_iam_binding(project: gcp_project_id, role: 'roles/iam.serviceAccountAdmin')
-  describe "[#{gcp_project_id}] roles/serviceAccountUser" do
-    subject { google_project_iam_binding(project: gcp_project_id, role: 'roles/iam.serviceAccountUser') }
-    sa_admins.members.each do |sa_admin|
-      its('members.to_s') { should_not match sa_admin }
+  if sa_admins.members.count == 0
+    impact 0
+    describe "[#{gcp_project_id}] does not contain users with roles/serviceAccountAdmin" do
+      skip "[#{gcp_project_id}] does not contain users with roles/serviceAccountAdmin"
     end
-  end  
-
+  else
+    describe "[#{gcp_project_id}] roles/serviceAccountUser" do
+      subject { google_project_iam_binding(project: gcp_project_id, role: 'roles/iam.serviceAccountUser') }
+      sa_admins.members.each do |sa_admin|
+        its('members.to_s') { should_not match sa_admin }
+      end
+    end  
+  end
 end
