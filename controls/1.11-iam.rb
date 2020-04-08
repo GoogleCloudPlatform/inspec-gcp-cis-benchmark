@@ -45,23 +45,29 @@ Any user(s) should not have Cloud KMS Admin and any of the Cloud KMS CryptoKey E
 
   kms_admins = google_project_iam_binding(project: gcp_project_id, role: 'roles/cloudkms.admin')
 
-  describe "[#{gcp_project_id}] roles/cloudkms.cryptoKeyEncrypter" do
-    subject { google_project_iam_binding(project: gcp_project_id, role: 'roles/cloudkms.cryptoKeyEncrypter') }
-    kms_admins.members.each do |kms_admin|
-      its('members.to_s') { should_not match kms_admin }
+  if kms_admins.members.count == 0
+    impact 0
+    describe "[#{gcp_project_id}] does not contain users with roles/CloudKMSAdmin" do
+      skip "[#{gcp_project_id}] does not contain users with roles/CloudKMSAdmin"
+    end
+  else
+    describe "[#{gcp_project_id}] roles/cloudkms.cryptoKeyEncrypter" do
+      subject { google_project_iam_binding(project: gcp_project_id, role: 'roles/cloudkms.cryptoKeyEncrypter') }
+      kms_admins.members.each do |kms_admin|
+        its('members.to_s') { should_not match kms_admin }
+      end
+    end
+    describe "[#{gcp_project_id}] roles/cloudkms.cryptoKeyDecrypter" do
+      subject { google_project_iam_binding(project: gcp_project_id, role: 'roles/cloudkms.cryptoKeyDecrypter') }
+      kms_admins.members.each do |kms_admin|
+        its('members.to_s') { should_not match kms_admin }
+      end
+    end
+    describe "[#{gcp_project_id}] roles/cloudkms.cryptoKeyEncrypterDecrypter" do
+      subject { google_project_iam_binding(project: gcp_project_id, role: 'roles/cloudkms.cryptoKeyEncrypterDecrypter') }
+      kms_admins.members.each do |kms_admin|
+        its('members.to_s') { should_not match kms_admin }
+      end
     end
   end
-  describe "[#{gcp_project_id}] roles/cloudkms.cryptoKeyDecrypter" do
-    subject { google_project_iam_binding(project: gcp_project_id, role: 'roles/cloudkms.cryptoKeyDecrypter') }
-    kms_admins.members.each do |kms_admin|
-      its('members.to_s') { should_not match kms_admin }
-    end
-  end
-  describe "[#{gcp_project_id}] roles/cloudkms.cryptoKeyEncrypterDecrypter" do
-    subject { google_project_iam_binding(project: gcp_project_id, role: 'roles/cloudkms.cryptoKeyEncrypterDecrypter') }
-    kms_admins.members.each do |kms_admin|
-      its('members.to_s') { should_not match kms_admin }
-    end
-  end
-  
 end
