@@ -73,6 +73,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   ref "CIS Benchmark", url: "#{cis_url}"
   ref "GCP Docs", url: "https://cloud.google.com/sql/docs/postgres/flags#setting_a_database_flag"
+  ref "GCP Docs", url: "https://www.postgresql.org/docs/9.6/runtime-config-logging.html#RUNTIME-CONFIG-LOGGING-WHAT"
 
   google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
     describe.one do
@@ -107,6 +108,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   ref "CIS Benchmark", url: "#{cis_url}"
   ref "GCP Docs", url: "https://cloud.google.com/sql/docs/postgres/flags#setting_a_database_flag"
+  ref "GCP Docs", url: "https://www.postgresql.org/docs/9.6/runtime-config-logging.html#RUNTIME-CONFIG-LOGGING-WHAT"
 
   google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
     describe.one do
@@ -142,6 +144,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   ref "CIS Benchmark", url: "#{cis_url}"
   ref "GCP Docs", url: "https://cloud.google.com/sql/docs/postgres/flags#setting_a_database_flag"
+  ref "GCP Docs", url: "https://www.postgresql.org/docs/9.6/runtime-config-logging.html#RUNTIME-CONFIG-LOGGING-WHAT"
 
   google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
     describe.one do
@@ -175,6 +178,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   ref "CIS Benchmark", url: "#{cis_url}"
   ref "GCP Docs", url: "https://cloud.google.com/sql/docs/postgres/flags#setting_a_database_flag"
+  ref "GCP Docs", url: "https://www.postgresql.org/docs/9.6/runtime-config-logging.html#RUNTIME-CONFIG-LOGGING-WHAT"
 
   google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
     describe.one do
@@ -207,6 +211,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   ref "CIS Benchmark", url: "#{cis_url}"
   ref "GCP Docs", url: "https://cloud.google.com/sql/docs/postgres/flags#setting_a_database_flag"
+  ref "GCP Docs", url: "https://www.postgresql.org/docs/9.6/runtime-config-logging.html#RUNTIME-CONFIG-LOGGING-WHAT"
 
   google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
     describe.one do
@@ -240,6 +245,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   ref "CIS Benchmark", url: "#{cis_url}"
   ref "GCP Docs", url: "https://cloud.google.com/sql/docs/postgres/flags#setting_a_database_flag"
+  ref "GCP Docs", url: "https://www.postgresql.org/docs/9.6/runtime-config-logging.html#RUNTIME-CONFIG-LOGGING-WHAT"
 
   google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
     describe.one do

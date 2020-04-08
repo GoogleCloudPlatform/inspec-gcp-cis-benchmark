@@ -70,7 +70,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   tag project: "#{gcp_project_id}"
 
   ref "CIS Benchmark", url: "#{cis_url}"
-  ref "GCP Docs", url: "https://cloud.google.com/sql/docs/postgres/flags#setting_a_database_flag"
+  ref "GCP Docs", url: "https://cloud.google.com/sql/docs/mysql/flags"
 
   google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
     describe.one do

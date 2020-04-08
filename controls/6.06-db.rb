@@ -30,13 +30,13 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   desc "rationale", "To lower the organization's attack surface, Cloud SQL databases should not have public IPs. Private IPs provide improved network security and lower latency for your application."
 
   tag cis_scored: true
-  tag cis_level: 1
+  tag cis_level: 2
   tag cis_gcp: "#{control_id}"
   tag cis_version: "#{cis_version}"
   tag project: "#{gcp_project_id}"
 
   ref "CIS Benchmark", url: "#{cis_url}"
-  ref "GCP Docs", url: "https://cloud.google.com/sql/docs/postgres/configure-ssl-instance"
+  ref "GCP Docs", url: "https://cloud.google.com/sql/docs/mysql/configure-private-ip"
 
   google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
     google_sql_database_instance(project: gcp_project_id, database: db).ip_addresses.each do |ip_address|
