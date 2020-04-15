@@ -13,30 +13,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title 'Ensure VPC Flow logs is enabled for every subnet in VPC Network'
+title 'Ensure no HTTPS or SSL proxy load balancers permit SSL policies with
+weak cipher suites'
 
 gcp_project_id = attribute('gcp_project_id')
 cis_version = attribute('cis_version')
 cis_url = attribute('cis_url')
-control_id = "3.8"
+control_id = "3.9"
 control_abbrev = "networking"
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 1.0
 
-  title "[#{control_abbrev.upcase}] Ensure VPC Flow logs is enabled for every subnet in VPC Network"
+  title "[#{control_abbrev.upcase}] Ensure no HTTPS or SSL proxy load balancers permit SSL policies with weak cipher suites"
 
-  desc "Flow Logs is a feature that enables you to capture information about the IP traffic going to and from network interfaces in your VPC Subnets. After you've created a flow log, you can view and retrieve its data in Stackdriver Logging. It is recommended that Flow Logs be enabled for every business critical VPC subnet."
-  desc "rationale", "VPC networks and subnetworks provide logically isolated and secure network partitions where you can launch GCP resources. When Flow Logs is enabled for a subnet, VMs within subnet starts reporting on all TCP and UDP flows. Each VM samples the TCP and UDP flows it sees, inbound and outbound, whether the flow is to or from another VM, a host in your on-premises datacenter, a Google service, or a host on the Internet. If two GCP VMs are communicating, and both are in subnets that have VPC Flow Logs enabled, both VMs report the flows.
-
-Flow Logs supports following use cases:
-
-- Network monitoring
-- Understanding network usage and optimizing network traffic expenses
-- Network forensics
-- Real-time security analysis
-
-Flow Logs provide visibility into network traffic for each VM inside the subnet and can be used to detect anomalous traffic or insight during security workflows."
+  desc "Secure Sockets Layer (SSL) policies determine what port Transport Layer Security (TLS) features clients are permitted to use when connecting to load balancers. To prevent usage of insecure features, SSL policies should use (a) at least TLS 1.2 with the MODERN profile; or (b) the RESTRICTED profile, because it effectively requires clients to use TLS 1.2 regardless of the chosen minimum TLS version; or (3) a CUSTOM profile that does not support any of the following features: TLS_RSA_WITH_AES_128_GCM_SHA256, TLS_RSA_WITH_AES_256_GCM_SHA384, TLS_RSA_WITH_AES_128_CBC_SHA, TLS_RSA_WITH_AES_256_CBC_SHA, TLS_RSA_WITH_3DES_EDE_CBC_SHA"
+  desc "rationale", "Load balancers are used to efficiently distribute traffic across multiple servers. Both SSL proxy and HTTPS load balancers are external load balancers, meaning they distribute traffic from the Internet to a GCP network. GCP customers can configure load balancer SSL policies with a minimum TLS version (1.0, 1.1, or 1.2) that clients can use to establish a connection, along with a profile (Compatible, Modern, Restricted, or Custom) that specifies permissible cipher suites. To comply with users using outdated protocols, GCP load balancers can be configured to permit insecure cipher suites. In fact, the GCP default SSL policy uses a minimum TLS versionls of 1.0 and a Compatible profile, which allows the widest range of insecure cipher suites. As a result, it is easy for customers to configure a load balancer without even knowing that they are permitting outdated cipher suites."
 
   tag cis_scored: true
   tag cis_level: 1
@@ -45,16 +37,47 @@ Flow Logs provide visibility into network traffic for each VM inside the subnet 
   tag project: "#{gcp_project_id}"
 
   ref "CIS Benchmark", url: "#{cis_url}"
-  ref "GCP Docs", url: "https://cloud.google.com/vpc/docs/using-flow-logs#enabling_vpc_flow_logging"
-  ref "GCP Docs", url: "https://cloud.google.com/vpc/"
+  ref "GCP Docs", url: "https://cloud.google.com/load-balancing/docs/use-ssl-policies"
+  ref "GCP Docs", url: "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-52r.pdf"
 
-  google_compute_regions(project: gcp_project_id).region_names.each do |region|
-    google_compute_subnetworks(project: gcp_project_id, region: region).where(enable_flow_log: false).subnetwork_names.each do |subnet|
-      describe "[#{gcp_project_id}] #{region}/#{subnet} without VPC Flow logs" do
-        subject { google_compute_subnetwork(project: gcp_project_id, region: region, name: subnet) }
-        its('name') { should cmp nil }
+  # All load balancers have custom/strong TLS profiles set
+  google_compute_target_https_proxies(project: gcp_project_id).names.each do |proxy|
+    describe "[#{gcp_project_id}] HTTPS Proxy: #{proxy}" do
+      subject { google_compute_target_https_proxy(project: gcp_project_id, name: proxy) }
+      it "should have a custom SSL policy configured" do
+        subject.ssl_policy.should_not cmp(nil)
       end
     end
   end
+  # Ensure SSL Policies use strong TLS
+  
 
+
+  google_compute_ssl_policies(project: gcp_project_id).names.each do |policy|
+    case google_compute_ssl_policy(project: gcp_project_id, name: policy).profile
+    when "MODERN"
+      describe "[#{gcp_project_id}] SSL Policy: #{policy}" do
+      subject { google_compute_ssl_policy(project: gcp_project_id, name: policy) }
+        it "should minimally require TLS 1.2" do
+          subject.min_tls_version.should cmp "TLS_1_2"
+        end
+      end
+
+    when "RESTRICTED"
+      describe "[#{gcp_project_id}] SSL Policy: #{policy} profile should be RESTRICTED" do
+        subject { google_compute_ssl_policy(project: gcp_project_id, name: policy).profile }
+          it {should cmp "RESTRICTED"}
+      end  
+    
+    when "CUSTOM"
+      describe "[#{gcp_project_id}] SSL Policy: #{policy} profile CUSTOM should not contain these cipher suites [TLS_RSA_WITH_AES_128_GCM_SHA256, TLS_RSA_WITH_AES_256_GCM_SHA384, TLS_RSA_WITH_AES_128_CBC_SHA,  TLS_RSA_WITH_AES_256_CBC_SHA, TLS_RSA_WITH_3DES_EDE_CBC_SHA] " do
+        subject { google_compute_ssl_policy(project: gcp_project_id, name: policy) }
+          its('custom_features') {should_not be_in ["TLS_RSA_WITH_AES_128_GCM_SHA256", "TLS_RSA_WITH_AES_256_GCM_SHA384" , "TLS_RSA_WITH_AES_128_CBC_SHA", "TLS_RSA_WITH_AES_256_CBC_SHA" , "TLS_RSA_WITH_3DES_EDE_CBC_SHA"]}
+      end
+    end
+  end
 end
+
+
+
+
