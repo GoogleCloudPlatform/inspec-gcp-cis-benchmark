@@ -85,17 +85,16 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
             end
           end
         else
-            describe "[#{gcp_project_id} , #{db} ] does not have database flags " do
-            subject { false }
+              describe "[#{gcp_project_id} , #{db} ] does not have database flags " do
+                subject { false }
                 it { should be true }
-            end
+              end
         end
-      #end
-    else 
-      impact 0 
-      describe "[#{gcp_project_id}] [#{db}] is not a MySQL databases " do
+      else 
+        impact 0 
+        describe "[#{gcp_project_id}] [#{db}] is not a MySQL databases " do
             skip "[#{gcp_project_id}] is not a MySQL databases"
-       end
+        end
     end 
   end 
 end 

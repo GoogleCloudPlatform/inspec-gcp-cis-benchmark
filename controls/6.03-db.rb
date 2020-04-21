@@ -53,7 +53,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
           it { should include(:value => 'off') }
         end
       end
-	  end
+    end
   end 
 end 
 
@@ -89,6 +89,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
           it { should include(:value => 'off') }
         end
       end
-	  end
+    end
   end 
 end 

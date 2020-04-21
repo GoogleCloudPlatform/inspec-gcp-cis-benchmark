@@ -48,7 +48,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
           it { should include(:value => 'on') }
         end
       end
-	  end
+    end
   end 
 end 
 
@@ -81,7 +81,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
           it { should include(:value => 'on') }
         end
       end
-	  end
+    end
   end 
 end 
 
@@ -114,7 +114,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
           it { should include(:value => 'on') }
         end
       end
-	  end
+    end
   end 
 end 
 
@@ -180,7 +180,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
           it { should include(:value => 'ERROR') }
         end
       end
-	  end
+    end
   end 
 end 
 
@@ -211,7 +211,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
           it { should include(:value => '0') }
         end
       end
-	  end
+    end
   end 
 end 
 
@@ -243,6 +243,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
           it { should include(:value => '-1') }
         end
       end
-	  end
+    end
   end 
 end 
