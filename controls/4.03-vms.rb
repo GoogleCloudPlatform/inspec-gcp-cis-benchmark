@@ -13,21 +13,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title 'Ensure oslogin is enabled for a Project'
+title "Ensure 'Block Project-wide SSH keys' is enabled for VM instances"
 
 gcp_project_id = attribute('gcp_project_id')
+gce_zones = attribute('gce_zones')
 cis_version = attribute('cis_version')
 cis_url = attribute('cis_url')
 control_id = "4.3"
 control_abbrev = "vms"
 
+gce_instances = get_gce_instances(gcp_project_id, gce_zones)
+
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 1.0
 
-  title "[#{control_abbrev.upcase}] Ensure oslogin is enabled for a Project"
+  title "[#{control_abbrev.upcase}] Ensure 'Block Project-wide SSH keys' enabled for VM instances"
 
-  desc "Enabling OS login binds SSH certificates to IAM users and facilitates effective SSH certificate management."
-  desc "rationale", "Enabling osLogin ensures that SSH keys used to connect to instances are mapped with IAM users. Revoking access to IAM user will revoke all the SSH keys associated with that particular user. It facilitates centralized and automated SSH key pair management which is useful in handling cases like response to compromised SSH key pairs and/or revocation of external/third-party/Vendor users."
+  desc "It is recommended to user Instance specific SSH key(s) instead of using common/shared project-wide SSH key(s) to access Instances."
+  desc "rationale", "Project-wide SSH keys are stored in Compute/Project-meta-data. Project wide SSH keys can be used to login into all the instances within project. Using project-wide SSH keys eases the SSH key management but if compromised, poses the security risk which can impact all the instances within project. It is recommended to use Instance specific SSH keys which can limit the attack surface if the SSH keys are compromised."
 
   tag cis_scored: true
   tag cis_level: 1
@@ -36,12 +39,14 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   tag project: "#{gcp_project_id}"
 
   ref "CIS Benchmark", url: "#{cis_url}"
-  ref "GCP Docs", url: "https://cloud.google.com/compute/docs/instances/managing-instance-access"
-  ref "GCP Docs", url: "https://cloud.google.com/compute/docs/instances/managing-instance-access#enable_oslogin"
+  ref "GCP Docs", url: "https://cloud.google.com/compute/docs/instances/adding-removing-ssh-keys"
 
-  describe "[#{gcp_project_id}]" do
-    subject { google_compute_project_info(project: gcp_project_id) }
-    it { should have_enabled_oslogin }
+  gce_instances.each do |instance|
+    next if instance[:name] =~ /^gke-/
+    describe "[#{gcp_project_id}] Instance #{instance[:zone]}/#{instance[:name]}" do
+      subject { google_compute_instance(project: gcp_project_id, zone: instance[:zone], name: instance[:name]) }
+      its('block_project_ssh_keys') { should cmp true }
+    end
   end
 
 end
