@@ -18,7 +18,7 @@ title 'Ensure that Cloud SQL database instances do not have public IPs'
 gcp_project_id = attribute('gcp_project_id')
 cis_version = attribute('cis_version')
 cis_url = attribute('cis_url')
-control_id = "6.06"
+control_id = "6.6"
 control_abbrev = "db"
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do

@@ -22,8 +22,8 @@ control_id = "6.2"
 control_abbrev = "db"
 
 # 6.2.1
-
-control "cis-gcp-#{control_id}-#{control_abbrev}" do
+sub_control_id = "#{control_id}.1"
+control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   impact 1.1
 
   title "[#{control_abbrev.upcase}] Ensure that the 'log_checkpoints' database flag for Cloud SQL PostgreSQL instance is set to 'on'"
@@ -33,7 +33,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   tag cis_scored: true
   tag cis_level: 1
-  tag cis_gcp: "#{control_id}"
+  tag cis_gcp: "#{sub_control_id}"
   tag cis_version: "#{cis_version}"
   tag project: "#{gcp_project_id}"
 
@@ -43,8 +43,6 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
     describe.one do
       google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.each do |flag|
-        puts flag.name
-        puts flag.value
         describe flag.item do
           it { should include(:name => 'log_checkpoints') }
           it { should include(:value => 'on') }
@@ -55,8 +53,8 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 end 
 
 # 6.2.2
-
-control "cis-gcp-#{control_id}-#{control_abbrev}" do
+sub_control_id = "#{control_id}.2"
+control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   impact 1.1
 
   title "[#{control_abbrev.upcase}] Ensure that the 'log_connections' database flag for Cloud SQL PostgreSQL instance is set to 'on'"
@@ -67,7 +65,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   tag cis_scored: true
   tag cis_level: 1
-  tag cis_gcp: "#{control_id}"
+  tag cis_gcp: "#{sub_control_id}"
   tag cis_version: "#{cis_version}"
   tag project: "#{gcp_project_id}"
 
@@ -78,8 +76,6 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
     describe.one do
       google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.each do |flag|
-        puts flag.name
-        puts flag.value
         describe flag.item do
           it { should include(:name => 'log_connections') }
           it { should include(:value => 'on') }
@@ -90,8 +86,8 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 end 
 
 # 6.2.3
-
-control "cis-gcp-#{control_id}-#{control_abbrev}" do
+sub_control_id = "#{control_id}.3"
+control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   impact 1.1
 
   title "[#{control_abbrev.upcase}] Ensure that the 'log_disconnections' database flag for Cloud SQL PostgreSQL instance is set to 'on'"
@@ -102,7 +98,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   tag cis_scored: true
   tag cis_level: 1
-  tag cis_gcp: "#{control_id}"
+  tag cis_gcp: "#{sub_control_id}"
   tag cis_version: "#{cis_version}"
   tag project: "#{gcp_project_id}"
 
@@ -113,8 +109,6 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
     describe.one do
       google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.each do |flag|
-        puts flag.name
-        puts flag.value
         describe flag.item do
           it { should include(:name => 'log_disconnections') }
           it { should include(:value => 'on') }
@@ -125,8 +119,8 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 end 
 
 # 6.2.4
-
-control "cis-gcp-#{control_id}-#{control_abbrev}" do
+sub_control_id = "#{control_id}.4"
+control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   impact 1.1
 
   title "[#{control_abbrev.upcase}] Ensure that the 'log_lock_waits' database flag for Cloud SQL PostgreSQL instance is set to 'on'"
@@ -138,7 +132,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   tag cis_scored: true
   tag cis_level: 1
-  tag cis_gcp: "#{control_id}"
+  tag cis_gcp: "#{sub_control_id}"
   tag cis_version: "#{cis_version}"
   tag project: "#{gcp_project_id}"
 
@@ -149,8 +143,6 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
     describe.one do
       google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.each do |flag|
-        puts flag.name
-        puts flag.value
         describe flag.item do
           it { should include(:name => 'log_lock_waits') }
           it { should include(:value => 'on') }
@@ -161,8 +153,8 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 end 
 
 # 6.2.5
-
-control "cis-gcp-#{control_id}-#{control_abbrev}" do
+sub_control_id = "#{control_id}.5"
+control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   impact 1.1
 
   title "[#{control_abbrev.upcase}] Ensure that the 'log_min_messages' database flag for Cloud SQL PostgreSQL instance is set appropriately"
@@ -172,7 +164,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   tag cis_scored: true
   tag cis_level: 1
-  tag cis_gcp: "#{control_id}"
+  tag cis_gcp: "#{sub_control_id}"
   tag cis_version: "#{cis_version}"
   tag project: "#{gcp_project_id}"
 
@@ -183,8 +175,6 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
     describe.one do
       google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.each do |flag|
-        puts flag.name
-        puts flag.value
         describe flag.item do
           it { should include(:name => 'log_min_error_statement') }
           it { should include(:value => 'ERROR') }
@@ -195,8 +185,8 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 end 
 
 # 6.2.6
-
-control "cis-gcp-#{control_id}-#{control_abbrev}" do
+sub_control_id = "#{control_id}.6"
+control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   impact 1.1
 
   title "[#{control_abbrev.upcase}] Ensure that the 'log_temp_files' database flag for Cloud SQL PostgreSQL instance is set to '0' (on)"
@@ -205,7 +195,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   desc "rationale", "If all temporary files are not logged, it may be more difficult to identify potential performance issues that may be due to either poor application coding or deliberate resource starvation attempts."
   tag cis_scored: true
   tag cis_level: 1
-  tag cis_gcp: "#{control_id}"
+  tag cis_gcp: "#{sub_control_id}"
   tag cis_version: "#{cis_version}"
   tag project: "#{gcp_project_id}"
 
@@ -216,8 +206,6 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
     describe.one do
       google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.each do |flag|
-        puts flag.name
-        puts flag.value
         describe flag.item do
           it { should include(:name => 'log_temp_files') }
           it { should include(:value => '0') }
@@ -228,8 +216,8 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 end 
 
 # 6.2.7
-
-control "cis-gcp-#{control_id}-#{control_abbrev}" do
+sub_control_id = "#{control_id}.7"
+control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   impact 1.1
 
   title "[#{control_abbrev.upcase}] Ensure that the 'log_min_duration_statement' database flag for Cloud SQL PostgreSQL instance is set to '-1' (disabled)"
@@ -239,7 +227,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   tag cis_scored: true
   tag cis_level: 1
-  tag cis_gcp: "#{control_id}"
+  tag cis_gcp: "#{sub_control_id}"
   tag cis_version: "#{cis_version}"
   tag project: "#{gcp_project_id}"
 
@@ -250,8 +238,6 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
     describe.one do
       google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.each do |flag|
-        puts flag.name
-        puts flag.value
         describe flag.item do
           it { should include(:name => 'log_min_duration_statement') }
           it { should include(:value => '-1') }

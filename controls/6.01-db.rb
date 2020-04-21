@@ -20,12 +20,12 @@ title 'Ensure that MySql database instances are secure.'
 gcp_project_id = attribute('gcp_project_id')
 cis_version = attribute('cis_version')
 cis_url = attribute('cis_url')
-control_id = "6.01"
+control_id = "6.1"
 control_abbrev = "db"
 
 # 6.1.1
-
-control "cis-gcp-#{control_id}-#{control_abbrev}" do
+sub_control_id = "#{control_id}.1"
+control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   impact 1.0
 
   title "[#{control_abbrev.upcase}] Ensure that MySql database instance does not allow anyone to connect with administrative privileges."
@@ -36,7 +36,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   tag cis_scored: true
   tag cis_level: 1
-  tag cis_gcp: "#{control_id}"
+  tag cis_gcp: "#{sub_control_id}"
   tag cis_version: "#{cis_version}"
   tag project: "#{gcp_project_id}"
 
@@ -54,18 +54,20 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 end
 
 # 6.1.2
-
-control "cis-gcp-#{control_id}-#{control_abbrev}" do
+sub_control_id = "#{control_id}.2"
+control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   impact 1.1
 
   title "[#{control_abbrev.upcase}] Ensure that the 'local_infile' database flag for a Cloud SQL Mysql instance is set to 'off'"
 
   desc "It is recommended to set the local_infile database flag for a Cloud SQL MySQL instance to off."
-  desc "rationale", "The local_infile flag controls the server-side LOCAL capability for LOAD DATA statements. Depending on the local_infile setting, the server refuses or permits local data loading by clients that have LOCAL enabled on the client side."
+  desc "rationale", "The local_infile flag controls the server-side LOCAL capability for LOAD DATA statements. Depending on the 
+                    local_infile setting, the server refuses or permits local data loading by clients that have LOCAL enabled on 
+                    the client side."
 
   tag cis_scored: true
   tag cis_level: 1
-  tag cis_gcp: "#{control_id}"
+  tag cis_gcp: "#{sub_control_id}"
   tag cis_version: "#{cis_version}"
   tag project: "#{gcp_project_id}"
 
@@ -73,15 +75,27 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   ref "GCP Docs", url: "https://cloud.google.com/sql/docs/mysql/flags"
 
   google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
-    describe.one do
-      google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.each do |flag|
-        puts flag.name
-        puts flag.value
-        describe flag.item do
-          it { should include(:name => 'local_infile') }
-          it { should include(:value => 'off') }
+      if google_sql_database_instance(project: gcp_project_id, database: db).database_version.include? 'MYSQL'
+        if defined? google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags 
+      #describe.one do
+          google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.each do |flag|
+            describe flag.item do
+              it { should include(:name => 'local_infile') }
+              it { should include(:value => 'off') }
+            end
+          end
+        else
+            describe "[#{gcp_project_id} , #{db} ] does not have database flags " do
+            subject { false }
+                it { should be true }
+            end
         end
-      end
-	  end
+      #end
+    else 
+      impact 0 
+      describe "[#{gcp_project_id}] [#{db}] is not a MySQL databases " do
+            skip "[#{gcp_project_id}] is not a MySQL databases"
+       end
+    end 
   end 
 end 

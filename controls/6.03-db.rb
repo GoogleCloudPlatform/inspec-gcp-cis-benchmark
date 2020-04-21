@@ -22,8 +22,8 @@ control_id = "6.3"
 control_abbrev = "db"
 
 # 6.3.1
-
-control "cis-gcp-#{control_id}-#{control_abbrev}" do
+sub_control_id = "#{control_id}.1"
+control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   impact 1.1
 
   title "[#{control_abbrev.upcase}] Ensure that the 'cross db ownership chaining' database flag for Cloud SQL Server instance is set to 'off'"
@@ -37,7 +37,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   tag cis_scored: true
   tag cis_level: 1
-  tag cis_gcp: "#{control_id}"
+  tag cis_gcp: "#{sub_control_id}"
   tag cis_version: "#{cis_version}"
   tag project: "#{gcp_project_id}"
 
@@ -48,8 +48,6 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
     describe.one do
       google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.each do |flag|
-        puts flag.name
-        puts flag.value
         describe flag.item do
           it { should include(:name => 'cross db ownership chaining') }
           it { should include(:value => 'off') }
@@ -60,8 +58,8 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 end 
 
 # 6.3.2
-
-control "cis-gcp-#{control_id}-#{control_abbrev}" do
+sub_control_id = "#{control_id}.2"
+control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   impact 1.1
 
   title "[#{control_abbrev.upcase}] Ensure that the 'contained database authentication' database flag for Cloud SQL server instance is set to 'off'"
@@ -74,7 +72,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   tag cis_scored: true
   tag cis_level: 1
-  tag cis_gcp: "#{control_id}"
+  tag cis_gcp: "#{sub_control_id}"
   tag cis_version: "#{cis_version}"
   tag project: "#{gcp_project_id}"
 
@@ -86,8 +84,6 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
     describe.one do
       google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.each do |flag|
-        puts flag.name
-        puts flag.value
         describe flag.item do
           it { should include(:name => 'contained database authentication') }
           it { should include(:value => 'off') }
