@@ -148,7 +148,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
           it { should include(:value => 'on') }
         end
       end
-	  end
+    end
   end 
 end 
 

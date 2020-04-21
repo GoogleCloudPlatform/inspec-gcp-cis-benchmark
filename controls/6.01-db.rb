@@ -85,10 +85,10 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
             end
           end
         else
-              describe "[#{gcp_project_id} , #{db} ] does not have database flags " do
-                subject { false }
-                it { should be true }
-              end
+          describe "[#{gcp_project_id} , #{db} ] does not have database flags " do
+            subject { false }
+            it { should be true }
+          end
         end
       else 
         impact 0 
