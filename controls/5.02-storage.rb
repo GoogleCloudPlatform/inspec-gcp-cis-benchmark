@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title 'Ensure that there are no publicly accessible objects in storage buckets'
+title '5.2 Ensure that Cloud Storage buckets have uniform bucket-level access enabled'
 
 gcp_project_id = attribute('gcp_project_id')
 cis_version = attribute('cis_version')
@@ -22,12 +22,27 @@ control_id = "5.2"
 control_abbrev = "storage"
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
-  impact 1.0
+  impact 1.1
 
-  title "[#{control_abbrev.upcase}] Ensure that there are no publicly accessible objects in storage buckets"
+  title "[#{control_abbrev.upcase}] Ensure that Cloud Storage buckets have uniform bucket-level access enabled"
 
-  desc "It is recommended that storage object ACL should not grant access to 'allUsers'."
-  desc "rationale", "Allowing public access to objects allows anyone with an internet connection to access sensitive data that is important to your business. IAM is used to control access over an entire bucket however to customize access to individual objects within a bucket ACLs are used. Even if IAM applied on storage does not allow access to 'allUsers' there could be object specific ACLs that allows public access to the specific objects inside the bucket.  Hence it is important to check ACLs at individual object level."
+  desc "It is recommended that uniform bucket-level access is enabled on Cloud Storage buckets."
+  desc "rationale", "It is recommended to use uniform bucket-level access to unify and simplify how you grant
+access to your Cloud Storage resources.
+Cloud Storage offers two systems for granting users permission to access your buckets and
+objects: Cloud Identity and Access Management (Cloud IAM) and Access Control Lists
+(ACLs). These systems act in parallel - in order for a user to access a Cloud Storage
+resource, only one of the systems needs to grant the user permission. Cloud IAM is used
+throughout Google Cloud and allows you to grant a variety of permissions at the bucket and
+project levels. ACLs are used only by Cloud Storage and have limited permission options,
+but they allow you to grant permissions on a per-object basis.
+
+In order to support a uniform permissioning system, Cloud Storage has uniform bucket-
+level access. Using this feature disables ACLs for all Cloud Storage resources: access to
+
+Cloud Storage resources then is granted exclusively through Cloud IAM. Enabling uniform
+bucket-level access guarantees that if a Storage bucket is not publicly accessible, no object
+in the bucket is publicly accessible either."
 
   tag cis_scored: false
   tag cis_level: 1
@@ -36,6 +51,12 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   tag project: "#{gcp_project_id}"
 
   ref "CIS Benchmark", url: "#{cis_url}"
-  ref "GCP Docs", url: "https://cloud.google.com/storage/docs/access-control/create-manage-lists"
+  ref "GCP Docs", url: "https://cloud.google.com/storage/docs/uniform-bucket-level-access"
 
+  google_storage_buckets(project: gcp_project_id).bucket_names.each do |bucket|
+    describe "[#{gcp_project_id}] GCS Bucket #{bucket} should have uniform bucket-level access enabled" do 
+      subject { google_storage_bucket(name: bucket).iam_configuration.uniform_bucket_level_access.item }   
+      it { should include(:enabled => true) }
+    end
+  end
 end
