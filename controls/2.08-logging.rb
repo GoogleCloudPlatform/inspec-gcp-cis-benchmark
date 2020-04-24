@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title 'Ensure log metric filter and alerts exists for VPC network route changes '
+title 'Ensure log metric filter and alerts exists for VPC network route changes'
 
 gcp_project_id = attribute('gcp_project_id')
 cis_version = attribute('cis_version')
