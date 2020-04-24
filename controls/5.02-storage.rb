@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title '5.2 Ensure that Cloud Storage buckets have uniform bucket-level access enabled'
+title 'Ensure that Cloud Storage buckets have uniform bucket-level access enabled'
 
 gcp_project_id = attribute('gcp_project_id')
 cis_version = attribute('cis_version')
@@ -22,7 +22,7 @@ control_id = "5.2"
 control_abbrev = "storage"
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
-  impact 1.1
+  impact 1.0
 
   title "[#{control_abbrev.upcase}] Ensure that Cloud Storage buckets have uniform bucket-level access enabled"
 
