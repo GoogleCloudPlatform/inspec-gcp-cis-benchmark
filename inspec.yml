@@ -20,7 +20,14 @@ copyright_email: copyright@google.com
 license: Apache-2.0
 summary: "Inspec Google Cloud Platform Center for Internet Security Benchmark v1.1 Profile"
 version: "1.1.0"
-attributes:
+supports:
+  - platform: gcp
+depends:
+  - name: inspec-gcp
+    url: https://github.com/inspec/inspec-gcp/archive/v1.4.0.tar.gz
+  - name: inspec-gcp-helpers
+    url: https://github.com/GoogleCloudPlatform/inspec-gcp-helpers/archive/v1.0.0.tar.gz
+inputs:
 - name: gcp_project_id
   description: 'The GCP project identifier.'
   type: string
@@ -56,7 +63,3 @@ attributes:
   type: array
   value:
     - ""
-depends:
-- name: inspec-gcp
-  git: https://github.com/inspec/inspec-gcp.git
-  tag: v0.21.4
