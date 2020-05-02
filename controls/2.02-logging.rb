@@ -42,8 +42,16 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   ref "GCP Docs", url: "https://cloud.google.com/logging/docs/export/using_exported_logs"
   ref "GCP Docs", url: "https://cloud.google.com/logging/docs/export/configure_export_v2"
 
+  empty_filter_sinks = []
+  google_logging_project_sinks(project: gcp_project_id).names.each do |sink_name|
+    if google_logging_project_sink(project: gcp_project_id, name: sink_name).filter == nil
+      empty_filter_sinks.push(sink_name)
+    end
+  end
   describe "[#{gcp_project_id}] Project level Log sink with an empty filter" do 
-    subject { google_logging_project_sinks(project: gcp_project_id).where(sink_filter: nil) }
-    it { should exist }
+    subject { empty_filter_sinks }
+    it "is expected to exist" do
+      expect(empty_filter_sinks.count).to be > 0
+    end
   end
 end
