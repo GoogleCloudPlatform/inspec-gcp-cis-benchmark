@@ -48,15 +48,19 @@ A key is used to protect some corpus of data. You could encrypt a collection of 
   locations = google_compute_regions(project: gcp_project_id).region_names
   locations << 'global'
  
+  # Ensure KMS keys autorotate 90d or less
   locations.each do |location|
     google_kms_key_rings(project: gcp_project_id, location: location).key_ring_names.each do |keyring|
       google_kms_crypto_keys(project: gcp_project_id, location: location, key_ring_name: keyring).crypto_key_names.each do |keyname|
         key = google_kms_crypto_key(project: gcp_project_id, location: location, key_ring_name: keyring, name: keyname)
+        rotation_period_int = key.rotation_period.delete_suffix('s').to_i
         if key.primary_state == "ENABLED"
-          describe "[#{gcp_project_id}] #{key.name.to_s.sub('projects/', '').sub('locations/','').sub('keyRings/','')}" do
+          describe "[#{gcp_project_id}] #{key.crypto_key_name}" do
             subject { key }
-            its('rotation_period_seconds') { should be <= kms_rotation_period_seconds }
-            its('next_rotation_time_date') { should be <= (Time.now + kms_rotation_period_seconds) }
+            it "should have a lower or equal rotation period than #{kms_rotation_period_seconds}" do
+              expect(rotation_period_int).to be <= kms_rotation_period_seconds
+            end
+            its('next_rotation_time') { should be <= (Time.now + kms_rotation_period_seconds) }
           end
         end
       end
