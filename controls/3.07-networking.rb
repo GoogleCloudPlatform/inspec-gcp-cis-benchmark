@@ -42,7 +42,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
     describe "[#{gcp_project_id}] #{firewall_name}" do
       subject { google_compute_firewall(project: gcp_project_id, name: firewall_name) }
       it "Should not allow RDP from 0.0.0.0/0" do
-        expect((subject.allowed_rdp?) && (subject.allow_ip_ranges? ['0.0.0.0/0'])).to eq(false)
+        expect((subject.allowed_rdp?) && (subject.allow_ip_ranges? ['0.0.0.0/0'])).to be false
       end
     end
   end
