@@ -40,13 +40,13 @@ Sinks can be configured to export logs in storage buckets. It is recommended to 
   ref "CIS Benchmark", url: "#{cis_url}"
   ref "GCP Docs", url: "https://cloud.google.com/storage/docs/bucket-lock"
 
-  if (google_logging_project_sinks(project: gcp_project_id).where(sink_destination: /storage.googleapis.com/).sink_destinations.empty?)
+  if (google_logging_project_sinks(project: gcp_project_id).where(destination: /storage.googleapis.com/).destinations.empty?)
     describe "[#{gcp_project_id}] does not have logging sinks configured." do
-      subject {google_logging_project_sinks(project: gcp_project_id).where(sink_destination: /storage.googleapis.com/).sink_destinations}
+      subject {google_logging_project_sinks(project: gcp_project_id).where(destination: /storage.googleapis.com/).destinations}
       it {should_not be_empty}
     end
   else
-    google_logging_project_sinks(project: gcp_project_id).where(sink_destination: /storage.googleapis.com/).sink_destinations.each do |sink|
+    google_logging_project_sinks(project: gcp_project_id).where(destination: /storage.googleapis.com/).destinations.each do |sink|
       bucket = sink.split("/").last
       describe "[#{gcp_project_id}] Logging bucket #{bucket} retention policy Bucket Lock status" do
         subject { google_storage_bucket(name: bucket).retention_policy }
