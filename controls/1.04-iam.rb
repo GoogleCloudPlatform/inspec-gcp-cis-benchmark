@@ -48,11 +48,12 @@ Even after owner's precaution, keys can be easily leaked by common development m
   ref "CIS Benchmark", url: "#{cis_url}"
   ref "GCP Docs", url: "https://cloud.google.com/iam/docs/understanding-service-accounts#managing_service_account_keys"
 
-  google_service_accounts(project: gcp_project_id).service_account_names.each do |sa_name|
-    describe "[#{gcp_project_id}] Service Account: #{sa_name}" do
-      subject { google_service_account(name: sa_name) }
-      it { should_not have_user_managed_keys }
+  google_service_accounts(project: gcp_project_id).service_account_emails.each do |sa_email|
+    google_service_account_keys(project: gcp_project_id, service_account: sa_email).key_names.each do |key_name|
+      describe "[#{gcp_project_id}] Service Account: #{sa_email}" do
+        subject { google_service_account_key(name: key_name) }
+        its('key_type') { should_not eq "USER_MANAGED" }
+      end
     end
   end
-
 end
