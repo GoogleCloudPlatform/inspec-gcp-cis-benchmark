@@ -14,4 +14,4 @@
 
 source 'https://rubygems.org'
 
-gem 'inspec', '~> 3'
+gem 'inspec', '~> 4'
