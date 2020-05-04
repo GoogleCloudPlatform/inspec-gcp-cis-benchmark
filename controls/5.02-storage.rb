@@ -54,9 +54,11 @@ in the bucket is publicly accessible either."
   ref "GCP Docs", url: "https://cloud.google.com/storage/docs/uniform-bucket-level-access"
 
   google_storage_buckets(project: gcp_project_id).bucket_names.each do |bucket|
-    describe "[#{gcp_project_id}] GCS Bucket #{bucket} should have uniform bucket-level access enabled" do 
-      subject { google_storage_bucket(name: bucket).iam_configuration.uniform_bucket_level_access.item }   
-      it { should include(:enabled => true) }
+    uniform_bucket_level_access = google_storage_bucket(name: bucket).acl.nil?
+    describe "[#{gcp_project_id}] GCS Bucket #{bucket}" do
+      it 'should have uniform bucket-level access enabled' do
+        expect(uniform_bucket_level_access).to be true
+      end
     end
   end
 end

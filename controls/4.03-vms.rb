@@ -22,7 +22,7 @@ cis_url = attribute('cis_url')
 control_id = "4.3"
 control_abbrev = "vms"
 
-gce_instances = get_gce_instances(gcp_project_id, gce_zones)
+gce_instances = GCECache(project: gcp_project_id, gce_zones: gce_zones).gce_instances_cache
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 1.0
@@ -45,7 +45,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
     next if instance[:name] =~ /^gke-/
     describe "[#{gcp_project_id}] Instance #{instance[:zone]}/#{instance[:name]}" do
       subject { google_compute_instance(project: gcp_project_id, zone: instance[:zone], name: instance[:name]) }
-      its('block_project_ssh_keys') { should cmp true }
+      its('block_project_ssh_keys') { should be true }
     end
   end
 
