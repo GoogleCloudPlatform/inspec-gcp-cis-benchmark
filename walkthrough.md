@@ -28,7 +28,7 @@ Continue on to the next step to start setting up your tutorial.
 InSpec is distributed as a Ruby gem and your Cloud Shell instance has a Ruby environment already configured. All you need to do is install the InSpec gem:
 
 ```bash
-gem install inspec-bin -v 4.18.51 --no-document --quiet
+gem install inspec-bin --no-document --quiet
 ```
 
 **Tip**: Click the Copy to Cloud Shell button on the side of the code box and then hit Enter in your terminal. You can also click the copy button on the side of the code box and paste the command in the Cloud Shell terminal to run it.

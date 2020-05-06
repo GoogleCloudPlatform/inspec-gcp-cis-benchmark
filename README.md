@@ -37,23 +37,21 @@ Use this Cloud Shell walkthrough for a hands-on example.
 
 ```
 #install inspec
-$ gem install inspec-bin -v 4.18.51 --no-document --quiet
+$ gem install inspec-bin --no-document --quiet
 ```
 
 ```
 # make sure you're authenticated to GCP
 $ gcloud auth list
 
-# make sure that you selected a project to scan
-$ gcloud config list project 
+# acquire credentials to use with Application Default Credentials
+$ gcloud auth application-default login 
 
-# with a project selected, this env var gets the right value
-$ echo $GOOGLE_CLOUD_PROJECT
 ```
 
 ```
-# scan your project with this profile
-$ CHEF_LICENSE=accept-no-persist inspec exec https://github.com/GoogleCloudPlatform/inspec-gcp-cis-benchmark.git -t gcp:// --input gcp_project_id=$GOOGLE_CLOUD_PROJECT
+# scan a project with this profile, replace <YOUR_PROJECT_ID> with your project ID
+$ CHEF_LICENSE=accept-no-persist inspec exec https://github.com/GoogleCloudPlatform/inspec-gcp-cis-benchmark.git -t gcp:// --input gcp_project_id=<YOUR_PROJECT_ID>
 ...snip...
 Profile Summary: 48 successful controls, 5 control failures, 7 controls skipped
 Test Summary: 166 successful, 7 failures, 7 skipped
