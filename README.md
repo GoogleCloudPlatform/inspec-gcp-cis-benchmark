@@ -11,6 +11,7 @@ This is not an officially supported Google product. This code is intended to hel
 The following GCP CIS v1.0 Benchmark Controls are not covered:
 
 * Identity and Access Management 1.2 - "Ensure that multi-factor authentication is enabled for all non-service accounts"
+* Identity and Access Management 1.3 - "Ensure that Security Key Enforcement is enabled for all admin accounts"
 * Identity and Access Management 1.12 - "Ensure API keys are not created for a project"
 * Identity and Access Management 1.13 - "Ensure API keys are restricted to use by only specified Hosts and Apps"
 * Identity and Access Management 1.14 - "Ensure API keys are restricted to only APIs that application needs access"
