@@ -47,11 +47,16 @@ GCP provides option to create one or more user-managed (also called as external 
 
   google_service_accounts(project: gcp_project_id).service_account_emails.each do |sa_email|
     if google_service_account_keys(project: gcp_project_id, service_account: sa_email).key_names.count > 1
+      impact 1.0
       describe "[#{gcp_project_id}] ServiceAccount Keys for #{sa_email} older than #{sa_key_older_than_seconds} seconds" do
         subject { google_service_account_keys(project: gcp_project_id, service_account: sa_email).where { (Time.now - sa_key_older_than_seconds > valid_after_time) } }
         it { should_not exist }
       end
+    else
+      impact 0
+      describe "[#{gcp_project_id}] ServiceAccount [#{sa_email}] does not have user-managed keys. This test is Not Applicable." do
+        skip "[#{gcp_project_id}] ServiceAccount [#{sa_email}] does not have user-managed keys."
+      end
     end
   end
-
 end

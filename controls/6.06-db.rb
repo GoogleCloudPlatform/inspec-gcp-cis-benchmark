@@ -38,12 +38,20 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   ref "CIS Benchmark", url: "#{cis_url}"
   ref "GCP Docs", url: "https://cloud.google.com/sql/docs/mysql/configure-private-ip"
 
-  google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
-    google_sql_database_instance(project: gcp_project_id, database: db).ip_addresses.each do |ip_address|
-      describe "[#{gcp_project_id}] CloudSQL #{db}" do
-        subject { ip_address }
-          its('type') { should_not include('PRIMARY') }  
+  unless google_sql_database_instances(project: gcp_project_id).instance_names.empty?
+    google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
+      google_sql_database_instance(project: gcp_project_id, database: db).ip_addresses.each do |ip_address|
+        describe "[#{gcp_project_id}] CloudSQL #{db}" do
+          subject { ip_address }
+            its('type') { should_not include('PRIMARY') }  
+        end
       end
+    end
+  else
+    impact 0
+    describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
+      skip "[#{gcp_project_id}] does not have CloudSQL instances."
     end
   end
 end
+

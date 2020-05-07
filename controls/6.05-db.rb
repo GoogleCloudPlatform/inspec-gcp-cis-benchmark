@@ -38,10 +38,17 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   ref "CIS Benchmark", url: "#{cis_url}"
   ref "GCP Docs", url: "https://cloud.google.com/sql/docs/mysql/configure-ip"
 
-  google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
-      describe "[#{gcp_project_id}] CloudSQL #{db}" do
-        subject { google_sql_database_instance(project: gcp_project_id, database: db).authorized_networks }
-        it { should_not include('0.0.0.0/0') }
-     end
+  unless google_sql_database_instances(project: gcp_project_id).instance_names.empty?
+    google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
+        describe "[#{gcp_project_id}] CloudSQL #{db}" do
+          subject { google_sql_database_instance(project: gcp_project_id, database: db).settings.ip_configuration.authorized_networks }
+          it { should_not include('0.0.0.0/0') }
+       end
+    end
+  else
+    impact 0
+    describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
+      skip "[#{gcp_project_id}] does not have CloudSQL instances."
+    end
   end
 end

@@ -38,10 +38,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   ref "CIS Benchmark", url: "#{cis_url}"
   ref "GCP Docs", url: "https://cloud.google.com/solutions/securing-gcp-account-u2f"
 
-  describe "Not scored" do
-    before do
-      skip
-    end
-    it {should eq "Not scored"}
+  describe 'This control is not scored' do
+    skip 'This control is not scored'
   end
 end

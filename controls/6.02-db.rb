@@ -41,16 +41,33 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref "GCP Docs", url: "https://cloud.google.com/sql/docs/postgres/flags#setting_a_database_flag"
 
   google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
-    describe.one do
-      google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.each do |flag|
-        describe flag.item do
-          it { should include(:name => 'log_checkpoints') }
-          it { should include(:value => 'on') }
+    if google_sql_database_instance(project: gcp_project_id, database: db).database_version.include? 'POSTGRES'
+      unless google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.nil?
+        impact 1.0
+        describe.one do
+          google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.each do |flag|
+            describe "[#{gcp_project_id} , #{db} ] should have a database flag 'log_checkpoints' set to 'on' " do
+              subject { flag }
+              its('name') { should cmp 'log_checkpoints' }
+              its('value') { should cmp 'on' }
+            end
+          end
+        end
+      else
+        impact 1.0
+        describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
+          subject { false }
+          it { should be true }
         end
       end
+    else
+      impact 0
+      describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
+        skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
+      end
     end
-  end 
-end 
+  end
+end
 
 # 6.2.2
 sub_control_id = "#{control_id}.2"
@@ -74,15 +91,32 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref "GCP Docs", url: "https://www.postgresql.org/docs/9.6/runtime-config-logging.html#RUNTIME-CONFIG-LOGGING-WHAT"
 
   google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
-    describe.one do
-      google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.each do |flag|
-        describe flag.item do
-          it { should include(:name => 'log_connections') }
-          it { should include(:value => 'on') }
+    if google_sql_database_instance(project: gcp_project_id, database: db).database_version.include? 'POSTGRES'
+      unless google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.nil?
+        impact 1.0
+        describe.one do
+          google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.each do |flag|
+            describe "[#{gcp_project_id} , #{db} ] should have a database flag 'log_connections' set to 'on' " do
+              subject { flag }
+              its('name') { should cmp 'log_connections' }
+              its('value') { should cmp 'on' }
+            end
+          end
+        end
+      else
+        impact 1.0
+        describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
+          subject { false }
+          it { should be true }
         end
       end
+    else
+      impact 0
+      describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
+        skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
+      end
     end
-  end 
+  end
 end 
 
 # 6.2.3
@@ -107,15 +141,32 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref "GCP Docs", url: "https://www.postgresql.org/docs/9.6/runtime-config-logging.html#RUNTIME-CONFIG-LOGGING-WHAT"
 
   google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
-    describe.one do
-      google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.each do |flag|
-        describe flag.item do
-          it { should include(:name => 'log_disconnections') }
-          it { should include(:value => 'on') }
+    if google_sql_database_instance(project: gcp_project_id, database: db).database_version.include? 'POSTGRES'
+      unless google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.nil?
+        impact 1.0
+        describe.one do
+          google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.each do |flag|
+            describe "[#{gcp_project_id} , #{db} ] should have a database flag 'log_disconnections' set to 'on' " do
+              subject { flag }
+              its('name') { should cmp 'log_disconnections' }
+              its('value') { should cmp 'on' }
+            end
+          end
+        end
+      else
+        impact 1.0
+        describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
+          subject { false }
+          it { should be true }
         end
       end
+    else
+      impact 0
+      describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
+        skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
+      end
     end
-  end 
+  end
 end 
 
 # 6.2.4
@@ -141,16 +192,33 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref "GCP Docs", url: "https://www.postgresql.org/docs/9.6/runtime-config-logging.html#RUNTIME-CONFIG-LOGGING-WHAT"
 
   google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
-    describe.one do
-      google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.each do |flag|
-        describe flag.item do
-          it { should include(:name => 'log_lock_waits') }
-          it { should include(:value => 'on') }
+    if google_sql_database_instance(project: gcp_project_id, database: db).database_version.include? 'POSTGRES'
+      unless google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.nil?
+        impact 1.0
+        describe.one do
+          google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.each do |flag|
+            describe "[#{gcp_project_id} , #{db} ] should have a database flag 'log_lock_waits' set to 'on' " do
+              subject { flag }
+              its('name') { should cmp 'log_lock_waits' }
+              its('value') { should cmp 'on' }
+            end
+          end
+        end
+      else
+        impact 1.0
+        describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
+          subject { false }
+          it { should be true }
         end
       end
+    else
+      impact 0
+      describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
+        skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
+      end
     end
-  end 
-end 
+  end
+end
 
 # 6.2.5
 sub_control_id = "#{control_id}.5"
@@ -173,15 +241,32 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref "GCP Docs", url: "https://www.postgresql.org/docs/9.6/runtime-config-logging.html#RUNTIME-CONFIG-LOGGING-WHAT"
 
   google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
-    describe.one do
-      google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.each do |flag|
-        describe flag.item do
-          it { should include(:name => 'log_min_error_statement') }
-          it { should include(:value => 'ERROR') }
+    if google_sql_database_instance(project: gcp_project_id, database: db).database_version.include? 'POSTGRES'
+      unless google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.nil?
+        impact 1.0
+        describe.one do
+          google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.each do |flag|
+            describe "[#{gcp_project_id} , #{db} ] should have a database flag 'log_min_error_statement' set to 'ERROR' " do
+              subject { flag }
+              its('name') { should cmp 'log_min_error_statement' }
+              its('value') { should cmp 'ERROR' }
+            end
+          end
+        end
+      else
+        impact 1.0
+        describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
+          subject { false }
+          it { should be true }
         end
       end
+    else
+      impact 0
+      describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
+        skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
+      end
     end
-  end 
+  end
 end 
 
 # 6.2.6
@@ -204,16 +289,33 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref "GCP Docs", url: "https://www.postgresql.org/docs/9.6/runtime-config-logging.html#RUNTIME-CONFIG-LOGGING-WHAT"
 
   google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
-    describe.one do
-      google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.each do |flag|
-        describe flag.item do
-          it { should include(:name => 'log_temp_files') }
-          it { should include(:value => '0') }
+    if google_sql_database_instance(project: gcp_project_id, database: db).database_version.include? 'POSTGRES'
+      unless google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.nil?
+        impact 1.0
+        describe.one do
+          google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.each do |flag|
+            describe "[#{gcp_project_id} , #{db} ] should have a database flag 'log_temp_files' set to '0' " do
+              subject { flag }
+              its('name') { should cmp 'log_temp_files' }
+              its('value') { should cmp '0' }
+            end
+          end
+        end
+      else
+        impact 1.0
+        describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
+          subject { false }
+          it { should be true }
         end
       end
+    else
+      impact 0
+      describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
+        skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
+      end
     end
-  end 
-end 
+  end
+end
 
 # 6.2.7
 sub_control_id = "#{control_id}.7"
@@ -236,13 +338,30 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref "GCP Docs", url: "https://www.postgresql.org/docs/9.6/runtime-config-logging.html#RUNTIME-CONFIG-LOGGING-WHAT"
 
   google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
-    describe.one do
-      google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.each do |flag|
-        describe flag.item do
-          it { should include(:name => 'log_min_duration_statement') }
-          it { should include(:value => '-1') }
+    if google_sql_database_instance(project: gcp_project_id, database: db).database_version.include? 'POSTGRES'
+      unless google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.nil?
+        impact 1.0
+        describe.one do
+          google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.each do |flag|
+            describe "[#{gcp_project_id} , #{db} ] should have a database flag 'log_min_duration_statement' set to '-1' " do
+              subject { flag }
+              its('name') { should cmp 'log_min_duration_statement' }
+              its('value') { should cmp '-1' }
+            end
+          end
+        end
+      else
+        impact 1.0
+        describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
+          subject { false }
+          it { should be true }
         end
       end
+    else
+      impact 0
+      describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
+        skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
+      end
     end
-  end 
-end 
+  end
+end

@@ -50,20 +50,35 @@ A key is used to protect some corpus of data. You could encrypt a collection of 
  
   # Ensure KMS keys autorotate 90d or less
   locations.each do |location|
-    google_kms_key_rings(project: gcp_project_id, location: location).key_ring_names.each do |keyring|
-      google_kms_crypto_keys(project: gcp_project_id, location: location, key_ring_name: keyring).crypto_key_names.each do |keyname|
-        key = google_kms_crypto_key(project: gcp_project_id, location: location, key_ring_name: keyring, name: keyname)
-        rotation_period_int = key.rotation_period.delete_suffix('s').to_i
-        if key.primary_state == "ENABLED"
-          describe "[#{gcp_project_id}] #{key.crypto_key_name}" do
-            subject { key }
-            it "should have a lower or equal rotation period than #{kms_rotation_period_seconds}" do
-              expect(rotation_period_int).to be <= kms_rotation_period_seconds
-            end
-            its('next_rotation_time') { should be <= (Time.now + kms_rotation_period_seconds) }
-          end
-        end
+    if google_kms_key_rings(project: gcp_project_id, location: location).key_ring_names.empty?
+      impact 0
+      describe "[#{gcp_project_id}] does not contain any key rings in [#{location}]. This test is Not Applicable." do
+        skip "[#{gcp_project_id}] does not contain any key rings in [#{location}]"
       end
+    else
+      google_kms_key_rings(project: gcp_project_id, location: location).key_ring_names.each do |keyring|
+        if google_kms_crypto_keys(project: gcp_project_id, location: location, key_ring_name: keyring).crypto_key_names.empty?
+          impact 0
+          describe "[#{gcp_project_id}] key ring [#{keyring}] does not contain any cryptographic keys. This test is Not Applicable." do
+            skip "[#{gcp_project_id}] key ring [#{keyring}] does not contain any cryptographic keys"
+          end
+        else
+          google_kms_crypto_keys(project: gcp_project_id, location: location, key_ring_name: keyring).crypto_key_names.each do |keyname|
+            key = google_kms_crypto_key(project: gcp_project_id, location: location, key_ring_name: keyring, name: keyname)
+            if key.primary_state == "ENABLED"
+              describe "[#{gcp_project_id}] #{key.crypto_key_name}" do
+                subject { key }
+                its('rotation_period') { should_not eq nil }
+                rotation_period_int = key.rotation_period.delete_suffix('s').to_i
+                it "should have a lower or equal rotation period than #{kms_rotation_period_seconds}" do
+                  expect(rotation_period_int).to be <= kms_rotation_period_seconds
+                end
+                its('next_rotation_time') { should be <= (Time.now + kms_rotation_period_seconds) }
+              end
+            end
+          end          
+        end
+      end      
     end
   end
 end

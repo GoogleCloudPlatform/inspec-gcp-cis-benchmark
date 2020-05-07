@@ -45,10 +45,7 @@ Once the key is stolen, it has no expiration, so it may be used indefinitely, un
 
   ref "CIS Benchmark", url: "#{cis_url}"
 
-  describe "Not scored" do
-    before do
-      skip
-    end
-    it {should eq "Not scored"}
+  describe 'This control is not scored' do
+    skip 'This control is not scored'
   end
 end
