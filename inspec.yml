@@ -24,7 +24,7 @@ supports:
   - platform: gcp
 depends:
   - name: inspec-gcp
-    url: https://github.com/inspec/inspec-gcp/archive/v1.4.0.tar.gz
+    url: https://github.com/inspec/inspec-gcp/archive/v1.5.0.tar.gz
   - name: inspec-gcp-helpers
     url: https://github.com/GoogleCloudPlatform/inspec-gcp-helpers/archive/v1.0.0.tar.gz
 inputs:
