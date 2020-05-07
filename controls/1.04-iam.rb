@@ -51,11 +51,9 @@ Even after owners precaution, keys can be easily leaked by common development ma
   google_service_accounts(project: gcp_project_id).service_account_emails.each do |sa_email|
     if google_service_account_keys(project: gcp_project_id, service_account: sa_email).key_names.count > 1
       impact 1.0
-      google_service_account_keys(project: gcp_project_id, service_account: sa_email).key_names.each do |key_name|
-        describe "[#{gcp_project_id}] Service Account: #{sa_email}" do
-          subject { google_service_account_key(name: key_name) }
-          its('key_type') { should_not eq 'USER_MANAGED' }
-        end
+      describe "[#{gcp_project_id}] Service Account: #{sa_email}" do
+        subject { google_service_account_keys(project: gcp_project_id, service_account: sa_email) }
+        its('key_types') { should_not include 'USER_MANAGED' }
       end
     else
       impact 0
