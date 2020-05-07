@@ -46,10 +46,7 @@ In order to reduce attack vector, API-Keys can be restricted only to the trusted
   ref "CIS Benchmark", url: "#{cis_url}"
   ref "GCP Docs", url: "https://cloud.google.com/docs/authentication/api-keys"
 
-  describe "Not scored" do
-    before do
-      skip
-    end
-    it {should eq "Not scored"}
+  describe 'This control is not scored' do
+    skip 'This control is not scored'
   end
 end

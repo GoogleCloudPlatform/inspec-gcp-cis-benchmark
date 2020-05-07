@@ -18,18 +18,18 @@ title 'Ensure that Cloud SQL database instances are configured with automated ba
 gcp_project_id = attribute('gcp_project_id')
 cis_version = attribute('cis_version')
 cis_url = attribute('cis_url')
-control_id = "6.7"
-control_abbrev = "db"
+control_id = '6.7'
+control_abbrev = 'db'
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 1.0
 
   title "[#{control_abbrev.upcase}] Ensure that Cloud SQL database instances are configured with automated backups"
 
-  desc "It is recommended to have all SQL database instances set to enable automated backups."
-  desc "rationale", "Backups provide a way to restore a Cloud SQL instance to recover lost data or recover from a problem
+  desc 'It is recommended to have all SQL database instances set to enable automated backups.'
+  desc 'rationale', 'Backups provide a way to restore a Cloud SQL instance to recover lost data or recover from a problem
                      with that instance. Automated backups need to be set for any instance that contains data that should 
-                     be protected from loss or damage"
+                     be protected from loss or damage'
 
   tag cis_scored: true
   tag cis_level: 1
@@ -37,15 +37,22 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   tag cis_version: "#{cis_version}"
   tag project: "#{gcp_project_id}"
 
-  ref "CIS Benchmark", url: "#{cis_url}"
-  ref "GCP Docs", url: "https://cloud.google.com/sql/docs/mysql/backup-recovery/backups"
-  ref "GCP Docs", url: "https://cloud.google.com/sql/docs/postgres/backup-recovery/backing-up"
+  ref 'CIS Benchmark', url: "#{cis_url}"
+  ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/mysql/backup-recovery/backups'
+  ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/backup-recovery/backing-up'
 
-  google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
-    describe "[#{gcp_project_id}] CloudSQL #{db} should have automated backups enabled and have a start time" do
-      subject { google_sql_database_instance(project: gcp_project_id, database: db).settings.backup_configuration.item }
-          it { should include(:enabled => true) }
-          it { should_not include(:start_time => '') }
+  if google_sql_database_instances(project: gcp_project_id).instance_names.empty?
+    impact 0
+    describe "[#{gcp_project_id}] does not have any CloudSQL instances, this test is Not Applicable" do
+      skip "[#{gcp_project_id}] does not have any CloudSQL instances"
+    end
+  else
+    google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
+      describe "[#{gcp_project_id}] CloudSQL #{db} should have automated backups enabled and have a start time" do
+        subject { google_sql_database_instance(project: gcp_project_id, database: db).settings.backup_configuration }
+          its('enabled') { should cmp true }
+          its('start_time') { should_not eq '' }
+      end
     end
   end
 end 

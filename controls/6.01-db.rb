@@ -44,13 +44,9 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref "GCP Docs", url: "https://cloud.google.com/sql/docs/mysql/create-manage-users"
   ref "GCP Docs", url: "https://cloud.google.com/sql/docs/mysql/create-instance"
 
-  describe "Not scored" do
-    before do
-      skip
-    end
-    it {should eq "Not scored"}
+  describe 'This control is not scored' do
+    skip 'This control is not scored'
   end
-
 end
 
 # 6.1.2
@@ -76,24 +72,26 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
 
   google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
       if google_sql_database_instance(project: gcp_project_id, database: db).database_version.include? 'MYSQL'
-        if defined? google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags 
-      #describe.one do
-          google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.each do |flag|
-            describe flag.item do
-              it { should include(:name => 'local_infile') }
-              it { should include(:value => 'off') }
+        unless google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.nil?
+          impact 1.0
+          describe.one do
+            google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.each do |flag|
+              describe flag do
+                its('name') { should cmp 'local_infile' }
+                its('value') { should cmp 'off' }
+              end
             end
           end
         else
-          describe "[#{gcp_project_id} , #{db} ] does not have database flags " do
+          describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
             subject { false }
             it { should be true }
           end
         end
       else 
         impact 0 
-        describe "[#{gcp_project_id}] [#{db}] is not a MySQL databases " do
-            skip "[#{gcp_project_id}] is not a MySQL databases"
+        describe "[#{gcp_project_id}] [#{db}] is not a MySQL database. This test is Not Applicable." do
+            skip "[#{gcp_project_id}] [#{db}] is not a MySQL database"
         end
     end 
   end 

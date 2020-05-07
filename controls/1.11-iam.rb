@@ -47,8 +47,8 @@ Any user(s) should not have Cloud KMS Admin and any of the Cloud KMS CryptoKey E
 
   if kms_admins.members.count == 0
     impact 0
-    describe "[#{gcp_project_id}] does not contain users with roles/CloudKMSAdmin" do
-      skip "[#{gcp_project_id}] does not contain users with roles/CloudKMSAdmin"
+    describe "[#{gcp_project_id}] does not have users with roles/CloudKMSAdmin. This test is Not Applicable." do
+      skip "[#{gcp_project_id}] does not have users with roles/CloudKMSAdmin"
     end
   else
     describe "[#{gcp_project_id}] roles/cloudkms.cryptoKeyEncrypter" do

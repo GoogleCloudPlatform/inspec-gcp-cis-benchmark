@@ -13,28 +13,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title 'Ensure API keys are not created for a project'
+title 'Ensure that Security Key Enforcement is enabled for all admin accounts'
 
 gcp_project_id = attribute('gcp_project_id')
 cis_version = attribute('cis_version')
 cis_url = attribute('cis_url')
-control_id = "1.12"
-control_abbrev = "iam"
+control_id = '1.3'
+control_abbrev = 'iam'
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 1.0
 
-  title "[#{control_abbrev.upcase}] Ensure API keys are not created for a project"
+  title "[#{control_abbrev.upcase}] Ensure that Security Key Enforcement is enabled for all admin accounts"
 
-  desc "Keys are insecure because they can be viewed publicly, such as from within a browser, or they can be accessed on a device where the key resides. It is recommended to use standard authentication flow instead."
-  desc "rationale", "Security risks involved in using API-Keys are below:
-
-- API keys are a simple encrypted strings
-- API keys do not identify the user or the application making the API request
-- API keys are typically accessible to clients, making it easy to discover and steal an API key
-
-To avoid security risk by using API keys, it is recommended to use standard authentication
-flow instead."
+  desc 'Setup Security Key Enforcement for Google Cloud Platform admin accounts.'
+  desc 'rationale', 'Google Cloud Platform users with Organization Administrator roles have the highest level of privilege in the organization. These accounts should be protected with the strongest form of two-factor authentication: Security Key Enforcement. Ensure that admins use Security Keys to log in instead of weaker second factors like SMS or one-time passwords (OTP). Security Keys are actual physical keys used to access Google Organization Administrator Accounts. They send an encrypted signature rather than a code, ensuring that logins cannot be phished.'
 
   tag cis_score: false
   tag cis_level: 2
@@ -42,8 +35,8 @@ flow instead."
   tag cis_version: "#{cis_version}"
   tag project: "#{gcp_project_id}"
 
-  ref "CIS Benchmark", url: "#{cis_url}"
-  ref "GCP Docs", url: "https://cloud.google.com/docs/authentication/api-keys"
+  ref 'CIS Benchmark', url: "#{cis_url}"
+  ref 'GCP Docs', url: 'https://cloud.google.com/security-key/'
 
   describe 'This control is not scored' do
     skip 'This control is not scored'

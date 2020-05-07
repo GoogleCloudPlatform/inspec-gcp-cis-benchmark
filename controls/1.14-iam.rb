@@ -48,10 +48,7 @@ restricted to use (call) only APIs required by an application."
   ref "GCP Docs", url: "https://cloud.google.com/docs/authentication/api-keys"
   ref "GCP Docs", url: "https://cloud.google.com/apis/docs/overview"
 
-  describe "Not scored" do
-    before do
-      skip
-    end
-    it {should eq "Not scored"}
+  describe 'This control is not scored' do
+    skip 'This control is not scored'
   end
 end
