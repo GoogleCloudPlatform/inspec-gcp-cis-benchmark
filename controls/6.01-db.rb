@@ -77,7 +77,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
       if google_sql_database_instance(project: gcp_project_id, database: db).database_version.include? 'MYSQL'
         if defined? google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags 
-      #describe.one do
           google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.each do |flag|
             describe flag.item do
               it { should include(:name => 'local_infile') }
@@ -85,15 +84,15 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
             end
           end
         else
-          describe "[#{gcp_project_id} , #{db} ] does not have database flags " do
+          describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
             subject { false }
             it { should be true }
           end
         end
       else 
         impact 0 
-        describe "[#{gcp_project_id}] [#{db}] is not a MySQL databases " do
-            skip "[#{gcp_project_id}] is not a MySQL databases"
+        describe "[#{gcp_project_id}] [#{db}] is not a MySQL database. This test is Not Applicable." do
+            skip "[#{gcp_project_id}] is not a MySQL database"
         end
     end 
   end 

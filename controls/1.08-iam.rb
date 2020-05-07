@@ -47,7 +47,7 @@ Any user(s) should not have Service Account Admin and Service Account User, both
   sa_admins = google_project_iam_binding(project: gcp_project_id, role: 'roles/iam.serviceAccountAdmin')
   if sa_admins.members.nil? || sa_admins.members.count.zero?
     impact 0
-    describe "[#{gcp_project_id}] does not contain users with roles/serviceAccountAdmin" do
+    describe "[#{gcp_project_id}] does not contain users with roles/serviceAccountAdmin. This test is Not Applicable." do
       skip "[#{gcp_project_id}] does not contain users with roles/serviceAccountAdmin"
     end
   else
