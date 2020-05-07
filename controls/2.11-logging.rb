@@ -57,17 +57,19 @@ Below are the few of configurable Options which may impact security posture of a
   end
 
   google_project_metrics(project: gcp_project_id).where(metric_filter: log_filter).metric_types.each do |metrictype|
-    filter = "metric.type=\"#{metrictype}\" resource.type=\"audited_resource\""
-    google_project_alert_policies(project: gcp_project_id).where{ policy_filter_list.include? filter }.where(policy_enabled_state: true).policy_names.each do |policy|
-      describe "[#{gcp_project_id}] Cloud SQL changes alert policy" do
-        subject { google_project_alert_policy_condition(policy: policy, filter: filter) }
-        it { should exist }
-        its('aggregation_cross_series_reducer') { should eq 'REDUCE_COUNT' }
-        its('aggregation_per_series_aligner') { should eq 'ALIGN_RATE' }
-        its('condition_threshold_value') { should eq 0.001 }
-        its('aggregation_alignment_period') { should eq '60s' }
+    describe.one do
+      filter = "metric.type=\"#{metrictype}\" resource.type=\"audited_resource\""
+      google_project_alert_policies(project: gcp_project_id).where(policy_enabled_state: true).policy_names.each do |policy|
+        condition = google_project_alert_policy_condition(policy: policy, filter: filter)
+        describe "[#{gcp_project_id}] Cloud SQL changes alert policy" do
+          subject { condition }
+          it { should exist }
+          its('aggregation_cross_series_reducer') { should eq 'REDUCE_COUNT' }
+          its('aggregation_per_series_aligner') { should eq 'ALIGN_RATE' }
+          its('condition_threshold_value') { should eq 0.001 }
+          its('aggregation_alignment_period') { should eq '60s' }
+        end
       end
     end
   end
-
 end
