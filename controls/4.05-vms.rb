@@ -1,4 +1,3 @@
-# encoding: utf-8
 # Copyright 2019 The inspec-gcp-cis-benchmark Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,8 +18,8 @@ gcp_project_id = attribute('gcp_project_id')
 gce_zones = attribute('gce_zones')
 cis_version = attribute('cis_version')
 cis_url = attribute('cis_url')
-control_id = "4.4"
-control_abbrev = "vms"
+control_id = '4.4'
+control_abbrev = 'vms'
 
 gce_instances = GCECache(project: gcp_project_id, gce_zones: gce_zones).gce_instances_cache
 
@@ -32,7 +31,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   desc "Interacting with a serial port is often referred to as the serial console, which is similar to using a terminal window, in that input and output is entirely in text mode and there is no graphical interface or mouse support.
 
 If you enable the interactive serial console on an instance, clients can attempt to connect to that instance from any IP address. Therefore interactive serial console support should be disabled."
-  desc "rationale", "A virtual machine instance has four virtual serial ports. Interacting with a serial port is similar to using a terminal window, in that input and output is entirely in text mode and there is no graphical interface or mouse support. The instance's operating system, BIOS, and other system-level entities often write output to the serial ports, and can accept input such as commands or answers to prompts. Typically, these system-level entities use the first serial port (port 1) and serial port 1 is often referred to as the serial console.
+  desc 'rationale', "A virtual machine instance has four virtual serial ports. Interacting with a serial port is similar to using a terminal window, in that input and output is entirely in text mode and there is no graphical interface or mouse support. The instance's operating system, BIOS, and other system-level entities often write output to the serial ports, and can accept input such as commands or answers to prompts. Typically, these system-level entities use the first serial port (port 1) and serial port 1 is often referred to as the serial console.
 
 The interactive serial console does not support IP-based access restrictions such as IP whitelists. If you enable the interactive serial console on an instance, clients can attempt to connect to that instance from any IP address. This allows anybody to connect to that instance if they know the correct SSH key, username, project ID, zone, and instance name.
 
@@ -40,12 +39,12 @@ Therefore interactive serial console support should be disabled."
 
   tag cis_scored: true
   tag cis_level: 1
-  tag cis_gcp: "#{control_id}"
-  tag cis_version: "#{cis_version}"
-  tag project: "#{gcp_project_id}"
+  tag cis_gcp: control_id.to_s
+  tag cis_version: cis_version.to_s
+  tag project: gcp_project_id.to_s
 
-  ref "CIS Benchmark", url: "#{cis_url}"
-  ref "GCP Docs", url: "https://cloud.google.com/compute/docs/instances/interacting-with-serial-console"
+  ref 'CIS Benchmark', url: cis_url.to_s
+  ref 'GCP Docs', url: 'https://cloud.google.com/compute/docs/instances/interacting-with-serial-console'
 
   gce_instances.each do |instance|
     next if instance[:name] =~ /^gke-/

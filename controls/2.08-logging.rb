@@ -1,4 +1,3 @@
-# encoding: utf-8
 # Copyright 2019 The inspec-gcp-cis-benchmark Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,33 +17,33 @@ title 'Ensure log metric filter and alerts exists for VPC network route changes'
 gcp_project_id = attribute('gcp_project_id')
 cis_version = attribute('cis_version')
 cis_url = attribute('cis_url')
-control_id = "2.8"
-control_abbrev = "logging"
+control_id = '2.8'
+control_abbrev = 'logging'
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 1.0
 
   title "[#{control_abbrev.upcase}] Ensure log metric filter and alerts exists for VPC network route changes "
 
-  desc "It is recommended that a metric filter and alarm be established for VPC network route changes."
-  desc "rationale", "Google Cloud Platform (GCP) routes define the paths network traffic takes from a VM instance to another destinations. The other destination can be inside your VPC network (such as another VM) or outside of it. Every route consists of a destination and a next hop.  Traffic whose destination IP is within the destination range is sent to the next hop for delivery.
+  desc 'It is recommended that a metric filter and alarm be established for VPC network route changes.'
+  desc 'rationale', "Google Cloud Platform (GCP) routes define the paths network traffic takes from a VM instance to another destinations. The other destination can be inside your VPC network (such as another VM) or outside of it. Every route consists of a destination and a next hop.  Traffic whose destination IP is within the destination range is sent to the next hop for delivery.
 
 Monitoring changes to route tables will help ensure that all VPC traffic flows through an expected path."
 
   tag cis_scored: true
   tag cis_level: 1
-  tag cis_gcp: "#{control_id}"
-  tag cis_version: "#{cis_version}"
-  tag project: "#{gcp_project_id}"
+  tag cis_gcp: control_id.to_s
+  tag cis_version: cis_version.to_s
+  tag project: gcp_project_id.to_s
 
-  ref "CIS Benchmark", url: "#{cis_url}"
-  ref "GCP Docs", url: "https://cloud.google.com/logging/docs/logs-based-metrics/"
-  ref "GCP Docs", url: "https://cloud.google.com/monitoring/custom-metrics/"
-  ref "GCP Docs", url: "https://cloud.google.com/monitoring/alerts/"
-  ref "GCP Docs", url: "https://cloud.google.com/logging/docs/reference/tools/gcloud-logging"
-  ref "GCP Docs", url: "https://cloud.google.com/storage/docs/access-control/iam"
+  ref 'CIS Benchmark', url: cis_url.to_s
+  ref 'GCP Docs', url: 'https://cloud.google.com/logging/docs/logs-based-metrics/'
+  ref 'GCP Docs', url: 'https://cloud.google.com/monitoring/custom-metrics/'
+  ref 'GCP Docs', url: 'https://cloud.google.com/monitoring/alerts/'
+  ref 'GCP Docs', url: 'https://cloud.google.com/logging/docs/reference/tools/gcloud-logging'
+  ref 'GCP Docs', url: 'https://cloud.google.com/storage/docs/access-control/iam'
 
-  log_filter = "resource.type=\"gce_route\" AND jsonPayload.event_subtype=\"compute.routes.delete\" OR jsonPayload.event_subtype=\"compute.routes.insert\""
+  log_filter = 'resource.type="gce_route" AND jsonPayload.event_subtype="compute.routes.delete" OR jsonPayload.event_subtype="compute.routes.insert"'
   describe "[#{gcp_project_id}] VPC Route changes filter" do
     subject { google_project_metrics(project: gcp_project_id).where(metric_filter: log_filter) }
     it { should exist }

@@ -1,4 +1,3 @@
-# encoding: utf-8
 # Copyright 2019 The inspec-gcp-cis-benchmark Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,25 +17,25 @@ title 'Ensure that Cloud SQL database instance requires all incoming connections
 gcp_project_id = attribute('gcp_project_id')
 cis_version = attribute('cis_version')
 cis_url = attribute('cis_url')
-control_id = "6.4"
-control_abbrev = "db"
+control_id = '6.4'
+control_abbrev = 'db'
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 1.0
 
   title "[#{control_abbrev.upcase}] Ensure that Cloud SQL database instance requires all incoming connections to use SSL"
 
-  desc "It is recommended to enforce all incoming connections to SQL database instance to use SSL."
-  desc "rationale", "SQL database connections if successfully trapped (MITM); can reveal sensitive data like credentials, database queries, query outputs etc. For security, it is recommended to always use SSL encryption when connecting to your instance. This recommendation is applicable for Postgresql, MySql generation 1 and MySql generation 2 Instances."
+  desc 'It is recommended to enforce all incoming connections to SQL database instance to use SSL.'
+  desc 'rationale', 'SQL database connections if successfully trapped (MITM); can reveal sensitive data like credentials, database queries, query outputs etc. For security, it is recommended to always use SSL encryption when connecting to your instance. This recommendation is applicable for Postgresql, MySql generation 1 and MySql generation 2 Instances.'
 
   tag cis_scored: true
   tag cis_level: 1
-  tag cis_gcp: "#{control_id}"
-  tag cis_version: "#{cis_version}"
-  tag project: "#{gcp_project_id}"
+  tag cis_gcp: control_id.to_s
+  tag cis_version: cis_version.to_s
+  tag project: gcp_project_id.to_s
 
-  ref "CIS Benchmark", url: "#{cis_url}"
-  ref "GCP Docs", url: "https://cloud.google.com/sql/docs/postgres/configure-ssl-instance"
+  ref 'CIS Benchmark', url: cis_url.to_s
+  ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/configure-ssl-instance'
 
   unless google_sql_database_instances(project: gcp_project_id).instance_names.empty?
     google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|

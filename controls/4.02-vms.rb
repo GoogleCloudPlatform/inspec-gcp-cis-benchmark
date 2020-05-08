@@ -1,4 +1,3 @@
-# encoding: utf-8
 # Copyright 2019 The inspec-gcp-cis-benchmark Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,8 +18,8 @@ gcp_project_id = attribute('gcp_project_id')
 gce_zones = attribute('gce_zones')
 cis_version = attribute('cis_version')
 cis_url = attribute('cis_url')
-control_id = "4.2"
-control_abbrev = "vms"
+control_id = '4.2'
+control_abbrev = 'vms'
 
 gce_instances = GCECache(project: gcp_project_id, gce_zones: gce_zones).gce_instances_cache
 
@@ -29,8 +28,8 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   title "[#{control_abbrev.upcase}] Ensure that instances are not configured to use the default service account with full access to all Cloud APIs"
 
-  desc "To support principle of least privileges and prevent potential privilege escalation it is recommended that instances are not assigned to default service account Compute Engine default service account with Scope Allow full access to all Cloud APIs."
-  desc "rationale", "Along with ability to optionally create, manage and use user managed custom service accounts, Google Compute Engine provides default service account Compute Engine default service account for an instances to access necessary cloud services. Project Editor role is assigned to Compute Engine default service account hence, This service account has almost all capabilities over all cloud services except billing. However, when Compute Engine default service account assigned to an instance it can operate in 3 scopes.
+  desc 'To support principle of least privileges and prevent potential privilege escalation it is recommended that instances are not assigned to default service account Compute Engine default service account with Scope Allow full access to all Cloud APIs.'
+  desc 'rationale', "Along with ability to optionally create, manage and use user managed custom service accounts, Google Compute Engine provides default service account Compute Engine default service account for an instances to access necessary cloud services. Project Editor role is assigned to Compute Engine default service account hence, This service account has almost all capabilities over all cloud services except billing. However, when Compute Engine default service account assigned to an instance it can operate in 3 scopes.
 
 1. Allow default access: Allows only minimum access required to run an Instance (Least Privileges)
 2. Allow full access to all Cloud APIs: Allow full access to all the cloud APIs/Services (Too much access)
@@ -40,13 +39,13 @@ When an instance is configured with Compute Engine default service account with 
 
   tag cis_scored: true
   tag cis_level: 1
-  tag cis_gcp: "#{control_id}"
-  tag cis_version: "#{cis_version}"
-  tag project: "#{gcp_project_id}"
+  tag cis_gcp: control_id.to_s
+  tag cis_version: cis_version.to_s
+  tag project: gcp_project_id.to_s
 
-  ref "CIS Benchmark", url: "#{cis_url}"
-  ref "GCP Docs", url: "https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances"
-  ref "GCP Docs", url: "https://cloud.google.com/compute/docs/access/service-accounts"
+  ref 'CIS Benchmark', url: cis_url.to_s
+  ref 'GCP Docs', url: 'https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances'
+  ref 'GCP Docs', url: 'https://cloud.google.com/compute/docs/access/service-accounts'
 
   gce_instances.each do |instance|
     describe "[#{gcp_project_id}] Instance #{instance[:zone]}/#{instance[:name]}" do

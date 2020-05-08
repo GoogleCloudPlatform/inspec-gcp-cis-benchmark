@@ -1,4 +1,3 @@
-# encoding: utf-8
 # Copyright 2019 The inspec-gcp-cis-benchmark Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,16 +17,16 @@ title ' Ensure log metric filter and alerts exists for SQL instance configuratio
 gcp_project_id = attribute('gcp_project_id')
 cis_version = attribute('cis_version')
 cis_url = attribute('cis_url')
-control_id = "2.11"
-control_abbrev = "logging"
+control_id = '2.11'
+control_abbrev = 'logging'
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 1.0
 
   title "[#{control_abbrev.upcase}] Ensure log metric filter and alerts exists for SQL instance configuration changes"
 
-  desc "It is recommended that a metric filter and alarm be established for SQL Instance configuration changes."
-  desc "rationale", "Monitoring changes to Sql Instance configuration changes may reduce time to detect and correct misconfigurations done on sql server.
+  desc 'It is recommended that a metric filter and alarm be established for SQL Instance configuration changes.'
+  desc 'rationale', "Monitoring changes to Sql Instance configuration changes may reduce time to detect and correct misconfigurations done on sql server.
 
 Below are the few of configurable Options which may impact security posture of a SQL Instance:
 
@@ -36,21 +35,21 @@ Below are the few of configurable Options which may impact security posture of a
 
   tag cis_scored: true
   tag cis_level: 1
-  tag cis_gcp: "#{control_id}"
-  tag cis_version: "#{cis_version}"
-  tag project: "#{gcp_project_id}"
+  tag cis_gcp: control_id.to_s
+  tag cis_version: cis_version.to_s
+  tag project: gcp_project_id.to_s
 
-  ref "CIS Benchmark", url: "#{cis_url}"
-  ref "GCP Docs", url: "https://cloud.google.com/logging/docs/logs-based-metrics/"
-  ref "GCP Docs", url: "https://cloud.google.com/monitoring/custom-metrics/"
-  ref "GCP Docs", url: "https://cloud.google.com/monitoring/alerts/"
-  ref "GCP Docs", url: "https://cloud.google.com/logging/docs/reference/tools/gcloud-logging"
-  ref "GCP Docs", url: "https://cloud.google.com/storage/docs/overview"
-  ref "GCP Docs", url: "https://cloud.google.com/sql/docs/"
-  ref "GCP Docs", url: "https://cloud.google.com/sql/docs/mysql/"
-  ref "GCP Docs", url: "https://cloud.google.com/sql/docs/postgres/"
+  ref 'CIS Benchmark', url: cis_url.to_s
+  ref 'GCP Docs', url: 'https://cloud.google.com/logging/docs/logs-based-metrics/'
+  ref 'GCP Docs', url: 'https://cloud.google.com/monitoring/custom-metrics/'
+  ref 'GCP Docs', url: 'https://cloud.google.com/monitoring/alerts/'
+  ref 'GCP Docs', url: 'https://cloud.google.com/logging/docs/reference/tools/gcloud-logging'
+  ref 'GCP Docs', url: 'https://cloud.google.com/storage/docs/overview'
+  ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/'
+  ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/mysql/'
+  ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/'
 
-  log_filter = "protoPayload.methodName=\"cloudsql.instances.update\""
+  log_filter = 'protoPayload.methodName="cloudsql.instances.update"'
   describe "[#{gcp_project_id}] Cloud SQL changes filter" do
     subject { google_project_metrics(project: gcp_project_id).where(metric_filter: log_filter) }
     it { should exist }

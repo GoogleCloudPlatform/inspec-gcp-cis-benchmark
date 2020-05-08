@@ -1,4 +1,3 @@
-# encoding: utf-8
 # Copyright 2019 The inspec-gcp-cis-benchmark Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,16 +27,16 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   desc 'It is recommended to have all SQL database instances set to enable automated backups.'
   desc 'rationale', 'Backups provide a way to restore a Cloud SQL instance to recover lost data or recover from a problem
-                     with that instance. Automated backups need to be set for any instance that contains data that should 
+                     with that instance. Automated backups need to be set for any instance that contains data that should
                      be protected from loss or damage'
 
   tag cis_scored: true
   tag cis_level: 1
-  tag cis_gcp: "#{control_id}"
-  tag cis_version: "#{cis_version}"
-  tag project: "#{gcp_project_id}"
+  tag cis_gcp: control_id.to_s
+  tag cis_version: cis_version.to_s
+  tag project: gcp_project_id.to_s
 
-  ref 'CIS Benchmark', url: "#{cis_url}"
+  ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/mysql/backup-recovery/backups'
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/backup-recovery/backing-up'
 
@@ -50,9 +49,9 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
     google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
       describe "[#{gcp_project_id}] CloudSQL #{db} should have automated backups enabled and have a start time" do
         subject { google_sql_database_instance(project: gcp_project_id, database: db).settings.backup_configuration }
-          its('enabled') { should cmp true }
-          its('start_time') { should_not eq '' }
+        its('enabled') { should cmp true }
+        its('start_time') { should_not eq '' }
       end
     end
   end
-end 
+end

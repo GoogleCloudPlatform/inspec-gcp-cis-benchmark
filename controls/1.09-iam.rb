@@ -1,4 +1,3 @@
-# encoding: utf-8
 # Copyright 2019 The inspec-gcp-cis-benchmark Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,16 +27,16 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   desc 'It is recommended that the IAM policy on Cloud KMS cryptokeys should restrict anonymous and/or public access.'
 
-  desc 'rationale', "Granting permissions to allUsers or allAuthenticatedUsers allows anyone to access the dataset. Such access might not be desirable if sensitive data is stored at the location. In this case, ensure that anonymous and/or public access to a Cloud KMS cryptokey is not allowed."
+  desc 'rationale', 'Granting permissions to allUsers or allAuthenticatedUsers allows anyone to access the dataset. Such access might not be desirable if sensitive data is stored at the location. In this case, ensure that anonymous and/or public access to a Cloud KMS cryptokey is not allowed.'
 
   tag cis_scored: true
   tag cis_level: 1
-  tag cis_gcp: "#{control_id}"
-  tag cis_version: "#{cis_version}"
-  tag project: "#{gcp_project_id}"
+  tag cis_gcp: control_id.to_s
+  tag cis_version: cis_version.to_s
+  tag project: gcp_project_id.to_s
 
-  ref "CIS Benchmark", url: "#{cis_url}"
-  ref "GCP Docs", url: "https://cloud.google.com/kms/docs/key-rotation#frequency_of_key_rotation"
+  ref 'CIS Benchmark', url: cis_url.to_s
+  ref 'GCP Docs', url: 'https://cloud.google.com/kms/docs/key-rotation#frequency_of_key_rotation'
 
   # Get all "normal" regions and add "global"
   locations = google_compute_regions(project: gcp_project_id).region_names
@@ -63,19 +62,19 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
               impact 0
               describe "[#{gcp_project_id}] key ring [#{keyring}] key [#{keyname}] does not have any IAM bindings. This test is Not Applicable." do
                 skip "[#{gcp_project_id}] key ring [#{keyring}] key [#{keyname}] does not have any IAM bindings"
-              end              
+              end
             else
               impact 1.0
               google_kms_crypto_key_iam_policy(project: gcp_project_id, location: location, key_ring_name: keyring, crypto_key_name: keyname).bindings.each do |binding|
                 describe binding do
-                  its('members') { should_not include 'allUsers'}
-                  its('members') { should_not include 'allAuthenticatedUsers'}
+                  its('members') { should_not include 'allUsers' }
+                  its('members') { should_not include 'allAuthenticatedUsers' }
                 end
               end
             end
-          end          
+          end
         end
-      end      
+      end
     end
   end
 end

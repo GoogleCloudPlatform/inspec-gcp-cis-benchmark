@@ -1,4 +1,3 @@
-# encoding: utf-8
 # Copyright 2019 The inspec-gcp-cis-benchmark Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,14 +32,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
 
   tag cis_scored: true
   tag cis_level: 1
-  tag cis_gcp: "#{sub_control_id}"
-  tag cis_version: "#{cis_version}"
-  tag project: "#{gcp_project_id}"
+  tag cis_gcp: sub_control_id.to_s
+  tag cis_version: cis_version.to_s
+  tag project: gcp_project_id.to_s
 
-  ref 'CIS Benchmark', url: "#{cis_url}"
+  ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/sqlserver/flags'
   ref 'GCP Docs', url: 'https://docs.microsoft.com/en-us/sql/database-engine/configure-windows/cross-db-ownership-chaining-server-configuration-option?view=sql-server-ver15'
-
 
   google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
     if google_sql_database_instance(project: gcp_project_id, database: db).database_version.include? 'SQLSERVER'
@@ -83,11 +81,11 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
 
   tag cis_scored: true
   tag cis_level: 1
-  tag cis_gcp: "#{sub_control_id}"
-  tag cis_version: "#{cis_version}"
-  tag project: "#{gcp_project_id}"
+  tag cis_gcp: sub_control_id.to_s
+  tag cis_version: cis_version.to_s
+  tag project: gcp_project_id.to_s
 
-  ref 'CIS Benchmark', url: "#{cis_url}"
+  ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/sqlserver/flags'
   ref 'GCP Docs', url: 'https://docs.microsoft.com/en-us/sql/database-engine/configure-windows/contained-database-authentication-server-configuration-option?view=sql-server-ver15'
   ref 'GCP Docs', url: 'https://docs.microsoft.com/en-us/sql/relational-databases/databases/security-best-practices-with-contained-databases?view=sql-server-ver15'
@@ -100,7 +98,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
           google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.each do |flag|
             describe "[#{gcp_project_id} , #{db} ] should have a database flag 'contained database authentication' set to 'off' " do
               subject { flag }
-              its('name') {should cmp 'contained database authentication' }
+              its('name') { should cmp 'contained database authentication' }
               its('value') { should cmp 'off' }
             end
           end

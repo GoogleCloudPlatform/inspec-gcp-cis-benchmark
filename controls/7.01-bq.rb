@@ -1,4 +1,3 @@
-# encoding: utf-8
 # Copyright 2019 The inspec-gcp-cis-benchmark Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#export GOOGLE_APPLICATION_CREDENTIALS="/Users/aayu/dev/inspec-gcp-cis-benchmark/inspec-key.json"
+# export GOOGLE_APPLICATION_CREDENTIALS="/Users/aayu/dev/inspec-gcp-cis-benchmark/inspec-key.json"
 
 title 'Ensure that BigQuery datasets are not anonymously or publicly accessible'
 
@@ -32,11 +31,11 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   tag cis_scored: true
   tag cis_level: 1
-  tag cis_gcp: "#{control_id}"
-  tag cis_version: "#{cis_version}"
-  tag project: "#{gcp_project_id}"
+  tag cis_gcp: control_id.to_s
+  tag cis_version: cis_version.to_s
+  tag project: gcp_project_id.to_s
 
-  ref 'CIS Benchmark', url: "#{cis_url}"
+  ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/storage/docs/access-control/iam-reference'
   ref 'GCP Docs', url: 'https://cloud.google.com/storage/docs/access-control/making-data-public'
 

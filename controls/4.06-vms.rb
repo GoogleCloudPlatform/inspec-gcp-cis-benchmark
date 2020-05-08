@@ -1,4 +1,3 @@
-# encoding: utf-8
 # Copyright 2019 The inspec-gcp-cis-benchmark Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,8 +18,8 @@ gcp_project_id = attribute('gcp_project_id')
 gce_zones = attribute('gce_zones')
 cis_version = attribute('cis_version')
 cis_url = attribute('cis_url')
-control_id = "4.6"
-control_abbrev = "vms"
+control_id = '4.6'
+control_abbrev = 'vms'
 
 gce_instances = GCECache(project: gcp_project_id, gce_zones: gce_zones).gce_instances_cache
 
@@ -30,16 +29,16 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   title "[#{control_abbrev.upcase}] Ensure that IP forwarding is not enabled on Instances"
 
   desc "Compute Engine instance cannot forward a packet unless the source IP address of the packet matches the IP address of the instance. Similarly, GCP won't deliver a packet whose destination IP address is different than the IP address of the instance receiving the packet.  However, both capabilities are required if you want to use instances to help route packets.  Forwarding of data packets should be disabled to prevent data loss or information disclosure."
-  desc "rationale", "Compute Engine instance cannot forward a packet unless the source IP address of the packet matches the IP address of the instance. Similarly, GCP won't deliver a packet whose destination IP address is different than the IP address of the instance receiving the packet.  However, both capabilities are required if you want to use instances to help route packets.  To enable this source and destination IP check, disable the canIpForward field, which allows an instance to send and receive packets with non-matching destination or source IPs."
+  desc 'rationale', "Compute Engine instance cannot forward a packet unless the source IP address of the packet matches the IP address of the instance. Similarly, GCP won't deliver a packet whose destination IP address is different than the IP address of the instance receiving the packet.  However, both capabilities are required if you want to use instances to help route packets.  To enable this source and destination IP check, disable the canIpForward field, which allows an instance to send and receive packets with non-matching destination or source IPs."
 
   tag cis_scored: true
   tag cis_level: 1
-  tag cis_gcp: "#{control_id}"
-  tag cis_version: "#{cis_version}"
-  tag project: "#{gcp_project_id}"
+  tag cis_gcp: control_id.to_s
+  tag cis_version: cis_version.to_s
+  tag project: gcp_project_id.to_s
 
-  ref "CIS Benchmark", url: "#{cis_url}"
-  ref "GCP Docs", url: "https://cloud.google.com/compute/docs/networking#canipforward"
+  ref 'CIS Benchmark', url: cis_url.to_s
+  ref 'GCP Docs', url: 'https://cloud.google.com/compute/docs/networking#canipforward'
 
   gce_instances.each do |instance|
     next if instance[:name] =~ /^gke-/

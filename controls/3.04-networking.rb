@@ -1,4 +1,3 @@
-# encoding: utf-8
 # Copyright 2019 The inspec-gcp-cis-benchmark Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,21 +32,21 @@ When enabling DNSSEC for a managed zone, or creating a managed zone with DNSSEC,
 
   tag cis_scored: true
   tag cis_level: 1
-  tag cis_gcp: "#{control_id}"
-  tag cis_version: "#{cis_version}"
-  tag project: "#{gcp_project_id}"
+  tag cis_gcp: control_id.to_s
+  tag cis_version: cis_version.to_s
+  tag project: gcp_project_id.to_s
 
-  ref 'CIS Benchmark', url: "#{cis_url}"
+  ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/dns/dnssec-advanced#advanced_signing_options'
 
   managed_zone_names = google_dns_managed_zones(project: gcp_project_id).zone_names
 
   unless managed_zone_names.empty?
     managed_zone_names.each do |dnszone|
-      zone = google_dns_managed_zone(project: gcp_project_id,  zone: dnszone)
+      zone = google_dns_managed_zone(project: gcp_project_id, zone: dnszone)
 
       if zone.dnssec_config.state == 'on'
-        zone.dnssec_config.default_key_specs.select{ |spec| spec.key_type == 'keySigning' }.each do |spec|
+        zone.dnssec_config.default_key_specs.select { |spec| spec.key_type == 'keySigning' }.each do |spec|
           describe "[#{gcp_project_id}] DNS Zone [#{dnszone}] with DNSSEC key-signing" do
             subject { spec }
             its('algorithm') { should_not cmp 'RSASHA1' }

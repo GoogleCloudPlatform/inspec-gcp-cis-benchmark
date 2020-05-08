@@ -1,4 +1,3 @@
-# encoding: utf-8
 # Copyright 2019 The inspec-gcp-cis-benchmark Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,8 +17,8 @@ title 'Ensure user-managed/external keys for service accounts are rotated every 
 gcp_project_id = attribute('gcp_project_id')
 cis_version = attribute('cis_version')
 cis_url = attribute('cis_url')
-control_id = "1.7"
-control_abbrev = "iam"
+control_id = '1.7'
+control_abbrev = 'iam'
 sa_key_older_than_seconds = attribute('sa_key_older_than_seconds')
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
@@ -27,8 +26,8 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   title "[#{control_abbrev.upcase}] Ensure user-managed/external keys for service accounts are rotated every 90 days or less"
 
-  desc "Service Account keys consist of a key ID (Private_key_Id) and Private key, which are used to sign programmatic requests that you make to Google cloud services accessible to that particular Service account. It is recommended that all Service Account keys are regularly rotated."
-  desc "rationale", "Rotating Service Account keys will reduce the window of opportunity for an access key that is associated with a compromised or terminated account to be used. Service Account keys should be rotated to ensure that data cannot be accessed with an old key which might have been lost, cracked, or stolen.
+  desc 'Service Account keys consist of a key ID (Private_key_Id) and Private key, which are used to sign programmatic requests that you make to Google cloud services accessible to that particular Service account. It is recommended that all Service Account keys are regularly rotated.'
+  desc 'rationale', "Rotating Service Account keys will reduce the window of opportunity for an access key that is associated with a compromised or terminated account to be used. Service Account keys should be rotated to ensure that data cannot be accessed with an old key which might have been lost, cracked, or stolen.
 
 Each service account is associated with a key pair, which is managed by Google Cloud Platform (GCP). It is used for service-to-service authentication within GCP. Google rotates the keys daily.
 
@@ -36,14 +35,14 @@ GCP provides option to create one or more user-managed (also called as external 
 
   tag cis_scored: true
   tag cis_level: 1
-  tag cis_gcp: "#{control_id}"
-  tag cis_version: "#{cis_version}"
-  tag project: "#{gcp_project_id}"
+  tag cis_gcp: control_id.to_s
+  tag cis_version: cis_version.to_s
+  tag project: gcp_project_id.to_s
 
-  ref "CIS Benchmark", url: "#{cis_url}"
-  ref "GCP Docs", url: "https://cloud.google.com/iam/docs/understanding-service-accounts#managing_service_account_keys"
-  ref "GCP Docs", url: "https://cloud.google.com/sdk/gcloud/reference/iam/service-accounts/keys/list"
-  ref "GCP Docs", url: "https://cloud.google.com/iam/docs/service-accounts"
+  ref 'CIS Benchmark', url: cis_url.to_s
+  ref 'GCP Docs', url: 'https://cloud.google.com/iam/docs/understanding-service-accounts#managing_service_account_keys'
+  ref 'GCP Docs', url: 'https://cloud.google.com/sdk/gcloud/reference/iam/service-accounts/keys/list'
+  ref 'GCP Docs', url: 'https://cloud.google.com/iam/docs/service-accounts'
 
   google_service_accounts(project: gcp_project_id).service_account_emails.each do |sa_email|
     if google_service_account_keys(project: gcp_project_id, service_account: sa_email).key_names.count > 1

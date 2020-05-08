@@ -1,4 +1,3 @@
-# encoding: utf-8
 # Copyright 2019 The inspec-gcp-cis-benchmark Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,16 +17,16 @@ title 'Ensure that Cloud Storage buckets have uniform bucket-level access enable
 gcp_project_id = attribute('gcp_project_id')
 cis_version = attribute('cis_version')
 cis_url = attribute('cis_url')
-control_id = "5.2"
-control_abbrev = "storage"
+control_id = '5.2'
+control_abbrev = 'storage'
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 1.0
 
   title "[#{control_abbrev.upcase}] Ensure that Cloud Storage buckets have uniform bucket-level access enabled"
 
-  desc "It is recommended that uniform bucket-level access is enabled on Cloud Storage buckets."
-  desc "rationale", "It is recommended to use uniform bucket-level access to unify and simplify how you grant
+  desc 'It is recommended that uniform bucket-level access is enabled on Cloud Storage buckets.'
+  desc 'rationale', "It is recommended to use uniform bucket-level access to unify and simplify how you grant
 access to your Cloud Storage resources.
 Cloud Storage offers two systems for granting users permission to access your buckets and
 objects: Cloud Identity and Access Management (Cloud IAM) and Access Control Lists
@@ -46,12 +45,12 @@ in the bucket is publicly accessible either."
 
   tag cis_scored: false
   tag cis_level: 1
-  tag cis_gcp: "#{control_id}"
-  tag cis_version: "#{cis_version}"
-  tag project: "#{gcp_project_id}"
+  tag cis_gcp: control_id.to_s
+  tag cis_version: cis_version.to_s
+  tag project: gcp_project_id.to_s
 
-  ref "CIS Benchmark", url: "#{cis_url}"
-  ref "GCP Docs", url: "https://cloud.google.com/storage/docs/uniform-bucket-level-access"
+  ref 'CIS Benchmark', url: cis_url.to_s
+  ref 'GCP Docs', url: 'https://cloud.google.com/storage/docs/uniform-bucket-level-access'
 
   google_storage_buckets(project: gcp_project_id).bucket_names.each do |bucket|
     uniform_bucket_level_access = google_storage_bucket(name: bucket).acl.nil?

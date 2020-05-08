@@ -1,4 +1,3 @@
-# encoding: utf-8
 # Copyright 2019 The inspec-gcp-cis-benchmark Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,11 +30,11 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   tag cis_scored: true
   tag cis_level: 1
-  tag cis_gcp: "#{control_id}"
-  tag cis_version: "#{cis_version}"
-  tag project: "#{gcp_project_id}"
+  tag cis_gcp: control_id.to_s
+  tag cis_version: cis_version.to_s
+  tag project: gcp_project_id.to_s
 
-  ref 'CIS Benchmark', url: "#{cis_url}"
+  ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloudplatform.googleblog.com/2017/11/DNSSEC-now-available-in-Cloud-DNS.html'
   ref 'GCP Docs', url: 'https://cloud.google.com/dns/dnssec-config#enabling'
   ref 'GCP Docs', url: 'https://cloud.google.com/dns/dnssec'
@@ -44,7 +43,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   unless managed_zone_names.empty?
     managed_zone_names.each do |dnszone|
       describe "[#{gcp_project_id}] DNS Zone [#{dnszone}] with DNSSEC" do
-        subject { google_dns_managed_zone(project: gcp_project_id,  zone: dnszone) }
+        subject { google_dns_managed_zone(project: gcp_project_id, zone: dnszone) }
         its('dnssec_config.state') { should cmp 'on' }
       end
     end

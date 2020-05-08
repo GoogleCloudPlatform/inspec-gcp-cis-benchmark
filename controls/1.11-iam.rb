@@ -1,4 +1,3 @@
-# encoding: utf-8
 # Copyright 2019 The inspec-gcp-cis-benchmark Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,8 +17,8 @@ title 'Ensure that Separation of duties is enforced while assigning KMS related 
 gcp_project_id = attribute('gcp_project_id')
 cis_version = attribute('cis_version')
 cis_url = attribute('cis_url')
-control_id = "1.11"
-control_abbrev = "iam"
+control_id = '1.11'
+control_abbrev = 'iam'
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 1.0
@@ -28,7 +27,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   desc "It is recommended that the principle of 'Separation of Duties' is enforced while assigning KMS related roles to users."
 
-  desc "rationale", "Built-in/Predefined IAM role Cloud KMS Admin allows user/identity to create, delete, and manage service account(s). Built-in/Predefined IAM role Cloud KMS CryptoKey Encrypter/Decrypter allows user/identity (with adequate privileges on concerned resources) to encrypt and decrypt data at rest using encryption key(s). Built-in/Predefined IAM role Cloud KMS CryptoKey Encrypter allows user/identity (with adequate privileges on concerned resources) to encrypt data at rest using encryption key(s). Builtin/Predefined IAM role Cloud KMS CryptoKey Decrypter allows user/identity (with adequate privileges on concerned resources) to decrypt data at rest using encryption key(s).
+  desc 'rationale', "Built-in/Predefined IAM role Cloud KMS Admin allows user/identity to create, delete, and manage service account(s). Built-in/Predefined IAM role Cloud KMS CryptoKey Encrypter/Decrypter allows user/identity (with adequate privileges on concerned resources) to encrypt and decrypt data at rest using encryption key(s). Built-in/Predefined IAM role Cloud KMS CryptoKey Encrypter allows user/identity (with adequate privileges on concerned resources) to encrypt data at rest using encryption key(s). Builtin/Predefined IAM role Cloud KMS CryptoKey Decrypter allows user/identity (with adequate privileges on concerned resources) to decrypt data at rest using encryption key(s).
 
 Separation of duties is the concept of ensuring that one individual does not have all necessary permissions to be able to complete a malicious action. In Cloud KMS, this could be an action such as using a key to access and decrypt data that that user should not normally have access to. Separation of duties is a business control typically used in larger organizations, meant to help avoid security or privacy incidents and errors. It is considered best practice.
 
@@ -36,12 +35,12 @@ Any user(s) should not have Cloud KMS Admin and any of the Cloud KMS CryptoKey E
 
   tag cis_scored: true
   tag cis_level: 2
-  tag cis_gcp: "#{control_id}"
-  tag cis_version: "#{cis_version}"
-  tag project: "#{gcp_project_id}"
+  tag cis_gcp: control_id.to_s
+  tag cis_version: cis_version.to_s
+  tag project: gcp_project_id.to_s
 
-  ref "CIS Benchmark", url: "#{cis_url}"
-  ref "GCP Docs", url: "https://cloud.google.com/kms/docs/separation-of-duties"
+  ref 'CIS Benchmark', url: cis_url.to_s
+  ref 'GCP Docs', url: 'https://cloud.google.com/kms/docs/separation-of-duties'
 
   kms_admins = google_project_iam_binding(project: gcp_project_id, role: 'roles/cloudkms.admin')
 

@@ -1,4 +1,3 @@
-# encoding: utf-8
 # Copyright 2019 The inspec-gcp-cis-benchmark Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,33 +17,33 @@ title 'Ensure log metric filter and alerts exists for VPC network changes'
 gcp_project_id = attribute('gcp_project_id')
 cis_version = attribute('cis_version')
 cis_url = attribute('cis_url')
-control_id = "2.9"
-control_abbrev = "logging"
+control_id = '2.9'
+control_abbrev = 'logging'
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 1.0
 
   title "[#{control_abbrev.upcase}] Ensure log metric filter and alerts exists for VPC network changes "
 
-  desc "It is recommended that a metric filter and alarm be established for VPC network changes."
-  desc "rationale", "It is possible to have more than 1 VPC within an project, in addition it is also possible to create a peer connection between 2 VPCs enabling network traffic to route between VPCs.
+  desc 'It is recommended that a metric filter and alarm be established for VPC network changes.'
+  desc 'rationale', "It is possible to have more than 1 VPC within an project, in addition it is also possible to create a peer connection between 2 VPCs enabling network traffic to route between VPCs.
 
 Monitoring changes to VPC will help ensure VPC traffic flow is not getting impacted."
 
   tag cis_scored: true
   tag cis_level: 1
-  tag cis_gcp: "#{control_id}"
-  tag cis_version: "#{cis_version}"
-  tag project: "#{gcp_project_id}"
+  tag cis_gcp: control_id.to_s
+  tag cis_version: cis_version.to_s
+  tag project: gcp_project_id.to_s
 
-  ref "CIS Benchmark", url: "#{cis_url}"
-  ref "GCP Docs", url: "https://cloud.google.com/logging/docs/logs-based-metrics/"
-  ref "GCP Docs", url: "https://cloud.google.com/monitoring/custom-metrics/"
-  ref "GCP Docs", url: "https://cloud.google.com/monitoring/alerts/"
-  ref "GCP Docs", url: "https://cloud.google.com/logging/docs/reference/tools/gcloud-logging"
-  ref "GCP Docs", url: "https://cloud.google.com/vpc/docs/overview"
+  ref 'CIS Benchmark', url: cis_url.to_s
+  ref 'GCP Docs', url: 'https://cloud.google.com/logging/docs/logs-based-metrics/'
+  ref 'GCP Docs', url: 'https://cloud.google.com/monitoring/custom-metrics/'
+  ref 'GCP Docs', url: 'https://cloud.google.com/monitoring/alerts/'
+  ref 'GCP Docs', url: 'https://cloud.google.com/logging/docs/reference/tools/gcloud-logging'
+  ref 'GCP Docs', url: 'https://cloud.google.com/vpc/docs/overview'
 
-  log_filter = "resource.type=gce_network AND jsonPayload.event_subtype=\"compute.networks.insert\" OR jsonPayload.event_subtype=\"compute.networks.patch\" OR jsonPayload.event_subtype=\"compute.networks.delete\" OR jsonPayload.event_subtype=\"compute.networks.removePeering\" OR jsonPayload.event_subtype=\"compute.networks.addPeering\""
+  log_filter = 'resource.type=gce_network AND jsonPayload.event_subtype="compute.networks.insert" OR jsonPayload.event_subtype="compute.networks.patch" OR jsonPayload.event_subtype="compute.networks.delete" OR jsonPayload.event_subtype="compute.networks.removePeering" OR jsonPayload.event_subtype="compute.networks.addPeering"'
   describe "[#{gcp_project_id}] VPC Network changes filter" do
     subject { google_project_metrics(project: gcp_project_id).where(metric_filter: log_filter) }
     it { should exist }

@@ -1,4 +1,3 @@
-# encoding: utf-8
 # Copyright 2019 The inspec-gcp-cis-benchmark Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,39 +17,39 @@ title 'Ensure that retention policies on log buckets are configured using Bucket
 gcp_project_id = attribute('gcp_project_id')
 cis_version = attribute('cis_version')
 cis_url = attribute('cis_url')
-control_id = "2.3"
-control_abbrev = "logging"
+control_id = '2.3'
+control_abbrev = 'logging'
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 1.0
 
   title "[#{control_abbrev.upcase}] Ensure that retention policies on log buckets are configured using Bucket Lock"
 
-  desc "It is recommended to set up retention policies and configure Bucket Lock on all storage buckets that are used as log sinks."
-  desc "rationale", "Logs can be exported by creating one or more sinks that include a log filter and a destination. As Stackdriver Logging receives new log entries, they are compared against each sink. If a log entry matches a sink's filter, then a copy of the log entry is written to the destination.
+  desc 'It is recommended to set up retention policies and configure Bucket Lock on all storage buckets that are used as log sinks.'
+  desc 'rationale', "Logs can be exported by creating one or more sinks that include a log filter and a destination. As Stackdriver Logging receives new log entries, they are compared against each sink. If a log entry matches a sink's filter, then a copy of the log entry is written to the destination.
 
 Sinks can be configured to export logs in storage buckets. It is recommended to configure a data retention policy for these cloud storage buckets and to lock the data retention policy; thus permanently preventing the policy from being reduced or removed. This way, if the system is ever compromised by an attacker or a malicious insider who wants to cover their tracks, the activity logs are definitely preserved for forensics and security investigations."
 
   tag cis_scored: true
   tag cis_level: 1
-  tag cis_gcp: "#{control_id}"
-  tag cis_version: "#{cis_version}"
-  tag project: "#{gcp_project_id}"
+  tag cis_gcp: control_id.to_s
+  tag cis_version: cis_version.to_s
+  tag project: gcp_project_id.to_s
 
-  ref "CIS Benchmark", url: "#{cis_url}"
-  ref "GCP Docs", url: "https://cloud.google.com/storage/docs/bucket-lock"
+  ref 'CIS Benchmark', url: cis_url.to_s
+  ref 'GCP Docs', url: 'https://cloud.google.com/storage/docs/bucket-lock'
 
-  if (google_logging_project_sinks(project: gcp_project_id).where(destination: /storage.googleapis.com/).destinations.empty?)
+  if google_logging_project_sinks(project: gcp_project_id).where(destination: /storage.googleapis.com/).destinations.empty?
     describe "[#{gcp_project_id}] does not have logging sinks configured." do
-      subject {google_logging_project_sinks(project: gcp_project_id).where(destination: /storage.googleapis.com/).destinations}
-      it {should_not be_empty}
+      subject { google_logging_project_sinks(project: gcp_project_id).where(destination: /storage.googleapis.com/).destinations }
+      it { should_not be_empty }
     end
   else
     google_logging_project_sinks(project: gcp_project_id).where(destination: /storage.googleapis.com/).destinations.each do |sink|
-      bucket = sink.split("/").last
+      bucket = sink.split('/').last
       describe "[#{gcp_project_id}] Logging bucket #{bucket} retention policy Bucket Lock status" do
         subject { google_storage_bucket(name: bucket).retention_policy }
-        its('is_locked') {should be true}
+        its('is_locked') { should be true }
       end
     end
   end

@@ -1,4 +1,3 @@
-# encoding: utf-8
 # Copyright 2019 The inspec-gcp-cis-benchmark Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,16 +17,16 @@ title 'Ensure API keys are rotated every 90 days'
 gcp_project_id = attribute('gcp_project_id')
 cis_version = attribute('cis_version')
 cis_url = attribute('cis_url')
-control_id = "1.15"
-control_abbrev = "iam"
+control_id = '1.15'
+control_abbrev = 'iam'
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 1.0
 
   title "[#{control_abbrev.upcase}] Ensure API keys are rotated every 90 days"
 
-  desc "It is recommended to rotate API keys every 90 days."
-  desc "rationale", "Security risks involved in using API-Keys are below:
+  desc 'It is recommended to rotate API keys every 90 days.'
+  desc 'rationale', "Security risks involved in using API-Keys are below:
 
 - API keys are a simple encrypted strings
 - API keys do not identify the user or the application making the API request
@@ -39,11 +38,11 @@ Once the key is stolen, it has no expiration, so it may be used indefinitely, un
 
   tag cis_score: false
   tag cis_level: 1
-  tag cis_gcp: "#{control_id}"
-  tag cis_version: "#{cis_version}"
-  tag project: "#{gcp_project_id}"
+  tag cis_gcp: control_id.to_s
+  tag cis_version: cis_version.to_s
+  tag project: gcp_project_id.to_s
 
-  ref "CIS Benchmark", url: "#{cis_url}"
+  ref 'CIS Benchmark', url: cis_url.to_s
 
   describe 'This control is not scored' do
     skip 'This control is not scored'

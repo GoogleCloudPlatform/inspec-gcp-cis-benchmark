@@ -1,4 +1,3 @@
-# encoding: utf-8
 # Copyright 2019 The inspec-gcp-cis-benchmark Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,17 +25,17 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   title "[#{control_abbrev.upcase}] Ensure that corporate login credentials are used"
 
-  desc "Use corporate login credentials instead of personal accounts, such as Gmail accounts."
-  desc "rationale", "It is recommended fully-managed corporate Google accounts be used for increased visibility, auditing, and controlling access to Cloud Platform resources. Email accounts based outside of the user's organization, such as personal accounts, should not be used for business purposes."
+  desc 'Use corporate login credentials instead of personal accounts, such as Gmail accounts.'
+  desc 'rationale', "It is recommended fully-managed corporate Google accounts be used for increased visibility, auditing, and controlling access to Cloud Platform resources. Email accounts based outside of the user's organization, such as personal accounts, should not be used for business purposes."
 
   tag cis_scored: true
   tag cis_level: 1
-  tag cis_gcp: "#{control_id}"
-  tag cis_version: "#{cis_version}"
-  tag project: "#{gcp_project_id}"
+  tag cis_gcp: control_id.to_s
+  tag cis_version: cis_version.to_s
+  tag project: gcp_project_id.to_s
 
-  ref "CIS Benchmark", url: "#{cis_url}"
-  ref "GCP Docs", url: "https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#use_corporate_login_credentials"
+  ref 'CIS Benchmark', url: cis_url.to_s
+  ref 'GCP Docs', url: 'https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#use_corporate_login_credentials'
 
   # determine the organization's email domain
   case google_project(project: gcp_project_id).parent.type
@@ -50,13 +49,13 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
         folder_id = google_resourcemanager_folder(name: "folders/#{folder_id}").parent.sub('folders/', '')
       else
         parent = 'organization'
-        org_domain = google_organization(name: "#{google_resourcemanager_folder(name: "folders/#{folder_id}").parent}").display_name
+        org_domain = google_organization(name: google_resourcemanager_folder(name: "folders/#{folder_id}").parent.to_s).display_name
       end
     end
   end
 
-  google_project_iam_bindings(project: gcp_project_id).iam_binding_roles.each do | role |
-    google_project_iam_binding(project: gcp_project_id,  role: role).members.each do | member |
+  google_project_iam_bindings(project: gcp_project_id).iam_binding_roles.each do |role|
+    google_project_iam_binding(project: gcp_project_id, role: role).members.each do |member|
       next if member.to_s.end_with?('.gserviceaccount.com')
       describe "[#{gcp_project_id}] [Role:#{role}] Its member #{member}" do
         subject { member.to_s }
