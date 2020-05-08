@@ -40,12 +40,31 @@ The algorithm used for key signing should be recommended one and it should not b
   ref "CIS Benchmark", url: "#{cis_url}"
   ref "GCP Docs", url: "https://cloud.google.com/dns/dnssec-advanced#advanced_signing_options"
 
-  google_dns_managed_zones(project: gcp_project_id).zone_names.each do |dnszone|
-    describe "[#{gcp_project_id}] DNS Zone with DNSSEC" do
-      subject { google_dns_managed_zone(project: gcp_project_id,  zone: dnszone) }
-      its('zone_signing_key_algorithm') { should_not be nil }
-      its('zone_signing_key_algorithm') { should_not cmp 'RSASHA1' }
+  managed_zone_names = google_dns_managed_zones(project: gcp_project_id).zone_names
+
+  unless managed_zone_names.empty?
+    managed_zone_names.each do |dnszone|
+      zone = google_dns_managed_zone(project: gcp_project_id,  zone: dnszone)
+
+      if zone.dnssec_config.state == 'on'
+        zone.dnssec_config.default_key_specs.select{ |spec| spec.key_type == 'zoneSigning' }.each do |spec|
+          describe "[#{gcp_project_id}] DNS Zone [#{dnszone}] with DNSSEC zone-signing" do
+            subject { spec }
+            its('algorithm') { should_not cmp 'RSASHA1' }
+            its('algorithm') { should_not cmp nil }
+          end
+        end
+      else
+        describe "[#{gcp_project_id}] DNS Zone [#{dnszone}] DNSSEC" do
+          subject { 'off' }
+          it { should cmp 'on' }
+        end
+      end
+    end
+  else
+    impact 0.0
+    describe "[#{gcp_project_id}] does not have DNS Zones. This test is Not Applicable." do
+      skip "[#{gcp_project_id}] does not have DNS Zones."
     end
   end
-
 end

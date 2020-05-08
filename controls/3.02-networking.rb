@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title 'Ensure legacy networks does not exists for a project'
+title 'Ensure legacy networks do not exists for a project'
 
 gcp_project_id = attribute('gcp_project_id')
 cis_version = attribute('cis_version')
@@ -39,11 +39,18 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   ref "GCP Docs", url: "https://cloud.google.com/compute/docs/networking#creating_a_legacy_network"
   ref "GCP Docs", url: "https://cloud.google.com/compute/docs/networking#legacy_non-subnet_network"
 
-  google_compute_networks(project: gcp_project_id).network_names.each do |network|
-    describe "[#{gcp_project_id}] Networks" do
-      subject { google_compute_network(project: gcp_project_id, name: network) }
-      it { should_not be_legacy }
+  network_names = google_compute_networks(project: gcp_project_id).network_names
+
+  unless network_names.empty?
+    google_compute_networks(project: gcp_project_id).network_names.each do |network|
+      describe "[#{gcp_project_id}] Network [#{network}] " do
+        subject { google_compute_network(project: gcp_project_id, name: network) }
+        it { should_not be_legacy }
+      end
+    end
+  else
+    describe "[#{gcp_project_id}] does not have any networks. This test is Not Applicable." do
+      skip "[#{gcp_project_id}] does not have any networks."
     end
   end
-
 end
