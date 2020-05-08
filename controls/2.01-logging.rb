@@ -1,4 +1,3 @@
-# encoding: utf-8
 # Copyright 2019 The inspec-gcp-cis-benchmark Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,8 +17,8 @@ title 'Ensure that Cloud Audit Logging is configured properly across all service
 gcp_project_id = attribute('gcp_project_id')
 cis_version = attribute('cis_version')
 cis_url = attribute('cis_url')
-control_id = "2.1"
-control_abbrev = "logging"
+control_id = '2.1'
+control_abbrev = 'logging'
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 1.0
@@ -29,7 +28,7 @@ l users from a project "
 
   desc "It is recommended that Cloud Audit Logging is configured to track all Admin activities and
 read, write access to user data."
-  desc "rationale", "Cloud Audit Logging maintains two audit logs for each project and organization: Admin Activity
+  desc 'rationale', "Cloud Audit Logging maintains two audit logs for each project and organization: Admin Activity
 nd Data Access.
 
 1. Admin Activity logs contain log entries for API calls or other administrative actions that modify the configurati
@@ -48,13 +47,13 @@ It is recommended to have effective default audit config configured in such a wa
 
   tag cis_scored: true
   tag cis_level: 1
-  tag cis_gcp: "#{control_id}"
-  tag cis_version: "#{cis_version}"
-  tag project: "#{gcp_project_id}"
+  tag cis_gcp: control_id.to_s
+  tag cis_version: cis_version.to_s
+  tag project: gcp_project_id.to_s
 
-  ref "CIS Benchmark", url: "#{cis_url}"
-  ref "GCP Docs", url: "https://cloud.google.com/logging/docs/audit/"
-  ref "GCP Docs", url: "https://cloud.google.com/logging/docs/audit/configure-data-access"
+  ref 'CIS Benchmark', url: cis_url.to_s
+  ref 'GCP Docs', url: 'https://cloud.google.com/logging/docs/audit/'
+  ref 'GCP Docs', url: 'https://cloud.google.com/logging/docs/audit/configure-data-access'
 
   describe google_project_logging_audit_config(project: gcp_project_id) do
     its('default_types') { should include 'DATA_READ' }

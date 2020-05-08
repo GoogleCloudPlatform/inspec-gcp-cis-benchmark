@@ -1,4 +1,3 @@
-# encoding: utf-8
 # Copyright 2019 The inspec-gcp-cis-benchmark Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,43 +12,50 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title 'Ensure that Separation of duties is enforced while assigning service account related roles to users'
+title 'Ensure user-managed/external keys for service accounts are rotated every 90 days or less'
 
 gcp_project_id = attribute('gcp_project_id')
 cis_version = attribute('cis_version')
 cis_url = attribute('cis_url')
-control_id = "1.7"
-control_abbrev = "iam"
+control_id = '1.7'
+control_abbrev = 'iam'
+sa_key_older_than_seconds = attribute('sa_key_older_than_seconds')
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 1.0
 
-  title "[#{control_abbrev.upcase}] Ensure that Separation of duties is enforced while assigning service account related roles to users"
+  title "[#{control_abbrev.upcase}] Ensure user-managed/external keys for service accounts are rotated every 90 days or less"
 
-  desc "It is recommended that the principle of 'Separation of Duties' is enforced while assigning service account related roles to users."
-  desc "rationale", "Built-in/Predefined IAM role Service Account admin allows user/identity to create, delete, manage service account(s). Built-in/Predefined IAM role Service Account User allows user/identity (with adequate privileges on Compute and App Engine) to assign service account(s) to Apps/Compute Instances.
+  desc 'Service Account keys consist of a key ID (Private_key_Id) and Private key, which are used to sign programmatic requests that you make to Google cloud services accessible to that particular Service account. It is recommended that all Service Account keys are regularly rotated.'
+  desc 'rationale', "Rotating Service Account keys will reduce the window of opportunity for an access key that is associated with a compromised or terminated account to be used. Service Account keys should be rotated to ensure that data cannot be accessed with an old key which might have been lost, cracked, or stolen.
 
-Separation of duties is the concept of ensuring that one individual does not have all necessary permissions to be able to complete a malicious action. In Cloud IAM - service accounts, this could be an action such as using a service account to access resources that user should not normally have access to. Separation of duties is a business control typically used in larger organizations, meant to help avoid security or privacy incidents and errors.  It is considered best practice.
+Each service account is associated with a key pair, which is managed by Google Cloud Platform (GCP). It is used for service-to-service authentication within GCP. Google rotates the keys daily.
 
-Any user(s) should not have Service Account Admin and Service Account User, both roles assigned at a time."
+GCP provides option to create one or more user-managed (also called as external key pairs) key pairs for use from outside GCP (for example, for use with Application Default Credentials). When a new key pair is created, user is enforced download the private key (which is not retained by Google). With external keys, users are responsible for security of the private key and other management operations such as key rotation. External keys can be managed by the IAM API, gcloud command-line tool, or the Service Accounts page in the Google Cloud Platform Console. GCP facilitates up to 10 external service account keys per service account to facilitate key rotation."
 
   tag cis_scored: true
-  tag cis_level: 2
-  tag cis_gcp: "#{control_id}"
-  tag cis_version: "#{cis_version}"
-  tag project: "#{gcp_project_id}"
+  tag cis_level: 1
+  tag cis_gcp: control_id.to_s
+  tag cis_version: cis_version.to_s
+  tag project: gcp_project_id.to_s
 
-  ref "CIS Benchmark", url: "#{cis_url}"
-  ref "GCP Docs", url: "https://cloud.google.com/iam/docs/service-accounts"
-  ref "GCP Docs", url: "https://cloud.google.com/iam/docs/understanding-roles"
-  ref "GCP Docs", url: "https://cloud.google.com/iam/docs/granting-roles-to-service-accounts"
+  ref 'CIS Benchmark', url: cis_url.to_s
+  ref 'GCP Docs', url: 'https://cloud.google.com/iam/docs/understanding-service-accounts#managing_service_account_keys'
+  ref 'GCP Docs', url: 'https://cloud.google.com/sdk/gcloud/reference/iam/service-accounts/keys/list'
+  ref 'GCP Docs', url: 'https://cloud.google.com/iam/docs/service-accounts'
 
-  sa_admins = google_project_iam_binding(project: gcp_project_id, role: 'roles/iam.serviceAccountAdmin')
-  describe "[#{gcp_project_id}] roles/serviceAccountUser" do
-    subject { google_project_iam_binding(project: gcp_project_id, role: 'roles/iam.serviceAccountUser') }
-    sa_admins.members.each do |sa_admin|
-      its('members.to_s') { should_not match sa_admin }
+  google_service_accounts(project: gcp_project_id).service_account_emails.each do |sa_email|
+    if google_service_account_keys(project: gcp_project_id, service_account: sa_email).key_names.count > 1
+      impact 1.0
+      describe "[#{gcp_project_id}] ServiceAccount Keys for #{sa_email} older than #{sa_key_older_than_seconds} seconds" do
+        subject { google_service_account_keys(project: gcp_project_id, service_account: sa_email).where { (Time.now - sa_key_older_than_seconds > valid_after_time) } }
+        it { should_not exist }
+      end
+    else
+      impact 0
+      describe "[#{gcp_project_id}] ServiceAccount [#{sa_email}] does not have user-managed keys. This test is Not Applicable." do
+        skip "[#{gcp_project_id}] ServiceAccount [#{sa_email}] does not have user-managed keys."
+      end
     end
-  end  
-
+  end
 end

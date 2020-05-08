@@ -13,14 +13,21 @@
 # limitations under the License.
 
 name: inspec-gcp-cis-benchmark
-title: "Inspec GCP CIS 1.0 Benchmark"
+title: "Inspec GCP CIS 1.1 Benchmark"
 maintainer: 
 copyright: Google
 copyright_email: copyright@google.com
 license: Apache-2.0
-summary: "Inspec Google Cloud Platform Center for Internet Security Benchmark v1.0 Profile"
-version: "0.1.0"
-attributes:
+summary: "Inspec Google Cloud Platform Center for Internet Security Benchmark v1.1 Profile"
+version: "1.1.0"
+supports:
+  - platform: gcp
+depends:
+  - name: inspec-gcp
+    url: https://github.com/inspec/inspec-gcp/archive/v1.5.0.tar.gz
+  - name: inspec-gcp-helpers
+    url: https://github.com/GoogleCloudPlatform/inspec-gcp-helpers/archive/v1.0.0.tar.gz
+inputs:
 - name: gcp_project_id
   description: 'The GCP project identifier.'
   type: string
@@ -38,8 +45,8 @@ attributes:
   value: 7776000
   type: numeric
 - name: kms_rotation_period_seconds
-  description: 'How many seconds KMS Keys should be last rotated (1 year)'
-  value: 31536000
+  description: 'How many seconds KMS Keys should be last rotated (90 days)'
+  value: 7776000
   type: numeric
 - name: bucket_logging_ignore_regex
   description: 'Ignore this bucket by regex from requiring logging to be enabled'
@@ -56,7 +63,3 @@ attributes:
   type: array
   value:
     - ""
-depends:
-- name: inspec-gcp
-  git: https://github.com/inspec/inspec-gcp.git
-  tag: v0.21.4

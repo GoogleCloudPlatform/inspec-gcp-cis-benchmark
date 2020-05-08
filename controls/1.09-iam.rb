@@ -1,4 +1,3 @@
-# encoding: utf-8
 # Copyright 2019 The inspec-gcp-cis-benchmark Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,55 +12,69 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title 'Ensure that Separation of duties is enforced while assigning KMS related roles to users'
+title 'Ensure that Cloud KMS cryptokeys are not anonymously or publicly accessible'
 
 gcp_project_id = attribute('gcp_project_id')
 cis_version = attribute('cis_version')
 cis_url = attribute('cis_url')
-control_id = "1.9"
-control_abbrev = "iam"
+control_id = '1.9'
+control_abbrev = 'iam'
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 1.0
 
-  title "[#{control_abbrev.upcase}] Ensure that Separation of duties is enforced while assigning KMS related roles to users"
+  title "[#{control_abbrev.upcase}] Ensure that Cloud KMS cryptokeys are not anonymously or publicly accessible"
 
-  desc "It is recommended that the principle of 'Separation of Duties' is enforced while assigning KMS related roles to users."
+  desc 'It is recommended that the IAM policy on Cloud KMS cryptokeys should restrict anonymous and/or public access.'
 
-  desc "rationale", "Built-in/Predefined IAM role Cloud KMS Admin allows user/identity to create, delete, and manage service account(s). Built-in/Predefined IAM role Cloud KMS CryptoKey Encrypter/Decrypter allows user/identity (with adequate privileges on concerned resources) to encrypt and decrypt data at rest using encryption key(s). Built-in/Predefined IAM role Cloud KMS CryptoKey Encrypter allows user/identity (with adequate privileges on concerned resources) to encrypt data at rest using encryption key(s). Builtin/Predefined IAM role Cloud KMS CryptoKey Decrypter allows user/identity (with adequate privileges on concerned resources) to decrypt data at rest using encryption key(s).
-
-Separation of duties is the concept of ensuring that one individual does not have all necessary permissions to be able to complete a malicious action. In Cloud KMS, this could be an action such as using a key to access and decrypt data that that user should not normally have access to. Separation of duties is a business control typically used in larger organizations, meant to help avoid security or privacy incidents and errors. It is considered best practice.
-
-Any user(s) should not have Cloud KMS Admin and any of the Cloud KMS CryptoKey Encrypter/Decrypter, Cloud KMS CryptoKey Encrypter, Cloud KMS CryptoKey Decrypter roles assigned at a time."
+  desc 'rationale', 'Granting permissions to allUsers or allAuthenticatedUsers allows anyone to access the dataset. Such access might not be desirable if sensitive data is stored at the location. In this case, ensure that anonymous and/or public access to a Cloud KMS cryptokey is not allowed.'
 
   tag cis_scored: true
-  tag cis_level: 2
-  tag cis_gcp: "#{control_id}"
-  tag cis_version: "#{cis_version}"
-  tag project: "#{gcp_project_id}"
+  tag cis_level: 1
+  tag cis_gcp: control_id.to_s
+  tag cis_version: cis_version.to_s
+  tag project: gcp_project_id.to_s
 
-  ref "CIS Benchmark", url: "#{cis_url}"
-  ref "GCP Docs", url: "https://cloud.google.com/kms/docs/separation-of-duties"
+  ref 'CIS Benchmark', url: cis_url.to_s
+  ref 'GCP Docs', url: 'https://cloud.google.com/kms/docs/key-rotation#frequency_of_key_rotation'
 
-  kms_admins = google_project_iam_binding(project: gcp_project_id, role: 'roles/cloudkms.admin')
+  # Get all "normal" regions and add "global"
+  locations = google_compute_regions(project: gcp_project_id).region_names
+  locations << 'global'
 
-  describe "[#{gcp_project_id}] roles/cloudkms.cryptoKeyEncrypter" do
-    subject { google_project_iam_binding(project: gcp_project_id, role: 'roles/cloudkms.cryptoKeyEncrypter') }
-    kms_admins.members.each do |kms_admin|
-      its('members.to_s') { should_not match kms_admin }
+  # Ensure that keys aren't publicly accessible
+  locations.each do |location|
+    if google_kms_key_rings(project: gcp_project_id, location: location).key_ring_names.empty?
+      impact 0
+      describe "[#{gcp_project_id}] does not contain any key rings in [#{location}]. This test is Not Applicable." do
+        skip "[#{gcp_project_id}] does not contain any key rings in [#{location}]"
+      end
+    else
+      google_kms_key_rings(project: gcp_project_id, location: location).key_ring_names.each do |keyring|
+        if google_kms_crypto_keys(project: gcp_project_id, location: location, key_ring_name: keyring).crypto_key_names.empty?
+          impact 0
+          describe "[#{gcp_project_id}] key ring [#{keyring}] does not contain any cryptographic keys. This test is Not Applicable." do
+            skip "[#{gcp_project_id}] key ring [#{keyring}] does not contain any cryptographic keys"
+          end
+        else
+          google_kms_crypto_keys(project: gcp_project_id, location: location, key_ring_name: keyring).crypto_key_names.each do |keyname|
+            if google_kms_crypto_key_iam_policy(project: gcp_project_id, location: location, key_ring_name: keyring, crypto_key_name: keyname).bindings.nil?
+              impact 0
+              describe "[#{gcp_project_id}] key ring [#{keyring}] key [#{keyname}] does not have any IAM bindings. This test is Not Applicable." do
+                skip "[#{gcp_project_id}] key ring [#{keyring}] key [#{keyname}] does not have any IAM bindings"
+              end
+            else
+              impact 1.0
+              google_kms_crypto_key_iam_policy(project: gcp_project_id, location: location, key_ring_name: keyring, crypto_key_name: keyname).bindings.each do |binding|
+                describe binding do
+                  its('members') { should_not include 'allUsers' }
+                  its('members') { should_not include 'allAuthenticatedUsers' }
+                end
+              end
+            end
+          end
+        end
+      end
     end
   end
-  describe "[#{gcp_project_id}] roles/cloudkms.cryptoKeyDecrypter" do
-    subject { google_project_iam_binding(project: gcp_project_id, role: 'roles/cloudkms.cryptoKeyDecrypter') }
-    kms_admins.members.each do |kms_admin|
-      its('members.to_s') { should_not match kms_admin }
-    end
-  end
-  describe "[#{gcp_project_id}] roles/cloudkms.cryptoKeyEncrypterDecrypter" do
-    subject { google_project_iam_binding(project: gcp_project_id, role: 'roles/cloudkms.cryptoKeyEncrypterDecrypter') }
-    kms_admins.members.each do |kms_admin|
-      its('members.to_s') { should_not match kms_admin }
-    end
-  end
-  
 end

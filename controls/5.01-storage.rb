@@ -1,4 +1,3 @@
-# encoding: utf-8
 # Copyright 2019 The inspec-gcp-cis-benchmark Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,26 +17,26 @@ title 'Ensure that Cloud Storage bucket is not anonymously or publicly accessibl
 gcp_project_id = attribute('gcp_project_id')
 cis_version = attribute('cis_version')
 cis_url = attribute('cis_url')
-control_id = "5.1"
-control_abbrev = "storage"
+control_id = '5.1'
+control_abbrev = 'storage'
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 1.0
 
   title "[#{control_abbrev.upcase}] Ensure that Cloud Storage bucket is not anonymously or publicly accessible"
 
-  desc "It is recommended that IAM policy on Cloud Storage bucket does not allows anonymous and/or public access."
-  desc "rationale", "Allowing anonymous and/or public access grants permissions to anyone to access bucket content. Such access might not be desired if you are storing any sensitive data. Hence, ensure that anonymous and/or public access to a bucket is not allowed."
+  desc 'It is recommended that IAM policy on Cloud Storage bucket does not allows anonymous and/or public access.'
+  desc 'rationale', 'Allowing anonymous and/or public access grants permissions to anyone to access bucket content. Such access might not be desired if you are storing any sensitive data. Hence, ensure that anonymous and/or public access to a bucket is not allowed.'
 
   tag cis_scored: true
   tag cis_level: 1
-  tag cis_gcp: "#{control_id}"
-  tag cis_version: "#{cis_version}"
-  tag project: "#{gcp_project_id}"
+  tag cis_gcp: control_id.to_s
+  tag cis_version: cis_version.to_s
+  tag project: gcp_project_id.to_s
 
-  ref "CIS Benchmark", url: "#{cis_url}"
-  ref "GCP Docs", url: "https://cloud.google.com/storage/docs/access-control/iam-reference"
-  ref "GCP Docs", url: "https://cloud.google.com/storage/docs/access-control/making-data-public"
+  ref 'CIS Benchmark', url: cis_url.to_s
+  ref 'GCP Docs', url: 'https://cloud.google.com/storage/docs/access-control/iam-reference'
+  ref 'GCP Docs', url: 'https://cloud.google.com/storage/docs/access-control/making-data-public'
 
   google_storage_buckets(project: gcp_project_id).bucket_names.each do |bucket|
     google_storage_bucket_iam_bindings(bucket: bucket).iam_binding_roles.each do |role|
