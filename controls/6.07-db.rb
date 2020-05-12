@@ -20,6 +20,8 @@ cis_url = attribute('cis_url')
 control_id = '6.7'
 control_abbrev = 'db'
 
+sql_cache = CloudSQLCache(project: gcp_project_id)
+
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 1.0
 
@@ -40,15 +42,15 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/mysql/backup-recovery/backups'
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/backup-recovery/backing-up'
 
-  if google_sql_database_instances(project: gcp_project_id).instance_names.empty?
+  if sql_cache.instance_names.empty?
     impact 0
     describe "[#{gcp_project_id}] does not have any CloudSQL instances, this test is Not Applicable" do
       skip "[#{gcp_project_id}] does not have any CloudSQL instances"
     end
   else
-    google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
+    sql_cache.instance_names.each do |db|
       describe "[#{gcp_project_id}] CloudSQL #{db} should have automated backups enabled and have a start time" do
-        subject { google_sql_database_instance(project: gcp_project_id, database: db).settings.backup_configuration }
+        subject { sql_cache.instance_objects[db].settings.backup_configuration }
         its('enabled') { should cmp true }
         its('start_time') { should_not eq '' }
       end
