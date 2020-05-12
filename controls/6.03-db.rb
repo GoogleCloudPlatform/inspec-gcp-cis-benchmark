@@ -20,6 +20,8 @@ cis_url = attribute('cis_url')
 control_id = '6.3'
 control_abbrev = 'db'
 
+sql_cache = CloudSQLCache(project: gcp_project_id)
+
 # 6.3.1
 sub_control_id = "#{control_id}.1"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
@@ -40,12 +42,12 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/sqlserver/flags'
   ref 'GCP Docs', url: 'https://docs.microsoft.com/en-us/sql/database-engine/configure-windows/cross-db-ownership-chaining-server-configuration-option?view=sql-server-ver15'
 
-  google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
-    if google_sql_database_instance(project: gcp_project_id, database: db).database_version.include? 'SQLSERVER'
-      unless google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.nil?
+  sql_cache.instance_names.each do |db|
+    if sql_cache.instance_objects[db].database_version.include? 'SQLSERVER'
+      unless sql_cache.instance_objects[db].settings.database_flags.nil?
         impact 1.0
         describe.one do
-          google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.each do |flag|
+          sql_cache.instance_objects[db].settings.database_flags.each do |flag|
             describe "[#{gcp_project_id} , #{db} ] should have a database flag 'cross db ownership chaining' set to 'off' " do
               subject { flag }
               its('name') { should cmp 'cross db ownership chaining' }
@@ -90,12 +92,12 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://docs.microsoft.com/en-us/sql/database-engine/configure-windows/contained-database-authentication-server-configuration-option?view=sql-server-ver15'
   ref 'GCP Docs', url: 'https://docs.microsoft.com/en-us/sql/relational-databases/databases/security-best-practices-with-contained-databases?view=sql-server-ver15'
 
-  google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
-    if google_sql_database_instance(project: gcp_project_id, database: db).database_version.include? 'SQLSERVER'
-      unless google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.nil?
+  sql_cache.instance_names.each do |db|
+    if sql_cache.instance_objects[db].database_version.include? 'SQLSERVER'
+      unless sql_cache.instance_objects[db].settings.database_flags.nil?
         impact 1.0
         describe.one do
-          google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.each do |flag|
+          sql_cache.instance_objects[db].settings.database_flags.each do |flag|
             describe "[#{gcp_project_id} , #{db} ] should have a database flag 'contained database authentication' set to 'off' " do
               subject { flag }
               its('name') { should cmp 'contained database authentication' }

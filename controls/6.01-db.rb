@@ -22,6 +22,8 @@ cis_url = attribute('cis_url')
 control_id = '6.1'
 control_abbrev = 'db'
 
+sql_cache = CloudSQLCache(project: gcp_project_id)
+
 # 6.1.1
 sub_control_id = "#{control_id}.1"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
@@ -69,12 +71,12 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/mysql/flags'
 
-  google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
-    if google_sql_database_instance(project: gcp_project_id, database: db).database_version.include? 'MYSQL'
-      unless google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.nil?
+  sql_cache.instance_names.each do |db|
+    if sql_cache.instance_objects[db].database_version.include? 'MYSQL'
+      unless sql_cache.instance_objects[db].settings.database_flags.nil?
         impact 1.0
         describe.one do
-          google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.each do |flag|
+          sql_cache.instance_objects[db].settings.database_flags.each do |flag|
             describe flag do
               its('name') { should cmp 'local_infile' }
               its('value') { should cmp 'off' }
@@ -92,6 +94,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
       describe "[#{gcp_project_id}] [#{db}] is not a MySQL database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a MySQL database"
       end
-  end
+    end
   end
 end

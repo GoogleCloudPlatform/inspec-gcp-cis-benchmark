@@ -20,6 +20,8 @@ cis_url = attribute('cis_url')
 control_id = '6.5'
 control_abbrev = 'db'
 
+sql_cache = CloudSQLCache(project: gcp_project_id)
+
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 1.0
 
@@ -37,10 +39,10 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/mysql/configure-ip'
 
-  unless google_sql_database_instances(project: gcp_project_id).instance_names.empty?
-    google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
+  unless sql_cache.instance_names.empty?
+    sql_cache.instance_names.each do |db|
       describe "[#{gcp_project_id}] CloudSQL #{db}" do
-        subject { google_sql_database_instance(project: gcp_project_id, database: db).settings.ip_configuration.authorized_networks }
+        subject { sql_cache.instance_objects[db].settings.ip_configuration.authorized_networks }
         it { should_not include('0.0.0.0/0') }
       end
     end

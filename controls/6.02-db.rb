@@ -20,6 +20,8 @@ cis_url = attribute('cis_url')
 control_id = '6.2'
 control_abbrev = 'db'
 
+sql_cache = CloudSQLCache(project: gcp_project_id)
+
 # 6.2.1
 sub_control_id = "#{control_id}.1"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
@@ -39,12 +41,12 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/flags#setting_a_database_flag'
 
-  google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
-    if google_sql_database_instance(project: gcp_project_id, database: db).database_version.include? 'POSTGRES'
-      unless google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.nil?
+  sql_cache.instance_names.each do |db|
+    if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
+      unless sql_cache.instance_objects[db].settings.database_flags.nil?
         impact 1.0
         describe.one do
-          google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.each do |flag|
+          sql_cache.instance_objects[db].settings.database_flags.each do |flag|
             describe "[#{gcp_project_id} , #{db} ] should have a database flag 'log_checkpoints' set to 'on' " do
               subject { flag }
               its('name') { should cmp 'log_checkpoints' }
@@ -89,12 +91,12 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/flags#setting_a_database_flag'
   ref 'GCP Docs', url: 'https://www.postgresql.org/docs/9.6/runtime-config-logging.html#RUNTIME-CONFIG-LOGGING-WHAT'
 
-  google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
-    if google_sql_database_instance(project: gcp_project_id, database: db).database_version.include? 'POSTGRES'
-      unless google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.nil?
+  sql_cache.instance_names.each do |db|
+    if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
+      unless sql_cache.instance_objects[db].settings.database_flags.nil?
         impact 1.0
         describe.one do
-          google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.each do |flag|
+          sql_cache.instance_objects[db].settings.database_flags.each do |flag|
             describe "[#{gcp_project_id} , #{db} ] should have a database flag 'log_connections' set to 'on' " do
               subject { flag }
               its('name') { should cmp 'log_connections' }
@@ -139,12 +141,12 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/flags#setting_a_database_flag'
   ref 'GCP Docs', url: 'https://www.postgresql.org/docs/9.6/runtime-config-logging.html#RUNTIME-CONFIG-LOGGING-WHAT'
 
-  google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
-    if google_sql_database_instance(project: gcp_project_id, database: db).database_version.include? 'POSTGRES'
-      unless google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.nil?
+  sql_cache.instance_names.each do |db|
+    if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
+      unless sql_cache.instance_objects[db].settings.database_flags.nil?
         impact 1.0
         describe.one do
-          google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.each do |flag|
+          sql_cache.instance_objects[db].settings.database_flags.each do |flag|
             describe "[#{gcp_project_id} , #{db} ] should have a database flag 'log_disconnections' set to 'on' " do
               subject { flag }
               its('name') { should cmp 'log_disconnections' }
@@ -190,12 +192,12 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/flags#setting_a_database_flag'
   ref 'GCP Docs', url: 'https://www.postgresql.org/docs/9.6/runtime-config-logging.html#RUNTIME-CONFIG-LOGGING-WHAT'
 
-  google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
-    if google_sql_database_instance(project: gcp_project_id, database: db).database_version.include? 'POSTGRES'
-      unless google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.nil?
+  sql_cache.instance_names.each do |db|
+    if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
+      unless sql_cache.instance_objects[db].settings.database_flags.nil?
         impact 1.0
         describe.one do
-          google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.each do |flag|
+          sql_cache.instance_objects[db].settings.database_flags.each do |flag|
             describe "[#{gcp_project_id} , #{db} ] should have a database flag 'log_lock_waits' set to 'on' " do
               subject { flag }
               its('name') { should cmp 'log_lock_waits' }
@@ -239,12 +241,12 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/flags#setting_a_database_flag'
   ref 'GCP Docs', url: 'https://www.postgresql.org/docs/9.6/runtime-config-logging.html#RUNTIME-CONFIG-LOGGING-WHAT'
 
-  google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
-    if google_sql_database_instance(project: gcp_project_id, database: db).database_version.include? 'POSTGRES'
-      unless google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.nil?
+  sql_cache.instance_names.each do |db|
+    if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
+      unless sql_cache.instance_objects[db].settings.database_flags.nil?
         impact 1.0
         describe.one do
-          google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.each do |flag|
+          sql_cache.instance_objects[db].settings.database_flags.each do |flag|
             describe "[#{gcp_project_id} , #{db} ] should have a database flag 'log_min_error_statement' set to 'ERROR' " do
               subject { flag }
               its('name') { should cmp 'log_min_error_statement' }
@@ -287,12 +289,12 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/flags#setting_a_database_flag'
   ref 'GCP Docs', url: 'https://www.postgresql.org/docs/9.6/runtime-config-logging.html#RUNTIME-CONFIG-LOGGING-WHAT'
 
-  google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
-    if google_sql_database_instance(project: gcp_project_id, database: db).database_version.include? 'POSTGRES'
-      unless google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.nil?
+  sql_cache.instance_names.each do |db|
+    if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
+      unless sql_cache.instance_objects[db].settings.database_flags.nil?
         impact 1.0
         describe.one do
-          google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.each do |flag|
+          sql_cache.instance_objects[db].settings.database_flags.each do |flag|
             describe "[#{gcp_project_id} , #{db} ] should have a database flag 'log_temp_files' set to '0' " do
               subject { flag }
               its('name') { should cmp 'log_temp_files' }
@@ -336,12 +338,12 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/flags#setting_a_database_flag'
   ref 'GCP Docs', url: 'https://www.postgresql.org/docs/9.6/runtime-config-logging.html#RUNTIME-CONFIG-LOGGING-WHAT'
 
-  google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
-    if google_sql_database_instance(project: gcp_project_id, database: db).database_version.include? 'POSTGRES'
-      unless google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.nil?
+  sql_cache.instance_names.each do |db|
+    if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
+      unless sql_cache.instance_objects[db].settings.database_flags.nil?
         impact 1.0
         describe.one do
-          google_sql_database_instance(project: gcp_project_id, database: db).settings.database_flags.each do |flag|
+          sql_cache.instance_objects[db].settings.database_flags.each do |flag|
             describe "[#{gcp_project_id} , #{db} ] should have a database flag 'log_min_duration_statement' set to '-1' " do
               subject { flag }
               its('name') { should cmp 'log_min_duration_statement' }

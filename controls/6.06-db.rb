@@ -20,6 +20,8 @@ cis_url = attribute('cis_url')
 control_id = '6.6'
 control_abbrev = 'db'
 
+sql_cache = CloudSQLCache(project: gcp_project_id)
+
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 1.0
 
@@ -37,9 +39,9 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/mysql/configure-private-ip'
 
-  unless google_sql_database_instances(project: gcp_project_id).instance_names.empty?
-    google_sql_database_instances(project: gcp_project_id).instance_names.each do |db|
-      google_sql_database_instance(project: gcp_project_id, database: db).ip_addresses.each do |ip_address|
+  unless sql_cache.instance_names.empty?
+    sql_cache.instance_names.each do |db|
+      sql_cache.instance_objects[db].ip_addresses.each do |ip_address|
         describe "[#{gcp_project_id}] CloudSQL #{db}" do
           subject { ip_address }
           its('type') { should_not include('PRIMARY') }
