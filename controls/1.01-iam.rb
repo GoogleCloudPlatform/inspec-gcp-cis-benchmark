@@ -20,6 +20,8 @@ cis_url = attribute('cis_url')
 control_id = '1.1'
 control_abbrev = 'iam'
 
+iam_bindings_cache = IAMBindingsCache(project: gcp_project_id)
+
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 1.0
 
@@ -54,8 +56,8 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
     end
   end
 
-  google_project_iam_bindings(project: gcp_project_id).iam_binding_roles.each do |role|
-    google_project_iam_binding(project: gcp_project_id, role: role).members.each do |member|
+  iam_bindings_cache.iam_binding_roles.each do |role|
+    iam_bindings_cache.iam_bindings[role].members.each do |member|
       next if member.to_s.end_with?('.gserviceaccount.com')
       describe "[#{gcp_project_id}] [Role:#{role}] Its member #{member}" do
         subject { member.to_s }

@@ -20,6 +20,8 @@ cis_url = attribute('cis_url')
 control_id = '1.5'
 control_abbrev = 'iam'
 
+iam_bindings_cache = IAMBindingsCache(project: gcp_project_id)
+
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 1.0
 
@@ -40,25 +42,20 @@ This recommendation is applicable only for User-Managed user created service acc
   ref 'GCP Docs', url: 'https://cloud.google.com/iam/docs/understanding-roles'
   ref 'GCP Docs', url: 'https://cloud.google.com/iam/docs/understanding-service-accounts'
 
-  google_project_iam_bindings(project: gcp_project_id).where(iam_binding_role: /admin/i).iam_binding_roles.each do |role|
+  iam_bindings_cache.iam_bindings.keys.grep(/admin/i).each do |role|
     describe "[#{gcp_project_id}] Admin roles" do
-      subject { google_project_iam_binding(project: gcp_project_id, role: role) }
+      subject { iam_bindings_cache.iam_bindings[role] }
       its('members') { should_not include /@iam.gserviceaccount.com/ }
     end
   end
 
-  google_project_iam_bindings(project: gcp_project_id).where(iam_binding_role: 'roles/editor').iam_binding_roles.each do |role|
-    describe "[#{gcp_project_id}] Project Editor Role" do
-      subject { google_project_iam_binding(project: gcp_project_id, role: role) }
-      its('members') { should_not include /@iam.gserviceaccount.com/ }
-    end
+  describe "[#{gcp_project_id}] Project Editor Role" do
+    subject { iam_bindings_cache.iam_bindings['roles/editor'] }
+    its('members') { should_not include /@iam.gserviceaccount.com/ }
   end
 
-  google_project_iam_bindings(project: gcp_project_id).where(iam_binding_role: 'roles/owner').iam_binding_roles.each do |role|
-    describe "[#{gcp_project_id}] Project Owner Role" do
-      subject { google_project_iam_binding(project: gcp_project_id, role: role) }
-      its('members') { should_not include /@iam.gserviceaccount.com/ }
-    end
+  describe "[#{gcp_project_id}] Project Owner Role" do
+    subject { iam_bindings_cache.iam_bindings['roles/owner'] }
+    its('members') { should_not include /@iam.gserviceaccount.com/ }
   end
-
 end
