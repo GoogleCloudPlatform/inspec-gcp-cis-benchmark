@@ -20,6 +20,8 @@ cis_url = attribute('cis_url')
 control_id = '1.4'
 control_abbrev = 'iam'
 
+service_account_cache = ServiceAccountCache(project: gcp_project_id)
+
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 1.0
 
@@ -47,11 +49,11 @@ Even after owners precaution, keys can be easily leaked by common development ma
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/iam/docs/understanding-service-accounts#managing_service_account_keys'
 
-  google_service_accounts(project: gcp_project_id).service_account_emails.each do |sa_email|
-    if google_service_account_keys(project: gcp_project_id, service_account: sa_email).key_names.count > 1
+  service_account_cache.service_account_emails.each do |sa_email|
+    if service_account_cache.service_account_keys[sa_email].key_names.count > 1
       impact 1.0
       describe "[#{gcp_project_id}] Service Account: #{sa_email}" do
-        subject { google_service_account_keys(project: gcp_project_id, service_account: sa_email) }
+        subject { service_account_cache.service_account_keys[sa_email] }
         its('key_types') { should_not include 'USER_MANAGED' }
       end
     else

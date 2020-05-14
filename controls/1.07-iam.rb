@@ -21,6 +21,8 @@ control_id = '1.7'
 control_abbrev = 'iam'
 sa_key_older_than_seconds = attribute('sa_key_older_than_seconds')
 
+service_account_cache = ServiceAccountCache(project: gcp_project_id)
+
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 1.0
 
@@ -44,11 +46,11 @@ GCP provides option to create one or more user-managed (also called as external 
   ref 'GCP Docs', url: 'https://cloud.google.com/sdk/gcloud/reference/iam/service-accounts/keys/list'
   ref 'GCP Docs', url: 'https://cloud.google.com/iam/docs/service-accounts'
 
-  google_service_accounts(project: gcp_project_id).service_account_emails.each do |sa_email|
-    if google_service_account_keys(project: gcp_project_id, service_account: sa_email).key_names.count > 1
+  service_account_cache.service_account_emails.each do |sa_email|
+    if service_account_cache.service_account_keys[sa_email].key_names.count > 1
       impact 1.0
       describe "[#{gcp_project_id}] ServiceAccount Keys for #{sa_email} older than #{sa_key_older_than_seconds} seconds" do
-        subject { google_service_account_keys(project: gcp_project_id, service_account: sa_email).where { (Time.now - sa_key_older_than_seconds > valid_after_time) } }
+        subject { service_account_cache.service_account_keys[sa_email].where { (Time.now - sa_key_older_than_seconds > valid_after_time) } }
         it { should_not exist }
       end
     else

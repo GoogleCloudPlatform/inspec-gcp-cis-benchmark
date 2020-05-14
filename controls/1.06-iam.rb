@@ -20,6 +20,8 @@ cis_url = attribute('cis_url')
 control_id = '1.6'
 control_abbrev = 'iam'
 
+iam_bindings_cache = IAMBindingsCache(project: gcp_project_id)
+
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 1.0
 
@@ -48,8 +50,7 @@ In order to implement least privileges best practices, IAM users should not be a
   ref 'GCP Docs', url: 'https://cloud.google.com/iam/docs/granting-changing-revoking-access'
 
   describe "[#{gcp_project_id}] A project-level binding of ServiceAccountUser" do
-    subject { google_project_iam_bindings(project: gcp_project_id).where(iam_binding_role: 'roles/iam.serviceAccountUser') }
-    it { should_not exist }
+    subject { iam_bindings_cache.iam_bindings['roles/iam.serviceAccountUser'] }
+    it { should eq nil }
   end
-
 end
