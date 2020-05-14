@@ -1,4 +1,4 @@
-# GCP CIS 1.1 Benchmark Inspec Profile
+# GCP CIS 1.1.0 Benchmark Inspec Profile
 
 This repository holds the [Google Cloud Platform (GCP)](https://cloud.google.com/) [Center for Internet Security (CIS)](https://www.cisecurity.org) [version 1.1 Benchmark](https://www.cisecurity.org/benchmark/google_cloud_computing_platform/) [Inspec](https://www.inspec.io/) Profile.
 
@@ -8,7 +8,7 @@ This is not an officially supported Google product. This code is intended to hel
 
 ## Coverage
 
-The following GCP CIS v1.0 Benchmark Controls are not covered:
+The following GCP CIS v1.1.0 Benchmark Controls are not covered:
 
 * Identity and Access Management 1.2 - "Ensure that multi-factor authentication is enabled for all non-service accounts"
 * Identity and Access Management 1.3 - "Ensure that Security Key Enforcement is enabled for all admin accounts"
