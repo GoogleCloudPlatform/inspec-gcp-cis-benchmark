@@ -41,23 +41,25 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   # Get all "normal" regions and add "global"
   locations = google_compute_regions(project: gcp_project_id).region_names
   locations << 'global'
+  
+  kms_cache = KMSKeyCache(project: gcp_project_id, locations: locations)
 
   # Ensure that keys aren't publicly accessible
   locations.each do |location|
-    if google_kms_key_rings(project: gcp_project_id, location: location).key_ring_names.empty?
+    if kms_cache.kms_key_ring_names[location].empty?
       impact 0
       describe "[#{gcp_project_id}] does not contain any key rings in [#{location}]. This test is Not Applicable." do
         skip "[#{gcp_project_id}] does not contain any key rings in [#{location}]"
       end
     else
-      google_kms_key_rings(project: gcp_project_id, location: location).key_ring_names.each do |keyring|
-        if google_kms_crypto_keys(project: gcp_project_id, location: location, key_ring_name: keyring).crypto_key_names.empty?
+      kms_cache.kms_key_ring_names[location].each do |keyring|
+        if kms_cache.kms_crypto_keys[location][keyring].empty?
           impact 0
           describe "[#{gcp_project_id}] key ring [#{keyring}] does not contain any cryptographic keys. This test is Not Applicable." do
             skip "[#{gcp_project_id}] key ring [#{keyring}] does not contain any cryptographic keys"
           end
         else
-          google_kms_crypto_keys(project: gcp_project_id, location: location, key_ring_name: keyring).crypto_key_names.each do |keyname|
+          kms_cache.kms_crypto_keys[location][keyring].each do |keyname|
             if google_kms_crypto_key_iam_policy(project: gcp_project_id, location: location, key_ring_name: keyring, crypto_key_name: keyname).bindings.nil?
               impact 0
               describe "[#{gcp_project_id}] key ring [#{keyring}] key [#{keyname}] does not have any IAM bindings. This test is Not Applicable." do
