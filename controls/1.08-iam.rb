@@ -46,7 +46,7 @@ Any user(s) should not have Service Account Admin and Service Account User, both
   ref 'GCP Docs', url: 'https://cloud.google.com/iam/docs/granting-roles-to-service-accounts'
 
   sa_admins = iam_bindings_cache.iam_bindings['roles/iam.serviceAccountAdmin']
-  if sa_admins.members.nil? || sa_admins.members.count.zero?
+  if sa_admins.nil? || sa_admins.members.count.zero?
     impact 0
     describe "[#{gcp_project_id}] does not contain users with roles/serviceAccountAdmin. This test is Not Applicable." do
       skip "[#{gcp_project_id}] does not contain users with roles/serviceAccountAdmin"
