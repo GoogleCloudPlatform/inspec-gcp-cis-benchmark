@@ -29,7 +29,7 @@ steps:
   args: 
     - '-c'
     - |
-      inspec check .
+      inspec check /share/.
 
 - id: 'Rubocop'
   waitFor: ['Verify InSpec controls']
@@ -38,7 +38,7 @@ steps:
   args: 
     - '-c'
     - |
-      rubocop .
+      rubocop /share/.
 
 - id: 'Write input file'
   waitFor: ['Rubocop']
