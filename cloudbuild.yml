@@ -22,8 +22,26 @@ steps:
   name: 'gcr.io/cloud-builders/docker'
   args: [ 'build', '-t', 'gcr.io/${_GCP_PROJECT_ID}/inspec-gcp-cis-benchmark:${_PR_NUMBER}', '.' ]
 
-- id: 'Write input file'
+- id: 'Verify InSpec controls'
   waitFor: ['Build Docker container']
+  name: gcr.io/${_GCP_PROJECT_ID}/inspec-gcp-cis-benchmark:${_PR_NUMBER}
+  entrypoint: '/bin/sh'
+  args: 
+    - '-c'
+    - |
+      inspec check .
+
+- id: 'Rubocop'
+  waitFor: ['Verify InSpec controls']
+  name: gcr.io/${_GCP_PROJECT_ID}/inspec-gcp-cis-benchmark:${_PR_NUMBER}
+  entrypoint: '/bin/sh'
+  args: 
+    - '-c'
+    - |
+      rubocop .
+
+- id: 'Write input file'
+  waitFor: ['Rubocop']
   name: gcr.io/cloud-foundation-cicd/cft/developer-tools:0
   entrypoint: '/bin/sh'
   args: 
@@ -45,7 +63,7 @@ steps:
       EOF
       cat /workspace/inputs.yml
 
-- id: 'Run PCI Profile on in-scope project'
+- id: 'Run CIS Profile on in-scope project'
   waitFor: ['Write input file']
   name: gcr.io/${_GCP_PROJECT_ID}/inspec-gcp-cis-benchmark:${_PR_NUMBER}
   entrypoint: '/bin/sh'
@@ -54,12 +72,12 @@ steps:
     - |
       inspec exec /share/. -t gcp:// \
       --input-file /workspace/inputs.yml \
-      --reporter cli json:/workspace/pci_report.json html:/workspace/pci_report.html | tee out.json
+      --reporter cli json:/workspace/cis_report.json html:/workspace/cis_report.html | tee out.json
 
 - id: 'Store json Report'
-  waitFor: ['Run PCI Profile on in-scope project']
+  waitFor: ['Run CIS Profile on in-scope project']
   name: gcr.io/cloud-builders/gsutil
   args:
     - cp
     - /workspace/pci_report.json
-    - gs://${_REPORTS_BUCKET}/pci_report-${BUILD_ID}.json
+    - gs://${_REPORTS_BUCKET}/cis_report-${BUILD_ID}.json
