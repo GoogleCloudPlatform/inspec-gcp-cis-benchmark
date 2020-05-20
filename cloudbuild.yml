@@ -79,5 +79,5 @@ steps:
   name: gcr.io/cloud-builders/gsutil
   args:
     - cp
-    - /workspace/pci_report.json
+    - /workspace/cis_report.json
     - gs://${_REPORTS_BUCKET}/cis_report-${BUILD_ID}.json
