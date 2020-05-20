@@ -50,7 +50,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   describe "[#{gcp_project_id}] Project level Log sink with an empty filter" do
     subject { empty_filter_sinks }
     it 'is expected to exist' do
-      expect(empty_filter_sinks.count).to be > 0
+      expect(empty_filter_sinks.count).to be.positive
     end
   end
 end

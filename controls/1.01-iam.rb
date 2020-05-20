@@ -61,7 +61,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
       next if member.to_s.end_with?('.gserviceaccount.com')
       describe "[#{gcp_project_id}] [Role:#{role}] Its member #{member}" do
         subject { member.to_s }
-        it { should match /@#{org_domain}/ }
+        it { should match(/@#{org_domain}/) }
       end
     end
   end

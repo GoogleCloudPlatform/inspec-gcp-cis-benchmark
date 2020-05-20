@@ -41,7 +41,6 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   # Get all "normal" regions and add "global"
   locations = google_compute_regions(project: gcp_project_id).region_names
   locations << 'global'
-  
   kms_cache = KMSKeyCache(project: gcp_project_id, locations: locations)
 
   # Ensure that keys aren't publicly accessible
