@@ -33,7 +33,7 @@ steps:
       inspec check /share/.
 
 - id: 'Rubocop'
-  waitFor: ['Build Docker container']
+  waitFor: ['Verify InSpec controls']
   name: gcr.io/${_GCP_PROJECT_ID}/inspec-gcp-cis-benchmark:${_PR_NUMBER}
   entrypoint: '/bin/sh'
   args: 
