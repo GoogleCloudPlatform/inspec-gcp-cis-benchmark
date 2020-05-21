@@ -52,7 +52,7 @@ $ gcloud auth application-default login
 
 ```
 # scan a project with this profile, replace <YOUR_PROJECT_ID> with your project ID
-$ CHEF_LICENSE=accept-no-persist inspec exec https://github.com/GoogleCloudPlatform/inspec-gcp-cis-benchmark.git -t gcp:// --input gcp_project_id=<YOUR_PROJECT_ID>
+$ inspec exec https://github.com/GoogleCloudPlatform/inspec-gcp-cis-benchmark.git -t gcp:// --input gcp_project_id=<YOUR_PROJECT_ID>
 ...snip...
 Profile Summary: 48 successful controls, 5 control failures, 7 controls skipped
 Test Summary: 166 successful, 7 failures, 7 skipped
