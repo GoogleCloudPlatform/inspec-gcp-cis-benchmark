@@ -22,7 +22,7 @@ control_id = '7.1'
 control_abbrev = 'storage'
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
-  impact 1.0
+  impact 'high'
 
   title "[#{control_abbrev.upcase}] Ensure that BigQuery datasets are not anonymously or publicly accessible"
 

@@ -21,7 +21,7 @@ control_id = '1.13'
 control_abbrev = 'iam'
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
-  impact 1.0
+  impact 'medium'
 
   title "[#{control_abbrev.upcase}] Ensure API keys are restricted to use by only specified Hosts and Apps"
 

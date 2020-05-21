@@ -21,7 +21,7 @@ control_id = '3.3'
 control_abbrev = 'networking'
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
-  impact 1.0
+  impact 'medium'
 
   title "[#{control_abbrev.upcase}] Ensure that DNSSEC is enabled for Cloud DNS"
 
@@ -48,7 +48,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
       end
     end
   else
-    impact 0
+    impact 'none'
     describe "[#{gcp_project_id}] does not have DNS Zones with Public visibility. This test is Not Applicable." do
       skip "[#{gcp_project_id}] does not have DNS Zones with Public visibility."
     end

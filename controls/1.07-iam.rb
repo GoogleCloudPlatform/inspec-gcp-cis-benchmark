@@ -24,7 +24,7 @@ sa_key_older_than_seconds = attribute('sa_key_older_than_seconds')
 service_account_cache = ServiceAccountCache(project: gcp_project_id)
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
-  impact 1.0
+  impact 'medium'
 
   title "[#{control_abbrev.upcase}] Ensure user-managed/external keys for service accounts are rotated every 90 days or less"
 
@@ -48,13 +48,13 @@ GCP provides option to create one or more user-managed (also called as external 
 
   service_account_cache.service_account_emails.each do |sa_email|
     if service_account_cache.service_account_keys[sa_email].key_names.count > 1
-      impact 1.0
+      impact 'medium'
       describe "[#{gcp_project_id}] ServiceAccount Keys for #{sa_email} older than #{sa_key_older_than_seconds} seconds" do
         subject { service_account_cache.service_account_keys[sa_email].where { (Time.now - sa_key_older_than_seconds > valid_after_time) } }
         it { should_not exist }
       end
     else
-      impact 0
+      impact 'none'
       describe "[#{gcp_project_id}] ServiceAccount [#{sa_email}] does not have user-managed keys. This test is Not Applicable." do
         skip "[#{gcp_project_id}] ServiceAccount [#{sa_email}] does not have user-managed keys."
       end

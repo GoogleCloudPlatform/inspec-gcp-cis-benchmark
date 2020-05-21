@@ -23,7 +23,7 @@ control_abbrev = 'db'
 sql_cache = CloudSQLCache(project: gcp_project_id)
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
-  impact 1.0
+  impact 'medium'
 
   title "[#{control_abbrev.upcase}] Ensure that Cloud SQL database instances are configured with automated backups"
 
@@ -43,7 +43,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/backup-recovery/backing-up'
 
   if sql_cache.instance_names.empty?
-    impact 0
+    impact 'none'
     describe "[#{gcp_project_id}] does not have any CloudSQL instances, this test is Not Applicable" do
       skip "[#{gcp_project_id}] does not have any CloudSQL instances"
     end

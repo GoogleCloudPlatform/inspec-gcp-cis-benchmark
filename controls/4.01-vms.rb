@@ -24,7 +24,7 @@ control_abbrev = 'vms'
 gce_instances = GCECache(project: gcp_project_id, gce_zones: gce_zones).gce_instances_cache
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
-  impact 1.0
+  impact 'medium'
 
   title "[#{control_abbrev.upcase}] Ensure that instances are not configured to use the default compute engine service account with full access to all Cloud APIs"
 

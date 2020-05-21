@@ -21,7 +21,7 @@ control_id = '1.11'
 control_abbrev = 'iam'
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
-  impact 1.0
+  impact 'medium'
 
   title "[#{control_abbrev.upcase}] Ensure that Separation of duties is enforced while assigning KMS related roles to users"
 
@@ -45,7 +45,7 @@ Any user(s) should not have Cloud KMS Admin and any of the Cloud KMS CryptoKey E
   kms_admins = google_project_iam_binding(project: gcp_project_id, role: 'roles/cloudkms.admin')
 
   if kms_admins.members.count == 0
-    impact 0
+    impact 'none'
     describe "[#{gcp_project_id}] does not have users with roles/CloudKMSAdmin. This test is Not Applicable." do
       skip "[#{gcp_project_id}] does not have users with roles/CloudKMSAdmin"
     end

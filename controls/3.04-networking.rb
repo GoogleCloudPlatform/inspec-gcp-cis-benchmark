@@ -21,7 +21,7 @@ control_id = '3.4'
 control_abbrev = 'networking'
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
-  impact 1.0
+  impact 'medium'
 
   title "[#{control_abbrev.upcase}] Ensure that RSASHA1 is not used for key-signing key in Cloud DNS DNSSEC"
 
@@ -61,7 +61,7 @@ When enabling DNSSEC for a managed zone, or creating a managed zone with DNSSEC,
       end
     end
   else
-    impact 0.0
+    impact 'none'
     describe "[#{gcp_project_id}] does not have DNS Zones. This test is Not Applicable." do
       skip "[#{gcp_project_id}] does not have DNS Zones."
     end

@@ -21,7 +21,7 @@ control_id = '3.2'
 control_abbrev = 'networking'
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
-  impact 1.0
+  impact 'medium'
 
   title "[#{control_abbrev.upcase}] Ensure legacy networks does not exists for a project"
 
