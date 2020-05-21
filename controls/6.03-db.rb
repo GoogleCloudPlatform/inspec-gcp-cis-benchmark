@@ -25,7 +25,7 @@ sql_cache = CloudSQLCache(project: gcp_project_id)
 # 6.3.1
 sub_control_id = "#{control_id}.1"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
-  impact 1.0
+  impact 'medium'
 
   title "[#{control_abbrev.upcase}] Ensure that the 'cross db ownership chaining' database flag for Cloud SQL Server instance is set to 'off'"
 
@@ -45,7 +45,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   sql_cache.instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'SQLSERVER'
       unless sql_cache.instance_objects[db].settings.database_flags.nil?
-        impact 1.0
+        impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
             describe "[#{gcp_project_id} , #{db} ] should have a database flag 'cross db ownership chaining' set to 'off' " do
@@ -56,14 +56,14 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
           end
         end
       else
-        impact 1.0
+        impact 'medium'
         describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
           subject { false }
           it { should be true }
         end
       end
     else
-      impact 0
+      impact 'none'
       describe "[#{gcp_project_id}] [#{db}] is not a SQL Server database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a SQL Server database"
       end
@@ -74,7 +74,7 @@ end
 # 6.3.2
 sub_control_id = "#{control_id}.2"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
-  impact 1.0
+  impact 'medium'
 
   title "[#{control_abbrev.upcase}] Ensure that the 'contained database authentication' database flag for Cloud SQL server instance is set to 'off'"
 
@@ -95,7 +95,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   sql_cache.instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'SQLSERVER'
       unless sql_cache.instance_objects[db].settings.database_flags.nil?
-        impact 1.0
+        impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
             describe "[#{gcp_project_id} , #{db} ] should have a database flag 'contained database authentication' set to 'off' " do
@@ -106,14 +106,14 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
           end
         end
       else
-        impact 1.0
+        impact 'medium'
         describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
           subject { false }
           it { should be true }
         end
       end
     else
-      impact 0
+      impact 'none'
       describe "[#{gcp_project_id}] [#{db}] is not a SQL Server database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a SQL Server database"
       end

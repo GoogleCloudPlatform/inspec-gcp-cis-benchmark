@@ -21,7 +21,7 @@ control_id = '3.8'
 control_abbrev = 'networking'
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
-  impact 1.0
+  impact 'low'
 
   title "[#{control_abbrev.upcase}] Ensure VPC Flow logs is enabled for every subnet in VPC Network"
 

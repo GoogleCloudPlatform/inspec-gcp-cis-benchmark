@@ -21,7 +21,7 @@ control_id = '3.1'
 control_abbrev = 'networking'
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
-  impact 1.0
+  impact 'medium'
 
   title "[#{control_abbrev.upcase}] Ensure the default network does not exist in a project"
 

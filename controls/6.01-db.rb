@@ -27,7 +27,7 @@ sql_cache = CloudSQLCache(project: gcp_project_id)
 # 6.1.1
 sub_control_id = "#{control_id}.1"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
-  impact 1.0
+  impact 'high'
 
   title "[#{control_abbrev.upcase}] Ensure that MySql database instance does not allow anyone to connect with administrative privileges."
 
@@ -53,7 +53,7 @@ end
 # 6.1.2
 sub_control_id = "#{control_id}.2"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
-  impact 1.1
+  impact 'medium'
 
   title "[#{control_abbrev.upcase}] Ensure that the 'local_infile' database flag for a Cloud SQL Mysql instance is set to 'off'"
 
@@ -74,7 +74,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   sql_cache.instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'MYSQL'
       unless sql_cache.instance_objects[db].settings.database_flags.nil?
-        impact 1.0
+        impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
             describe flag do
@@ -90,7 +90,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
         end
       end
     else
-      impact 0
+      impact 'none'
       describe "[#{gcp_project_id}] [#{db}] is not a MySQL database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a MySQL database"
       end

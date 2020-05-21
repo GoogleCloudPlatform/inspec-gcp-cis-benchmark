@@ -21,7 +21,7 @@ control_id = '5.1'
 control_abbrev = 'storage'
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
-  impact 1.0
+  impact 'high'
 
   title "[#{control_abbrev.upcase}] Ensure that Cloud Storage bucket is not anonymously or publicly accessible"
 

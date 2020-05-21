@@ -21,7 +21,7 @@ control_id = '2.10'
 control_abbrev = 'logging'
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
-  impact 1.0
+  impact 'low'
 
   title "[#{control_abbrev.upcase}] Ensure log metric filter and alerts exists for Cloud Storage IAM permission changes"
 

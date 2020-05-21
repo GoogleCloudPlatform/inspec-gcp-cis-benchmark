@@ -23,7 +23,7 @@ control_abbrev = 'db'
 sql_cache = CloudSQLCache(project: gcp_project_id)
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
-  impact 1.0
+  impact 'high'
 
   title "[#{control_abbrev.upcase}] Ensure that Cloud SQL database instances do not have public IPs"
 
@@ -49,7 +49,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
       end
     end
   else
-    impact 0
+    impact 'none'
     describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
       skip "[#{gcp_project_id}] does not have CloudSQL instances."
     end

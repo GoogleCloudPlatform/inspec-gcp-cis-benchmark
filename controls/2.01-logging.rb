@@ -21,7 +21,7 @@ control_id = '2.1'
 control_abbrev = 'logging'
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
-  impact 1.0
+  impact 'low'
 
   title "[#{control_abbrev.upcase}] Ensure that Cloud Audit Logging is configured properly across all services and a
 l users from a project "

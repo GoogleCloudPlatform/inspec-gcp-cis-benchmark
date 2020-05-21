@@ -22,7 +22,7 @@ control_abbrev = 'iam'
 kms_rotation_period_seconds = attribute('kms_rotation_period_seconds')
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
-  impact 1.0
+  impact 'medium'
 
   title "[#{control_abbrev.upcase}] Ensure Encryption keys are rotated within a period of 90 days"
 
@@ -52,14 +52,14 @@ A key is used to protect some corpus of data. You could encrypt a collection of 
   # Ensure KMS keys autorotate 90d or less
   locations.each do |location|
     if kms_cache.kms_key_ring_names[location].empty?
-      impact 0
+      impact 'none'
       describe "[#{gcp_project_id}] does not contain any key rings in [#{location}]. This test is Not Applicable." do
         skip "[#{gcp_project_id}] does not contain any key rings in [#{location}]"
       end
     else
       kms_cache.kms_key_ring_names[location].each do |keyring|
         if kms_cache.kms_crypto_keys[location][keyring].empty?
-          impact 0
+          impact 'none'
           describe "[#{gcp_project_id}] key ring [#{keyring}] does not contain any cryptographic keys. This test is Not Applicable." do
             skip "[#{gcp_project_id}] key ring [#{keyring}] does not contain any cryptographic keys"
           end

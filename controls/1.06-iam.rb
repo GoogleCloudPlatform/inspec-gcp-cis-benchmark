@@ -23,7 +23,7 @@ control_abbrev = 'iam'
 iam_bindings_cache = IAMBindingsCache(project: gcp_project_id)
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
-  impact 1.0
+  impact 'medium'
 
   title "[#{control_abbrev.upcase}] Ensure that IAM users are not assigned Service Account User role at project level"
 
