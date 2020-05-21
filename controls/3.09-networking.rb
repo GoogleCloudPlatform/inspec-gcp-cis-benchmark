@@ -22,7 +22,7 @@ control_id = '3.9'
 control_abbrev = 'networking'
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
-  impact 1.0
+  impact 'low'
 
   title "[#{control_abbrev.upcase}] Ensure no HTTPS or SSL proxy load balancers permit SSL policies with weak cipher suites"
 

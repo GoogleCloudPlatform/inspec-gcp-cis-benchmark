@@ -21,7 +21,7 @@ control_id = '5.2'
 control_abbrev = 'storage'
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
-  impact 1.0
+  impact 'medium'
 
   title "[#{control_abbrev.upcase}] Ensure that Cloud Storage buckets have uniform bucket-level access enabled"
 

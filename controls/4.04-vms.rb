@@ -21,7 +21,7 @@ control_id = '4.4'
 control_abbrev = 'vms'
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
-  impact 1.0
+  impact 'medium'
 
   title "[#{control_abbrev.upcase}] Ensure oslogin is enabled for a Project"
 
@@ -42,5 +42,4 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
     subject { google_compute_project_info(project: gcp_project_id) }
     it { should have_enabled_oslogin }
   end
-
 end

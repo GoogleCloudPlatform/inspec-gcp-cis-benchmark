@@ -23,7 +23,7 @@ control_abbrev = 'iam'
 iam_bindings_cache = IAMBindingsCache(project: gcp_project_id)
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
-  impact 1.0
+  impact 'high'
 
   title "[#{control_abbrev.upcase}] Ensure that corporate login credentials are used"
 

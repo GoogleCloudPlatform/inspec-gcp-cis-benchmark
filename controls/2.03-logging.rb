@@ -21,7 +21,7 @@ control_id = '2.3'
 control_abbrev = 'logging'
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
-  impact 1.0
+  impact 'low'
 
   title "[#{control_abbrev.upcase}] Ensure that retention policies on log buckets are configured using Bucket Lock"
 
