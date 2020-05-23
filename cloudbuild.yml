@@ -75,6 +75,8 @@ steps:
       --input-file /workspace/inputs.yml \
       --reporter cli json:/workspace/cis_report.json html:/workspace/cis_report.html | tee out.json
 
+      inspec_tools compliance -j /workspace/cis_report.json -i '{failed.total.max: 2}'
+
 - id: 'Store json Report'
   waitFor: ['Run CIS Profile on in-scope project']
   name: gcr.io/cloud-builders/gsutil
