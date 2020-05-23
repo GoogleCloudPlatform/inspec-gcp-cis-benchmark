@@ -1,0 +1,89 @@
+# Copyright 2020 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+substitutions:
+  _GCP_PROJECT_ID: ''
+  _REPORTS_BUCKET: ''
+
+timeout: 3000s
+steps:
+- id: 'Build Docker container'
+  name: 'gcr.io/cloud-builders/docker'
+  args: [ 'build', '-t', 'gcr.io/${_GCP_PROJECT_ID}/inspec-gcp-cis-benchmark:${_PR_NUMBER}', '.' ]
+
+- id: 'Verify InSpec controls'
+  waitFor: ['Build Docker container']
+  name: gcr.io/${_GCP_PROJECT_ID}/inspec-gcp-cis-benchmark:${_PR_NUMBER}
+  entrypoint: '/bin/sh'
+  args: 
+    - '-c'
+    - |
+      inspec vendor /share/.
+      inspec check /share/.
+
+- id: 'Rubocop'
+  waitFor: ['Verify InSpec controls']
+  name: gcr.io/${_GCP_PROJECT_ID}/inspec-gcp-cis-benchmark:${_PR_NUMBER}
+  entrypoint: '/bin/sh'
+  args: 
+    - '-c'
+    - |
+      rubocop /share/.
+
+- id: 'Write input file'
+  waitFor: ['Rubocop']
+  name: gcr.io/cloud-foundation-cicd/cft/developer-tools:0
+  entrypoint: '/bin/sh'
+  args: 
+    - '-c'
+    - |
+      cloud_build_service_account=`gcloud config get-value account`
+      cat <<EOF > /workspace/inputs.yml
+      gcp_project_id: "${_GCP_PROJECT_ID}"
+      gcp_gke_locations:
+        - 'us-central1'
+      gce_zones:
+        - 'us-central1'
+        - 'us-central1-a'
+        - 'us-central1-b'
+        - 'us-central1-c'
+        - 'us-central1-d'
+        - 'us-central1-e'
+        - 'us-central1-f'
+      EOF
+      cat /workspace/inputs.yml
+
+- id: 'Run CIS Profile on in-scope project'
+  waitFor: ['Write input file']
+  name: gcr.io/${_GCP_PROJECT_ID}/inspec-gcp-cis-benchmark:${_PR_NUMBER}
+  entrypoint: '/bin/sh'
+  args: 
+    - '-c'
+    - |
+      inspec exec /share/. -t gcp:// \
+      --input-file /workspace/inputs.yml \
+      --reporter cli json:/workspace/cis_report.json html:/workspace/cis_report.html | tee out.json
+
+- id: 'Test Compliance'
+  waitFor: ['Run CIS Profile on in-scope project']
+  name: mitre/inspec_tools
+  args: ['compliance', '-j', '/workspace/cis_report.json', '-i', '{failed.total.max: 1}']
+
+- id: 'Store json Report'
+  waitFor: ['Test Compliance']
+  name: gcr.io/cloud-builders/gsutil
+  args:
+    - cp
+    - /workspace/cis_report.json
+    - gs://${_REPORTS_BUCKET}/cis_report-${BUILD_ID}.json
