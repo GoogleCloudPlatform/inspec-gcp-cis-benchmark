@@ -75,10 +75,17 @@ steps:
       --input-file /workspace/inputs.yml \
       --reporter cli json:/workspace/cis_report.json html:/workspace/cis_report.html | tee out.json
 
+- id: 'Test Compliance'
+  waitFor: ['Run CIS Profile on in-scope project']
+  name: mitre/inspec_tools
+  entrypoint: '/bin/sh'
+  args: 
+    - '-c'
+    - |
       inspec_tools compliance -j /workspace/cis_report.json -i '{failed.total.max: 2}'
 
 - id: 'Store json Report'
-  waitFor: ['Run CIS Profile on in-scope project']
+  waitFor: ['Test Compliance']
   name: gcr.io/cloud-builders/gsutil
   args:
     - cp
