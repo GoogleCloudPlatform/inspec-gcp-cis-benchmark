@@ -82,7 +82,7 @@ steps:
   args: 
     - '-c'
     - |
-      inspec_tools compliance -j /workspace/cis_report.json -i '{failed.total.max: 2}'
+      inspec_tools compliance -j /workspace/cis_report.json -i '{failed.total.max: 1}'
 
 - id: 'Store json Report'
   waitFor: ['Test Compliance']
