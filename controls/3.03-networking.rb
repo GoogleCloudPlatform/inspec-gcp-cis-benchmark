@@ -40,17 +40,17 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://cloud.google.com/dns/dnssec'
 
   managed_zone_names = google_dns_managed_zones(project: gcp_project_id).where(visibility: 'public').zone_names
-  unless managed_zone_names.empty?
+  if managed_zone_names.empty?
+    impact 'none'
+    describe "[#{gcp_project_id}] does not have DNS Zones with Public visibility. This test is Not Applicable." do
+      skip "[#{gcp_project_id}] does not have DNS Zones with Public visibility."
+    end
+  else
     managed_zone_names.each do |dnszone|
       describe "[#{gcp_project_id}] DNS Zone [#{dnszone}] with DNSSEC" do
         subject { google_dns_managed_zone(project: gcp_project_id, zone: dnszone) }
         its('dnssec_config.state') { should cmp 'on' }
       end
-    end
-  else
-    impact 'none'
-    describe "[#{gcp_project_id}] does not have DNS Zones with Public visibility. This test is Not Applicable." do
-      skip "[#{gcp_project_id}] does not have DNS Zones with Public visibility."
     end
   end
 end

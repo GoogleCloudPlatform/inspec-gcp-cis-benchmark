@@ -53,5 +53,4 @@ When an instance is configured with Compute Engine default service account with 
       its('service_account_scopes') { should_not include 'https://www.googleapis.com/auth/cloud-platform' }
     end
   end
-
 end

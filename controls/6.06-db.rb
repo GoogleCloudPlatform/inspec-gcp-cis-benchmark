@@ -39,7 +39,12 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/mysql/configure-private-ip'
 
-  unless sql_cache.instance_names.empty?
+  if sql_cache.instance_names.empty?
+    impact 'none'
+    describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
+      skip "[#{gcp_project_id}] does not have CloudSQL instances."
+    end
+  else
     sql_cache.instance_names.each do |db|
       sql_cache.instance_objects[db].ip_addresses.each do |ip_address|
         describe "[#{gcp_project_id}] CloudSQL #{db}" do
@@ -47,11 +52,6 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
           its('type') { should_not include('PRIMARY') }
         end
       end
-    end
-  else
-    impact 'none'
-    describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
-      skip "[#{gcp_project_id}] does not have CloudSQL instances."
     end
   end
 end

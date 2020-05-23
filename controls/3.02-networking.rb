@@ -40,16 +40,16 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   network_names = google_compute_networks(project: gcp_project_id).network_names
 
-  unless network_names.empty?
+  if network_names.empty?
+    describe "[#{gcp_project_id}] does not have any networks. This test is Not Applicable." do
+      skip "[#{gcp_project_id}] does not have any networks."
+    end
+  else
     google_compute_networks(project: gcp_project_id).network_names.each do |network|
       describe "[#{gcp_project_id}] Network [#{network}] " do
         subject { google_compute_network(project: gcp_project_id, name: network) }
         it { should_not be_legacy }
       end
-    end
-  else
-    describe "[#{gcp_project_id}] does not have any networks. This test is Not Applicable." do
-      skip "[#{gcp_project_id}] does not have any networks."
     end
   end
 end

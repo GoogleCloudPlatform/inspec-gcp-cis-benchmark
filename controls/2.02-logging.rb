@@ -43,9 +43,8 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   empty_filter_sinks = []
   google_logging_project_sinks(project: gcp_project_id).names.each do |sink_name|
-    if google_logging_project_sink(project: gcp_project_id, name: sink_name).filter.nil?
-      empty_filter_sinks.push(sink_name)
-    end
+    empty_filter_sinks.push(sink_name) if google_logging_project_sink(project: gcp_project_id,
+                                                                      name: sink_name).filter.nil?
   end
   describe "[#{gcp_project_id}] Project level Log sink with an empty filter" do
     subject { empty_filter_sinks }
