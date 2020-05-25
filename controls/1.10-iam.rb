@@ -70,11 +70,13 @@ A key is used to protect some corpus of data. You could encrypt a collection of 
             describe "[#{gcp_project_id}] #{key.crypto_key_name}" do
               subject { key }
               its('rotation_period') { should_not eq nil }
-              rotation_period_int = key.rotation_period.delete_suffix('s').to_i
-              it "should have a lower or equal rotation period than #{kms_rotation_period_seconds}" do
-                expect(rotation_period_int).to be <= kms_rotation_period_seconds
+              unless key.rotation_period.nil?
+                rotation_period_int = key.rotation_period.delete_suffix('s').to_i
+                it "should have a lower or equal rotation period than #{kms_rotation_period_seconds}" do
+                  expect(rotation_period_int).to be <= kms_rotation_period_seconds
+                end
+                its('next_rotation_time') { should be <= (Time.now + kms_rotation_period_seconds) }
               end
-              its('next_rotation_time') { should be <= (Time.now + kms_rotation_period_seconds) }
             end
           end
         end
