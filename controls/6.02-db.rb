@@ -297,8 +297,8 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
           subject { false }
           it { should be true }
         end
-        impact 'medium'
       else
+        impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
             describe "[#{gcp_project_id} , #{db} ] should have a database flag 'log_temp_files' set to '0' " do
