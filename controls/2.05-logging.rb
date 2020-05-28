@@ -61,7 +61,6 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
           its('aggregation_alignment_period') { should eq '60s' }
         end
       end
-
     end
   end
 end

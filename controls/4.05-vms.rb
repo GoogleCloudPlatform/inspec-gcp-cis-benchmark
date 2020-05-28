@@ -53,5 +53,4 @@ Therefore interactive serial console support should be disabled."
       it { should have_serial_port_disabled }
     end
   end
-
 end

@@ -41,7 +41,12 @@ When enabling DNSSEC for a managed zone, or creating a managed zone with DNSSEC,
 
   managed_zone_names = google_dns_managed_zones(project: gcp_project_id).zone_names
 
-  unless managed_zone_names.empty?
+  if managed_zone_names.empty?
+    impact 'none'
+    describe "[#{gcp_project_id}] does not have DNS Zones. This test is Not Applicable." do
+      skip "[#{gcp_project_id}] does not have DNS Zones."
+    end
+  else
     managed_zone_names.each do |dnszone|
       zone = google_dns_managed_zone(project: gcp_project_id, zone: dnszone)
 
@@ -59,11 +64,6 @@ When enabling DNSSEC for a managed zone, or creating a managed zone with DNSSEC,
           it { should cmp 'on' }
         end
       end
-    end
-  else
-    impact 'none'
-    describe "[#{gcp_project_id}] does not have DNS Zones. This test is Not Applicable." do
-      skip "[#{gcp_project_id}] does not have DNS Zones."
     end
   end
 end

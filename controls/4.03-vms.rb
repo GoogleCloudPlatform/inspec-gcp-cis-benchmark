@@ -47,5 +47,4 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
       its('block_project_ssh_keys') { should be true }
     end
   end
-
 end

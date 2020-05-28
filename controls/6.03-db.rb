@@ -44,7 +44,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
 
   sql_cache.instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'SQLSERVER'
-      unless sql_cache.instance_objects[db].settings.database_flags.nil?
+      if sql_cache.instance_objects[db].settings.database_flags.nil?
+        impact 'medium'
+        describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
+          subject { false }
+          it { should be true }
+        end
+      else
         impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
@@ -54,12 +60,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
               its('value') { should cmp 'off' }
             end
           end
-        end
-      else
-        impact 'medium'
-        describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
-          subject { false }
-          it { should be true }
         end
       end
     else
@@ -94,7 +94,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
 
   sql_cache.instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'SQLSERVER'
-      unless sql_cache.instance_objects[db].settings.database_flags.nil?
+      if sql_cache.instance_objects[db].settings.database_flags.nil?
+        impact 'medium'
+        describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
+          subject { false }
+          it { should be true }
+        end
+      else
         impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
@@ -104,12 +110,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
               its('value') { should cmp 'off' }
             end
           end
-        end
-      else
-        impact 'medium'
-        describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
-          subject { false }
-          it { should be true }
         end
       end
     else

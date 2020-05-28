@@ -55,5 +55,4 @@ At least business critical VMs should have VM disks encrypted with CSEK."
       it { should have_disks_encrypted_with_csek }
     end
   end
-
 end

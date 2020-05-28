@@ -65,5 +65,4 @@ Monitoring changes to route tables will help ensure that all VPC traffic flows t
       end
     end
   end
-
 end

@@ -43,5 +43,4 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
     subject { google_compute_networks(project: gcp_project_id) }
     its('network_names') { should_not include 'default' }
   end
-
 end

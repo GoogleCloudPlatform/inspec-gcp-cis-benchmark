@@ -69,7 +69,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
     when 'CUSTOM'
       describe "[#{gcp_project_id}] SSL Policy: #{policy} profile CUSTOM should not contain these cipher suites [TLS_RSA_WITH_AES_128_GCM_SHA256, TLS_RSA_WITH_AES_256_GCM_SHA384, TLS_RSA_WITH_AES_128_CBC_SHA,  TLS_RSA_WITH_AES_256_CBC_SHA, TLS_RSA_WITH_3DES_EDE_CBC_SHA] " do
         subject { google_compute_ssl_policy(project: gcp_project_id, name: policy) }
-        its('custom_features') { should_not be_in %w{TLS_RSA_WITH_AES_128_GCM_SHA256 TLS_RSA_WITH_AES_256_GCM_SHA384 TLS_RSA_WITH_AES_128_CBC_SHA TLS_RSA_WITH_AES_256_CBC_SHA TLS_RSA_WITH_3DES_EDE_CBC_SHA} }
+        its('custom_features') { should_not be_in %w[TLS_RSA_WITH_AES_128_GCM_SHA256 TLS_RSA_WITH_AES_256_GCM_SHA384 TLS_RSA_WITH_AES_128_CBC_SHA TLS_RSA_WITH_AES_256_CBC_SHA TLS_RSA_WITH_3DES_EDE_CBC_SHA] }
       end
     end
   end
