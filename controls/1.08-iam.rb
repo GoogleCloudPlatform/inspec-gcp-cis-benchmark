@@ -14,9 +14,9 @@
 
 title 'Ensure that Separation of duties is enforced while assigning service account related roles to users'
 
-gcp_project_id = attribute('gcp_project_id')
-cis_version = attribute('cis_version')
-cis_url = attribute('cis_url')
+gcp_project_id = input('gcp_project_id')
+cis_version = input('cis_version')
+cis_url = input('cis_url')
 control_id = '1.8'
 control_abbrev = 'iam'
 

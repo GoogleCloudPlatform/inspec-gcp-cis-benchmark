@@ -1,3 +1,6 @@
 **/.tmp
 inspec.lock
 attrs.yml
+Gemfile.lock
+inputs.yml
+vendor

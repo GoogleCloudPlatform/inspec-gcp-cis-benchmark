@@ -14,10 +14,10 @@
 
 title 'Ensure that instances are not configured to use the default service account with full access to all Cloud APIs'
 
-gcp_project_id = attribute('gcp_project_id')
-gce_zones = attribute('gce_zones')
-cis_version = attribute('cis_version')
-cis_url = attribute('cis_url')
+gcp_project_id = input('gcp_project_id')
+gce_zones = input('gce_zones')
+cis_version = input('cis_version')
+cis_url = input('cis_url')
 control_id = '4.2'
 control_abbrev = 'vms'
 

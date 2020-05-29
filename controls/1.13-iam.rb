@@ -14,9 +14,9 @@
 
 title 'Ensure API keys are restricted to use by only specified Hosts and Apps'
 
-gcp_project_id = attribute('gcp_project_id')
-cis_version = attribute('cis_version')
-cis_url = attribute('cis_url')
+gcp_project_id = input('gcp_project_id')
+cis_version = input('cis_version')
+cis_url = input('cis_url')
 control_id = '1.13'
 control_abbrev = 'iam'
 

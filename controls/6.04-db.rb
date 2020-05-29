@@ -14,9 +14,9 @@
 
 title 'Ensure that Cloud SQL database instance requires all incoming connections to use SSL'
 
-gcp_project_id = attribute('gcp_project_id')
-cis_version = attribute('cis_version')
-cis_url = attribute('cis_url')
+gcp_project_id = input('gcp_project_id')
+cis_version = input('cis_version')
+cis_url = input('cis_url')
 control_id = '6.4'
 control_abbrev = 'db'
 

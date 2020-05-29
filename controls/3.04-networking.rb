@@ -14,9 +14,9 @@
 
 title 'Ensure that RSASHA1 is not used for key-signing key in Cloud DNS DNSSEC'
 
-gcp_project_id = attribute('gcp_project_id')
-cis_version = attribute('cis_version')
-cis_url = attribute('cis_url')
+gcp_project_id = input('gcp_project_id')
+cis_version = input('cis_version')
+cis_url = input('cis_url')
 control_id = '3.4'
 control_abbrev = 'networking'
 

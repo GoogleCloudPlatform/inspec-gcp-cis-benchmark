@@ -14,12 +14,12 @@
 
 title 'Ensure user-managed/external keys for service accounts are rotated every 90 days or less'
 
-gcp_project_id = attribute('gcp_project_id')
-cis_version = attribute('cis_version')
-cis_url = attribute('cis_url')
+gcp_project_id = input('gcp_project_id')
+cis_version = input('cis_version')
+cis_url = input('cis_url')
 control_id = '1.7'
 control_abbrev = 'iam'
-sa_key_older_than_seconds = attribute('sa_key_older_than_seconds')
+sa_key_older_than_seconds = input('sa_key_older_than_seconds')
 
 service_account_cache = ServiceAccountCache(project: gcp_project_id)
 
