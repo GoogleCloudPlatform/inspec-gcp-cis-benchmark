@@ -14,12 +14,12 @@
 
 title 'Ensure Encryption keys are rotated within a period of 90 days'
 
-gcp_project_id = attribute('gcp_project_id')
-cis_version = attribute('cis_version')
-cis_url = attribute('cis_url')
+gcp_project_id = input('gcp_project_id')
+cis_version = input('cis_version')
+cis_url = input('cis_url')
 control_id = '1.10'
 control_abbrev = 'iam'
-kms_rotation_period_seconds = attribute('kms_rotation_period_seconds')
+kms_rotation_period_seconds = input('kms_rotation_period_seconds')
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 'medium'

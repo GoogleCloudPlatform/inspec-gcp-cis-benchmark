@@ -14,9 +14,9 @@
 
 title 'Ensure that Cloud Audit Logging is configured properly across all services and all users from a project '
 
-gcp_project_id = attribute('gcp_project_id')
-cis_version = attribute('cis_version')
-cis_url = attribute('cis_url')
+gcp_project_id = input('gcp_project_id')
+cis_version = input('cis_version')
+cis_url = input('cis_url')
 control_id = '2.1'
 control_abbrev = 'logging'
 
