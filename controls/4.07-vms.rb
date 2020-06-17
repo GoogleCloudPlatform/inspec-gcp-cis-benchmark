@@ -18,7 +18,7 @@ gcp_project_id = input('gcp_project_id')
 gce_zones = input('gce_zones')
 cis_version = input('cis_version')
 cis_url = input('cis_url')
-control_id = '4.6'
+control_id = '4.7'
 control_abbrev = 'vms'
 
 gce_instances = GCECache(project: gcp_project_id, gce_zones: gce_zones).gce_instances_cache
