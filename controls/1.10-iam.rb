@@ -26,7 +26,9 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   title "[#{control_abbrev.upcase}] Ensure Encryption keys are rotated within a period of 90 days"
 
-  desc "Google Cloud Key Management Service stores cryptographic keys in a hierarchical structure designed for useful and elegant access control management. Access to resources.
+  desc "Google Cloud Key Management Service (KMS) stores cryptographic keys in a hierarchical structure designed for useful and elegant access control management.
+
+Automatic cryptographic key rotation is only available for symmetric keys. Cloud KMS does not support automatic rotation of asymmetric keys so such keys are out of scope for this control. More information can be found in the GCP documentation references of this control.
 
 The format for the rotation schedule depends on the client library that is used. For the gcloud command-line tool, the next rotation time must be in ISO or RFC3339 format, and the rotation period must be in the form INTEGER[UNIT], where units can be one of seconds (s), minutes (m), hours (h) or days (d)."
 
@@ -42,6 +44,7 @@ A key is used to protect some corpus of data. You could encrypt a collection of 
 
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/kms/docs/key-rotation#frequency_of_key_rotation'
+  ref 'GCP Docs', url: 'https://cloud.google.com/kms/docs/key-rotation#asymmetric'
 
   # Get all "normal" regions and add "global"
   locations = google_compute_regions(project: gcp_project_id).region_names
@@ -66,7 +69,7 @@ A key is used to protect some corpus of data. You could encrypt a collection of 
         else
           kms_cache.kms_crypto_keys[location][keyring].each do |keyname|
             key = google_kms_crypto_key(project: gcp_project_id, location: location, key_ring_name: keyring, name: keyname)
-            next unless key.primary_state == 'ENABLED'
+            next unless key.purpose == 'ENCRYPT_DECRYPT' && key.primary_state == 'ENABLED'
             describe "[#{gcp_project_id}] #{key.crypto_key_name}" do
               subject { key }
               its('rotation_period') { should_not eq nil }
