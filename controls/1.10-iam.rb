@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title 'Ensure Symmetric Encryption keys are rotated within a period of 90 days'
+title 'Ensure Encryption keys are rotated within a period of 90 days'
 
 gcp_project_id = input('gcp_project_id')
 cis_version = input('cis_version')
@@ -24,9 +24,9 @@ kms_rotation_period_seconds = input('kms_rotation_period_seconds')
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 'medium'
 
-  title "[#{control_abbrev.upcase}] Ensure Symmetric Encryption keys are rotated within a period of 90 days"
+  title "[#{control_abbrev.upcase}] Ensure Encryption keys are rotated within a period of 90 days"
 
-  desc "Google Cloud Key Management Service (KMS) stores cryptographic keys in a hierarchical structure designed for useful and elegant access control management. Access to resources.
+  desc "Google Cloud Key Management Service (KMS) stores cryptographic keys in a hierarchical structure designed for useful and elegant access control management.
 
 Automatic cryptographic key rotation is only available for symmetric keys. Cloud KMS does not support automatic rotation of asymmetric keys so such keys are out of scope for this control. More information can be found in the GCP documentation references of this control.
 
