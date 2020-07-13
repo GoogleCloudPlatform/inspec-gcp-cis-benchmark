@@ -49,13 +49,17 @@ This recommendation is applicable only for User-Managed user created service acc
     end
   end
 
-  describe "[#{gcp_project_id}] Project Editor Role" do
-    subject { iam_bindings_cache.iam_bindings['roles/editor'] }
-    its('members') { should_not include(/@iam.gserviceaccount.com/) }
+  iam_bindings_cache.iam_bindings.keys.grep(/roles\/editor/i).each do |role|
+    describe "[#{gcp_project_id}] Project Editor Role" do
+      subject { iam_bindings_cache.iam_bindings[role] }
+      its('members') { should_not include(/@iam.gserviceaccount.com/) }
+    end
   end
 
-  describe "[#{gcp_project_id}] Project Owner Role" do
-    subject { iam_bindings_cache.iam_bindings['roles/owner'] }
-    its('members') { should_not include(/@iam.gserviceaccount.com/) }
+  iam_bindings_cache.iam_bindings.keys.grep(/roles\/owner/i).each do |role|
+    describe "[#{gcp_project_id}] Project Owner Role" do
+      subject { iam_bindings_cache.iam_bindings[role] }
+      its('members') { should_not include(/@iam.gserviceaccount.com/) }
+    end
   end
 end
