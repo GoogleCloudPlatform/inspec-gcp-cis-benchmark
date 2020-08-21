@@ -28,7 +28,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   desc 'Setup Security Key Enforcement for Google Cloud Platform admin accounts.'
   desc 'rationale', 'Google Cloud Platform users with Organization Administrator roles have the highest level of privilege in the organization. These accounts should be protected with the strongest form of two-factor authentication: Security Key Enforcement. Ensure that admins use Security Keys to log in instead of weaker second factors like SMS or one-time passwords (OTP). Security Keys are actual physical keys used to access Google Organization Administrator Accounts. They send an encrypted signature rather than a code, ensuring that logins cannot be phished.'
 
-  tag cis_score: false
+  tag cis_scored: false
   tag cis_level: 2
   tag cis_gcp: control_id.to_s
   tag cis_version: cis_version.to_s

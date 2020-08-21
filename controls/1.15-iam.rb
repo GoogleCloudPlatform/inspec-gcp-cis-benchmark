@@ -36,7 +36,7 @@ Because of this Google recommend using the standard authentication flow instead.
 
 Once the key is stolen, it has no expiration, so it may be used indefinitely, unless the project owner revokes or regenerates the key. Rotating API keys will reduce the window of opportunity for an access key that is associated with a compromised or terminated account to be used. API keys should be rotated to ensure that data cannot be accessed with an old key which might have been lost, cracked, or stolen."
 
-  tag cis_score: false
+  tag cis_scored: false
   tag cis_level: 1
   tag cis_gcp: control_id.to_s
   tag cis_version: cis_version.to_s

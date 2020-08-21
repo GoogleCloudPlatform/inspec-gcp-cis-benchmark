@@ -35,7 +35,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 To avoid security risk by using API keys, it is recommended to use standard authentication
 flow instead."
 
-  tag cis_score: false
+  tag cis_scored: false
   tag cis_level: 2
   tag cis_gcp: control_id.to_s
   tag cis_version: cis_version.to_s

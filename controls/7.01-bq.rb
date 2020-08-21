@@ -40,7 +40,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://cloud.google.com/storage/docs/access-control/making-data-public'
 
   if google_bigquery_datasets(project: gcp_project_id).ids.empty?
-    impact 0
+    impact 'none'
     describe "[#{gcp_project_id}] does not have BigQuery Datasets, this test is Not Applicable." do
       skip "[#{gcp_project_id}] does not have BigQuery Datasets"
     end

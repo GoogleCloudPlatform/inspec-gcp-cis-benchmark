@@ -37,7 +37,7 @@ Because of this Google recommend using the standard authentication flow instead.
 In order to reduce attack surface by providing least privileges, API-Keys can be
 restricted to use (call) only APIs required by an application."
 
-  tag cis_score: false
+  tag cis_scored: false
   tag cis_level: 1
   tag cis_gcp: control_id.to_s
   tag cis_version: cis_version.to_s
