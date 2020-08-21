@@ -28,7 +28,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   desc 'Setup multi-factor authentication for Google Cloud Platform accounts.'
   desc 'rationale', 'Multi-factor authentication requires more than one mechanism to authenticate a user. This secures your logins from attackers exploiting stolen or weak credentials.'
 
-  tag cis_score: false
+  tag cis_scored: false
   tag cis_level: 1
   tag cis_gcp: control_id.to_s
   tag cis_version: cis_version.to_s

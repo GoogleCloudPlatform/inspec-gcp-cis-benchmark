@@ -24,7 +24,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 'low'
 
   title "[#{control_abbrev.upcase}] Ensure that Cloud Audit Logging is configured properly across all services and a
-l users from a project "
+ll users from a project "
 
   desc "It is recommended that Cloud Audit Logging is configured to track all Admin activities and
 read, write access to user data."

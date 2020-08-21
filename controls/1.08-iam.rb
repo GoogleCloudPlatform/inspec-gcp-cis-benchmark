@@ -34,7 +34,7 @@ Separation of duties is the concept of ensuring that one individual does not hav
 
 Any user(s) should not have Service Account Admin and Service Account User, both roles assigned at a time."
 
-  tag cis_scored: true
+  tag cis_scored: false
   tag cis_level: 2
   tag cis_gcp: control_id.to_s
   tag cis_version: cis_version.to_s
