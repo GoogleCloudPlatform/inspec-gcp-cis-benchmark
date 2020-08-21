@@ -43,7 +43,7 @@ Cloud Storage resources then is granted exclusively through Cloud IAM. Enabling 
 bucket-level access guarantees that if a Storage bucket is not publicly accessible, no object
 in the bucket is publicly accessible either."
 
-  tag cis_scored: false
+  tag cis_scored: true
   tag cis_level: 1
   tag cis_gcp: control_id.to_s
   tag cis_version: cis_version.to_s

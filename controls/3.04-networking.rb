@@ -30,7 +30,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
 When enabling DNSSEC for a managed zone, or creating a managed zone with DNSSEC, you can select the DNSSEC signing algorithms and the denial-of-existence type. Changing the DNSSEC settings is only effective for a managed zone if DNSSEC is not already enabled. If you need to change the settings for a managed zone where it has been enabled, you can turn DNSSEC off and then re-enable it with different settings.'
 
-  tag cis_scored: true
+  tag cis_scored: false
   tag cis_level: 1
   tag cis_gcp: control_id.to_s
   tag cis_version: cis_version.to_s

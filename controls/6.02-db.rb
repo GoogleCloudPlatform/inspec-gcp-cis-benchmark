@@ -231,7 +231,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   desc 'The log_min_error_statement flag defines the minimum message severity level that is considered as an error statement. Messages for error statements are logged with the SQL statement '
   desc 'rationale', 'ERROR is considered the best practice setting. Auditing helps in troubleshooting operational problems and also permits forensic analysis. If log_min_error_statement is not set to the correct value, messages may not be classified as error messages appropriately'
 
-  tag cis_scored: true
+  tag cis_scored: false
   tag cis_level: 1
   tag cis_gcp: sub_control_id.to_s
   tag cis_version: cis_version.to_s
