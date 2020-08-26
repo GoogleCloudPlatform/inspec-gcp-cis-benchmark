@@ -64,7 +64,7 @@ This recommendation is applicable only for User-Managed user created service acc
   iam_bindings_cache.iam_bindings.keys.grep(%r{roles/owner}).each do |role|
     describe "[#{gcp_project_id}] Project Owner Role" do
       subject { iam_bindings_cache.iam_bindings[role] }
-      it { should_not include(/@[a-z][a-z0-9|-]{4,28}[a-z].iam.gserviceaccount.com/) }
+      its('members') { should_not include(/@[a-z][a-z0-9|-]{4,28}[a-z].iam.gserviceaccount.com/) }
     end
   end
 end
