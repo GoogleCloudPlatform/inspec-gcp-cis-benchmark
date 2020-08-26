@@ -54,7 +54,7 @@ This recommendation is applicable only for User-Managed user created service acc
     end
   end
 
-  iam_bindings_cache.iam_bindings.keys.grep(/roles\/editor/i).each do |role|
+  iam_bindings_cache.iam_bindings.keys.grep(%r{roles/editor}).each do |role|
     members_in_scope = []
     iam_bindings_cache.iam_bindings[role].members.each do |member|
       next if member.include? '@containerregistry.iam.gserviceaccount.com'
@@ -66,7 +66,7 @@ This recommendation is applicable only for User-Managed user created service acc
     end
   end
 
-  iam_bindings_cache.iam_bindings.keys.grep(/roles\/owner/i).each do |role|
+  iam_bindings_cache.iam_bindings.keys.grep(%r{roles/owner}).each do |role|
     members_in_scope = []
     iam_bindings_cache.iam_bindings[role].members.each do |member|
       next if member.include? '@containerregistry.iam.gserviceaccount.com'
