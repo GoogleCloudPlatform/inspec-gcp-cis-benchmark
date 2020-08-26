@@ -45,21 +45,26 @@ This recommendation is applicable only for User-Managed user created service acc
   iam_bindings_cache.iam_bindings.keys.grep(/admin/i).each do |role|
     describe "[#{gcp_project_id}] Admin roles" do
       subject { iam_bindings_cache.iam_bindings[role] }
-      its('members') { should_not include(/@iam.gserviceaccount.com/) }
+      its('members') { should_not include(/@[a-z][a-z0-9|-]{4,28}[a-z].iam.gserviceaccount.com/) }
     end
   end
 
   iam_bindings_cache.iam_bindings.keys.grep(%r{roles/editor}).each do |role|
+    members_in_scope = []
+    iam_bindings_cache.iam_bindings[role].members.each do |member|
+      next if member.include? '@containerregistry.iam.gserviceaccount.com'
+      members_in_scope.push(member)
+    end
     describe "[#{gcp_project_id}] Project Editor Role" do
-      subject { iam_bindings_cache.iam_bindings[role] }
-      its('members') { should_not include(/@iam.gserviceaccount.com/) }
+      subject { members_in_scope }
+      it { should_not include(/@[a-z][a-z0-9|-]{4,28}[a-z].iam.gserviceaccount.com/) }
     end
   end
 
   iam_bindings_cache.iam_bindings.keys.grep(%r{roles/owner}).each do |role|
     describe "[#{gcp_project_id}] Project Owner Role" do
       subject { iam_bindings_cache.iam_bindings[role] }
-      its('members') { should_not include(/@iam.gserviceaccount.com/) }
+      its('members') { should_not include(/@[a-z][a-z0-9|-]{4,28}[a-z].iam.gserviceaccount.com/) }
     end
   end
 end
