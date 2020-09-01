@@ -38,9 +38,9 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/kms/docs/key-rotation#frequency_of_key_rotation'
 
-  # Get all "normal" regions and add "global"
+  # Get all "normal" regions and add dual/multi regions
   locations = google_compute_regions(project: gcp_project_id).region_names
-  locations << 'global'
+  locations << 'global' << 'asia' << 'europe' << 'us' << 'eur4' << 'nam4'
   kms_cache = KMSKeyCache(project: gcp_project_id, locations: locations)
 
   # Ensure that keys aren't publicly accessible
