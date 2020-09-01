@@ -12,10 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM chef/inspec:4.18.104
+FROM cincproject/auditor:4.22.0
 
 COPY . /share/.
-ENV CHEF_LICENSE accept-no-persist
 
 RUN gem install rubocop
 
