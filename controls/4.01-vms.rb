@@ -43,6 +43,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   project_number = google_project(project: gcp_project_id).project_number
   gce_instances.each do |instance|
+    next if instance[:name] =~ /^gke-/
     google_compute_instance(project: gcp_project_id, zone: instance[:zone], name: instance[:name]).service_accounts.each do |serviceaccount|
       describe "VM #{instance[:name]} should not include the default compute engine service account" do
         subject { serviceaccount.email }

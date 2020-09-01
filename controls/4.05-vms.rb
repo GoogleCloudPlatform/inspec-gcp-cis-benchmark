@@ -47,7 +47,6 @@ Therefore interactive serial console support should be disabled."
   ref 'GCP Docs', url: 'https://cloud.google.com/compute/docs/instances/interacting-with-serial-console'
 
   gce_instances.each do |instance|
-    next if instance[:name] =~ /^gke-/
     describe "[#{gcp_project_id}] Instance #{instance[:zone]}/#{instance[:name]}" do
       subject { google_compute_instance(project: gcp_project_id, zone: instance[:zone], name: instance[:name]) }
       it { should have_serial_port_disabled }
