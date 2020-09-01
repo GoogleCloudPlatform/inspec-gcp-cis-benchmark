@@ -71,7 +71,7 @@ steps:
   args: 
     - '-c'
     - |
-    cinc-auditor exec /share/. -t gcp:// \
+      cinc-auditor exec /share/. -t gcp:// \
       --input-file /workspace/inputs.yml \
       --reporter cli json:/workspace/cis_report.json html:/workspace/cis_report.html | tee out.json
 
