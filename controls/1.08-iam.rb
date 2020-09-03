@@ -51,18 +51,16 @@ Any user(s) should not have Service Account Admin and Service Account User, both
     describe "[#{gcp_project_id}] does not contain users with roles/serviceAccountAdmin. This test is Not Applicable." do
       skip "[#{gcp_project_id}] does not contain users with roles/serviceAccountAdmin"
     end
+  elsif iam_bindings_cache.iam_bindings['roles/iam.serviceAccountUser'].nil?
+    impact 'none'
+    describe "[#{gcp_project_id}] does not contain users with roles/serviceAccountUser. This test is Not Applicable." do
+      skip "[#{gcp_project_id}] does not contain users with roles/serviceAccountUser"
+    end
   else
     describe "[#{gcp_project_id}] roles/serviceAccountUser" do
-      if iam_bindings_cache.iam_bindings['roles/iam.serviceAccountUser'].nil?
-        impact 'none'
-        describe "[#{gcp_project_id}] does not contain users with roles/serviceAccountUser. This test is Not Applicable." do
-          skip "[#{gcp_project_id}] does not contain users with roles/serviceAccountUser"
-        end
-      else
-        subject { iam_bindings_cache.iam_bindings['roles/iam.serviceAccountUser'] }
-        sa_admins.members.each do |sa_admin|
-          its('members.to_s') { should_not match sa_admin }
-        end
+      subject { iam_bindings_cache.iam_bindings['roles/iam.serviceAccountUser'] }
+      sa_admins.members.each do |sa_admin|
+        its('members.to_s') { should_not match sa_admin }
       end
     end
   end
