@@ -65,6 +65,7 @@ On organization level:
 * resourcemanager.organizations.get
 * resourcemanager.projects.get
 * resourcemanager.projects.getIamPolicy
+* resourcemanager.folders.get
 
 On project level:
 * cloudkms.cryptoKeys.get
