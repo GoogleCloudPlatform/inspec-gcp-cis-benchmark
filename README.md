@@ -57,3 +57,39 @@ $ inspec exec https://github.com/GoogleCloudPlatform/inspec-gcp-cis-benchmark.gi
 Profile Summary: 48 successful controls, 5 control failures, 7 controls skipped
 Test Summary: 166 successful, 7 failures, 7 skipped
 ```
+
+### Required Permissions
+The following permissions are required to run the CIS benchmark profile:
+
+On organization level:
+* resourcemanager.organizations.get
+* resourcemanager.projects.get
+* resourcemanager.projects.getIamPolicy
+
+On project level:
+* cloudkms.cryptoKeys.get
+* cloudkms.cryptoKeys.getIamPolicy
+* cloudkms.cryptoKeys.list
+* cloudkms.keyRings.list
+* cloudsql.instances.get
+* cloudsql.instances.list
+* compute.firewalls.list
+* compute.instances.get
+* compute.instances.list
+* compute.networks.list
+* compute.regions.list
+* compute.sslPolicies.get
+* compute.sslPolicies.list
+* compute.subnetworks.get
+* compute.subnetworks.list
+* compute.targetHttpsProxies.list
+* dns.managedZones.list
+* iam.serviceAccountKeys.list
+* iam.serviceAccounts.list
+* logging.logMetrics.list
+* logging.sinks.get
+* logging.sinks.list
+* monitoring.alertPolicies.list
+* resourcemanager.projects.get
+* resourcemanager.projects.getIamPolicy
+* storage.buckets.list
