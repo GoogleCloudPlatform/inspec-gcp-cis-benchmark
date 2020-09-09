@@ -47,11 +47,15 @@ When an instance is configured with Compute Engine default service account with 
   ref 'GCP Docs', url: 'https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances'
   ref 'GCP Docs', url: 'https://cloud.google.com/compute/docs/access/service-accounts'
 
+  project_number = google_project(project: gcp_project_id).project_number
   gce_instances.each do |instance|
     next if instance[:name] =~ /^gke-/
-    describe "[#{gcp_project_id}] Instance #{instance[:zone]}/#{instance[:name]}" do
-      subject { google_compute_instance(project: gcp_project_id, zone: instance[:zone], name: instance[:name]) }
-      its('service_account_scopes') { should_not include 'https://www.googleapis.com/auth/cloud-platform' }
+    google_compute_instance(project: gcp_project_id, zone: instance[:zone], name: instance[:name]).service_accounts.each do |serviceaccount|
+      next if serviceaccount.email != "#{project_number}-compute@developer.gserviceaccount.com"
+      describe "[#{gcp_project_id}] Instance #{instance[:zone]}/#{instance[:name]}" do
+        subject { serviceaccount.scopes }
+        it { should_not include 'https://www.googleapis.com/auth/cloud-platform' }
+      end
     end
   end
 end
