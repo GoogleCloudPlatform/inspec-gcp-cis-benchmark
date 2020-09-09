@@ -60,10 +60,12 @@ Test Summary: 166 successful, 7 failures, 7 skipped
 
 ### Required APIs
 
-The following GCP APIs should be enabled
-in **both** the *source* project of the Service Account that runs the scan
-and the *target* project to be scanned:
+Consider these GCP projects, which may all be the same or different:
+* the project of the Service Account that's used to authenticate the scan
+* the project from which the benchmark is called
+* the project to be scanned
 
+The following GCP APIs should be enabled in **all** of these projects:
 * cloudkms.googleapis.com
 * cloudresourcemanager.googleapis.com
 * compute.googleapis.com
