@@ -58,6 +58,22 @@ Profile Summary: 48 successful controls, 5 control failures, 7 controls skipped
 Test Summary: 166 successful, 7 failures, 7 skipped
 ```
 
+### Required APIs
+
+The following GCP APIs should be enabled
+in **both** the *source* project of the Service Account that runs the scan
+and the *target* project to be scanned:
+
+* cloudkms.googleapis.com
+* cloudresourcemanager.googleapis.com
+* compute.googleapis.com
+* dns.googleapis.com
+* iam.googleapis.com
+* logging.googleapis.com
+* monitoring.googleapis.com
+* sqladmin.googleapis.com
+* storage-api.googleapis.com
+  
 ### Required Permissions
 The following permissions are required to run the CIS benchmark profile:
 
