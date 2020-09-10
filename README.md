@@ -99,5 +99,6 @@ On project level:
 * monitoring.alertPolicies.list
 * resourcemanager.projects.get
 * resourcemanager.projects.getIamPolicy
+* storage.buckets.get
 * storage.buckets.getIamPolicy
 * storage.buckets.list
