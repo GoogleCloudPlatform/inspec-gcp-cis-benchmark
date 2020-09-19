@@ -46,7 +46,7 @@ $ gem install inspec-bin --no-document --quiet
 $ gcloud auth list
 
 # acquire credentials to use with Application Default Credentials
-$ gcloud auth application-default login 
+$ gcloud auth application-default login
 
 ```
 
@@ -74,16 +74,22 @@ On project level:
 * cloudkms.keyRings.list
 * cloudsql.instances.get
 * cloudsql.instances.list
+* compute.firewalls.get
 * compute.firewalls.list
 * compute.instances.get
 * compute.instances.list
+* compute.networks.get
 * compute.networks.list
+* compute.projects.get
 * compute.regions.list
 * compute.sslPolicies.get
 * compute.sslPolicies.list
 * compute.subnetworks.get
 * compute.subnetworks.list
+* compute.targetHttpsProxies.get
 * compute.targetHttpsProxies.list
+* compute.zones.list
+* dns.managedZones.get
 * dns.managedZones.list
 * iam.serviceAccountKeys.list
 * iam.serviceAccounts.list
@@ -93,4 +99,6 @@ On project level:
 * monitoring.alertPolicies.list
 * resourcemanager.projects.get
 * resourcemanager.projects.getIamPolicy
+* storage.buckets.get
+* storage.buckets.getIamPolicy
 * storage.buckets.list
