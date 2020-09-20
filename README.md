@@ -21,7 +21,16 @@ The following GCP CIS v1.1.0 Benchmark Controls are not covered:
 
 ## Usage
 
-### Profile Attributes
+### Profile Inputs (see `inspec.yml` file)
+
+This profile uses InSpec Inputs to make the tests more flexible. You are able to provide inputs at runtime either via the `cli` or via `YAML files` to help the profile work best in your deployment.
+
+**pro tip**: Do not change the inputs in the `inspec.yml` file directly, either:
+
+1. update them via the cli - via the `--input` flag
+2. pass them in via a YAML file as shown in the `Example` - via the `--input-file` flag
+
+Further details can be found here: <https://docs.chef.io/inspec/inputs/>
 
 - **gcp_project_id** - (Default: "", type: string) - The target GCP Project that must be specified.
 - **sa_key_older_than_seconds** - (Default: 7776000, type: int, CIS IAM 1.15) - The maximum allowed age of GCP User-managed Service Account Keys (90 days in seconds).
