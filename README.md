@@ -32,13 +32,19 @@ This profile uses InSpec Inputs to make the tests more flexible. You are able to
 
 Further details can be found here: <https://docs.chef.io/inspec/inputs/>
 
-- **gcp_project_id** - (Default: "", type: string) - The target GCP Project that must be specified.
-- **sa_key_older_than_seconds** - (Default: 7776000, type: int, CIS IAM 1.15) - The maximum allowed age of GCP User-managed Service Account Keys (90 days in seconds).
-- **kms_rotation_period_seconds** - (Default: 7776000, type: int, CIS IAM 1.10) - The maximum allowed age of KMS keys (90 days in seconds).
+### (Required) User Provided Inputs - via the CLI or Input Files
+
+1. **gcp_project_id** - (Default: null, type: String) - The target GCP Project you are scanning.
+
+### (Optional) User Provided Inputs
+
+1. **bucket_logging_ignore_regex** - (type: String) - Ignore this bucket by regex from requiring logging to be enabled. Example: `-logging`
+2. **sa_key_older_than_seconds** - (Default: 7776000, type: int, CIS IAM 1.15) - The maximum allowed age of GCP User-managed Service Account Keys (90 days in seconds).
+3. **kms_rotation_period_seconds** - (Default: 7776000, type: int, CIS IAM 1.10) - The maximum allowed age of KMS keys (90 days in seconds).
 
 ### Cloud Shell Walkthrough
 
-Use this Cloud Shell walkthrough for a hands-on example.
+Use this Cloud Shell Walkthrough for a hands-on example.
 
 [![Open this project in Cloud Shell](http://gstatic.com/cloudssh/images/open-btn.png)](https://console.cloud.google.com/cloudshell/open?git_repo=https://github.com/GoogleCloudPlatform/inspec-gcp-cis-benchmark&page=editor&tutorial=walkthrough.md)
 
@@ -59,8 +65,8 @@ $ gcloud auth application-default login
 ```
 
 ```
-# scan a project with this profile, replace <YOUR_PROJECT_ID> with your project ID
-$ inspec exec https://github.com/GoogleCloudPlatform/inspec-gcp-cis-benchmark.git -t gcp:// --input gcp_project_id=<YOUR_PROJECT_ID>  --reporter cli json:myscan.json
+# scan a project with this profile, replace {{project-id}} with your project ID
+$ inspec exec https://github.com/GoogleCloudPlatform/inspec-gcp-cis-benchmark.git -t gcp:// --input gcp_project_id={{project-id}}  --reporter cli json:{{project-id}}_scan.json
 ...snip...
 Profile Summary: 48 successful controls, 5 control failures, 7 controls skipped
 Test Summary: 166 successful, 7 failures, 7 skipped
