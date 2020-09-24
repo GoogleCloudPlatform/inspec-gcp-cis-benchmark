@@ -1,6 +1,6 @@
 # Introduction to Running InSpec in Cloud Shell
 
-## Let's get started!
+## Getting Started
 
 This guide will show you how to install InSpec on your Cloud Shell instance and how to use InSpec to check the infrastructure in your Google Cloud Project against the CIS GCP Benchmark.
 
@@ -21,7 +21,7 @@ Before we jump in, let's briefly go over what InSpec can do.
 
 Continue on to the next step to start setting up your tutorial.
 
-## Install InSpec
+## Installing InSpec
 
 InSpec is distributed as a Ruby gem and your Cloud Shell instance has a Ruby environment already configured. All you need to do is install the InSpec gem:
 
@@ -33,7 +33,7 @@ gem install inspec-bin --no-document --quiet
 
 Next, you’ll select a Google Cloud Project to scan with InSpec.
 
-## Select a Google Cloud Project to scan
+## Select the Google Cloud Project to scan
 
 Pick a project where you have sufficient permissions. We'll use your user credentials in Cloud Shell to scan the project.
 

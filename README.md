@@ -27,20 +27,20 @@ This profile uses InSpec Inputs to make the tests more flexible. You are able to
 
 **pro tip**: Do not change the inputs in the `inspec.yml` file directly, either:
 
-1. update them via the cli - via the `--input` flag
-2. pass them in via a YAML file as shown in the `Example` - via the `--input-file` flag
+- update them via the cli - via the `--input` flag
+- pass them in via a YAML file as shown in the `Example` - via the `--input-file` flag
 
 Further details can be found here: <https://docs.chef.io/inspec/inputs/>
 
 ### (Required) User Provided Inputs - via the CLI or Input Files
 
-1. **gcp_project_id** - (Default: null, type: String) - The target GCP Project you are scanning.
+- **gcp_project_id** - (Default: null, type: String) - The target GCP Project you are scanning.
 
 ### (Optional) User Provided Inputs
 
-1. **bucket_logging_ignore_regex** - (type: String) - Ignore this bucket by regex from requiring logging to be enabled. Example: `-logging`
-2. **sa_key_older_than_seconds** - (Default: 7776000, type: int, CIS IAM 1.15) - The maximum allowed age of GCP User-managed Service Account Keys (90 days in seconds).
-3. **kms_rotation_period_seconds** - (Default: 7776000, type: int, CIS IAM 1.10) - The maximum allowed age of KMS keys (90 days in seconds).
+- **bucket_logging_ignore_regex** - (type: String) - Ignore this bucket by regex from requiring logging to be enabled. Example: `-logging`
+- **sa_key_older_than_seconds** - (Default: 7776000, type: int, CIS IAM 1.15) - The maximum allowed age of GCP User-managed Service Account Keys (90 days in seconds).
+- **kms_rotation_period_seconds** - (Default: 7776000, type: int, CIS IAM 1.10) - The maximum allowed age of KMS keys (90 days in seconds).
 
 ### Cloud Shell Walkthrough
 

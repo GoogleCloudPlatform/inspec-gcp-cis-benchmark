@@ -13,13 +13,13 @@
 # limitations under the License.
 
 name: inspec-gcp-cis-benchmark
-title: "InSpec GCP CIS 1.1 Benchmark"
+title: 'InSpec GCP CIS 1.1 Benchmark'
 maintainer: 'Google Cloud Platform'
-copyright: (c) 2020, Google, Inc.
-copyright_email: copyright@google.com
-license: Apache-2.0
-summary: "Inspec Google Cloud Platform Center for Internet Security Benchmark v1.1 Profile"
-version: "1.1.0-17"
+copyright: '(c) 2020, Google, Inc.'
+copyright_email: 'copyright@google.com'
+license: 'Apache-2.0'
+summary: 'Inspec Google Cloud Platform Center for Internet Security Benchmark v1.1 Profile'
+version: 1.1.0-17
 
 supports:
   - platform: gcp
