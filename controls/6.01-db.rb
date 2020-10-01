@@ -82,6 +82,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
         impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
+            next unless flag.name == 'local_infile'
             describe flag do
               its('name') { should cmp 'local_infile' }
               its('value') { should cmp 'off' }
