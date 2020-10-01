@@ -13,62 +13,63 @@
 # limitations under the License.
 
 name: inspec-gcp-cis-benchmark
-title: 'InSpec GCP CIS 1.1 Benchmark'
-maintainer: 'Google Cloud Platform'
-copyright: '(c) 2020, Google, Inc.'
-copyright_email: 'copyright@google.com'
-license: 'Apache-2.0'
-summary: 'Inspec Google Cloud Platform Center for Internet Security Benchmark v1.1 Profile'
-version: 1.1.0-17
+title: "InSpec GCP CIS 1.1 Benchmark"
+maintainer: "Google Cloud Platform"
+copyright: "(c) 2020, Google, Inc."
+copyright_email: "copyright@google.com"
+license: "Apache-2.0"
+summary: "Inspec Google Cloud Platform Center for Internet Security Benchmark v1.1 Profile"
+version: 1.1.0-18
 
 supports:
   - platform: gcp
 
 depends:
-- name: inspec-gcp-helpers
-  url: https://github.com/GoogleCloudPlatform/inspec-gcp-helpers/archive/v1.0.7.tar.gz
+  - name: inspec-gcp-helpers
+    url: https://github.com/GoogleCloudPlatform/inspec-gcp-helpers/archive/v1.0.7.tar.gz
 
 inputs:
-# {{gcp_project_id}} and {{bucket_logging_ignore_regex}} 
-# must be defined at runtime by the user 
-- name: gcp_project_id
-  description: 'The GCP project identifier.'
-  type: string
-  required: true
+  # {{gcp_project_id}} and {{bucket_logging_ignore_regex}}
+  # must be defined at runtime by the user
+  - name: gcp_project_id
+    description: "The GCP project identifier."
+    type: String
+    required: true
 
-# example = "-logging"
-# "replace-with-bucket-name-or-partial-match"
-- name: bucket_logging_ignore_regex
-  description: 'Ignore this bucket by regex from requiring logging to be enabled'
-  required: false
+  # example = "-logging"
+  # "replace-with-bucket-name-or-partial-match"
+  - name: bucket_logging_ignore_regex
+    description: "Ignore this bucket by regex from requiring logging to be enabled"
+    type: String
+    required: false
 
-- name: cis_version
-  description: 'The short version of the GCP CIS Benchmark'
-  value: '1.0'
-  type: String
-  
-- name: cis_url
-  description: 'The URL to the GCP CIS Benchmark'
-  value: 'https://www.cisecurity.org/benchmark/google_cloud_computing_platform/'
-  type: String
+  - name: cis_version
+    description: "The short version of the GCP CIS Benchmark"
+    value: "1.0"
+    type: String
+
+  - name: cis_url
+    description: "The URL to the GCP CIS Benchmark"
+    value: "https://www.cisecurity.org/benchmark/google_cloud_computing_platform/"
+    type: String
 
   - name: sa_key_older_than_seconds
-  description: 'How many seconds SA keys should not be older than'
-  value: 7776000
-  type: Numeric
+    description: "How many seconds SA keys should not be older than"
+    value: 7776000
+    type: Numeric
 
   - name: kms_rotation_period_seconds
-  description: 'How many seconds KMS Keys should be last rotated (90 days)'
-  value: 7776000
-  type: Numeric
+    description: "How many seconds KMS Keys should be last rotated (90 days)"
+    value: 7776000
+    type: Numeric
 
   - name: gcp_gke_locations
-  description: 'The list of regions and/or zone names where GKE clusters are running. An empty array searches all locations'
-  type: Array
-  value:
-    - "" 
-- name: gce_zones
-  description: 'The list of zone names where GCE instances are running. An empty array searches all locations'
-  type: Array
-  value:
-    - ""
+    description: "The list of regions and/or zone names where GKE clusters are running. An empty array searches all locations"
+    type: Array
+    value:
+      - ""
+  - name: gce_zones
+    description: "The list of zone names where GCE instances are running. An empty array searches all locations"
+    type: Array
+    value:
+      - ""
