@@ -54,6 +54,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
         impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
+            next unless flag.name == 'cross db ownership chaining'
             describe "[#{gcp_project_id} , #{db} ] should have a database flag 'cross db ownership chaining' set to 'off' " do
               subject { flag }
               its('name') { should cmp 'cross db ownership chaining' }
@@ -104,6 +105,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
         impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
+            next unless flag.name == 'contained database authentication'
             describe "[#{gcp_project_id} , #{db} ] should have a database flag 'contained database authentication' set to 'off' " do
               subject { flag }
               its('name') { should cmp 'contained database authentication' }
