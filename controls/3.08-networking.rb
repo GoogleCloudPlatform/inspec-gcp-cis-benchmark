@@ -51,8 +51,8 @@ Flow Logs provide visibility into network traffic for each VM inside the subnet 
     google_compute_subnetworks(project: gcp_project_id, region: region).subnetwork_names.each do |subnet|
       subnet_obj = google_compute_subnetwork(project: gcp_project_id, region: region, name: subnet)
       if subnet_obj.purpose == 'INTERNAL_HTTPS_LOAD_BALANCER' # filter subnets for internal HTTPs Load Balancing
-        describe "[#{gcp_project_id} #{region}/#{subnet}] cannot enable vpc flow logs. This test is Not Applicable." do
-          skip "[#{gcp_project_id} #{region}/#{subnet}] cannot enable vpc flow logs."
+        describe "[#{gcp_project_id} #{region}/#{subnet}] does not support VPC Flow Logs. This test is Not Applicable." do
+          skip "[#{gcp_project_id} #{region}/#{subnet}] does not support VPC Flow Logs."
         end
       else
         describe "[#{gcp_project_id}] #{region}/#{subnet}" do
