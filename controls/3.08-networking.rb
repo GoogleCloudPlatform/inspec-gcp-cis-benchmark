@@ -50,6 +50,7 @@ Flow Logs provide visibility into network traffic for each VM inside the subnet 
   google_compute_regions(project: gcp_project_id).region_names.each do |region|
     google_compute_subnetworks(project: gcp_project_id, region: region).subnetwork_names.each do |subnet|
       subnet_obj = google_compute_subnetwork(project: gcp_project_id, region: region, name: subnet)
+      next unless subnet_obj.purpose == 'PRIVATE' # filter subnets for internal HTTPs Load Balancing
       describe "[#{gcp_project_id}] #{region}/#{subnet}" do
         subject { subnet_obj }
         if subnet_obj.methods.include?(:log_config) == true
