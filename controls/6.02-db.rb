@@ -53,6 +53,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
         impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
+            next unless flag.name == 'log_checkpoints'
             describe "[#{gcp_project_id} , #{db} ] should have a database flag 'log_checkpoints' set to 'on' " do
               subject { flag }
               its('name') { should cmp 'log_checkpoints' }
@@ -103,6 +104,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
         impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
+            next unless flag.name == 'log_connections'
             describe "[#{gcp_project_id} , #{db} ] should have a database flag 'log_connections' set to 'on' " do
               subject { flag }
               its('name') { should cmp 'log_connections' }
@@ -153,6 +155,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
         impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
+            next unless flag.name == 'log_disconnections'
             describe "[#{gcp_project_id} , #{db} ] should have a database flag 'log_disconnections' set to 'on' " do
               subject { flag }
               its('name') { should cmp 'log_disconnections' }
@@ -204,6 +207,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
         impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
+            next unless flag.name == 'log_lock_waits'
             describe "[#{gcp_project_id} , #{db} ] should have a database flag 'log_lock_waits' set to 'on' " do
               subject { flag }
               its('name') { should cmp 'log_lock_waits' }
@@ -226,7 +230,7 @@ sub_control_id = "#{control_id}.5"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   impact 'medium'
 
-  title "[#{control_abbrev.upcase}] Ensure that the 'log_min_messages' database flag for Cloud SQL PostgreSQL instance is set appropriately"
+  title "[#{control_abbrev.upcase}] Ensure that the 'log_min_error_statement' database flag for Cloud SQL PostgreSQL instance is set appropriately"
 
   desc 'The log_min_error_statement flag defines the minimum message severity level that is considered as an error statement. Messages for error statements are logged with the SQL statement '
   desc 'rationale', 'ERROR is considered the best practice setting. Auditing helps in troubleshooting operational problems and also permits forensic analysis. If log_min_error_statement is not set to the correct value, messages may not be classified as error messages appropriately'
@@ -253,6 +257,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
         impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
+            next unless flag.name == 'log_min_error_statement'
             describe "[#{gcp_project_id} , #{db} ] should have a database flag 'log_min_error_statement' set to 'ERROR' " do
               subject { flag }
               its('name') { should cmp 'log_min_error_statement' }
@@ -301,6 +306,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
         impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
+            next unless flag.name == 'log_temp_files'
             describe "[#{gcp_project_id} , #{db} ] should have a database flag 'log_temp_files' set to '0' " do
               subject { flag }
               its('name') { should cmp 'log_temp_files' }
@@ -350,6 +356,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
         impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
+            next unless flag.name == 'log_min_duration_statement'
             describe "[#{gcp_project_id} , #{db} ] should have a database flag 'log_min_duration_statement' set to '-1' " do
               subject { flag }
               its('name') { should cmp 'log_min_duration_statement' }

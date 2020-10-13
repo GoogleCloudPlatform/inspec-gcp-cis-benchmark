@@ -50,11 +50,17 @@ Flow Logs provide visibility into network traffic for each VM inside the subnet 
   google_compute_regions(project: gcp_project_id).region_names.each do |region|
     google_compute_subnetworks(project: gcp_project_id, region: region).subnetwork_names.each do |subnet|
       subnet_obj = google_compute_subnetwork(project: gcp_project_id, region: region, name: subnet)
-      describe "[#{gcp_project_id}] #{region}/#{subnet}" do
-        subject { subnet_obj }
-        if subnet_obj.methods.include?(:log_config) == true
-          it 'should have logging enabled' do
-            expect(subnet_obj.log_config.enable).to be true
+      if subnet_obj.purpose == 'INTERNAL_HTTPS_LOAD_BALANCER' # filter subnets for internal HTTPs Load Balancing
+        describe "[#{gcp_project_id} #{region}/#{subnet}] does not support VPC Flow Logs. This test is Not Applicable." do
+          skip "[#{gcp_project_id} #{region}/#{subnet}] does not support VPC Flow Logs."
+        end
+      else
+        describe "[#{gcp_project_id}] #{region}/#{subnet}" do
+          subject { subnet_obj }
+          if subnet_obj.methods.include?(:log_config) == true
+            it 'should have logging enabled' do
+              expect(subnet_obj.log_config.enable).to be true
+            end
           end
         end
       end
