@@ -35,6 +35,7 @@ inputs:
     description: "The GCP project identifier."
     type: String
     required: true
+    value: 'aaa-bbb-ccc-ddd'
 
   # example = "-logging"
   # "replace-with-bucket-name-or-partial-match"
