@@ -43,9 +43,17 @@ This recommendation is applicable only for User-Managed user created service acc
   ref 'GCP Docs', url: 'https://cloud.google.com/iam/docs/understanding-service-accounts'
 
   iam_bindings_cache.iam_bindings.keys.grep(/admin/i).each do |role|
-    describe "[#{gcp_project_id}] Admin roles" do
-      subject { iam_bindings_cache.iam_bindings[role] }
-      its('members') { should_not include(/@[a-z][a-z0-9|-]{4,28}[a-z].iam.gserviceaccount.com/) }
+    role_bindings = iam_bindings_cache.iam_bindings[role]
+    if role_bindings.members.nil?
+      impact 'none'
+      describe "[#{gcp_project_id}] Role bindings for role [#{role}] do not contain any members. This test is Not Applicable." do
+        skip "[#{gcp_project_id}] role bindings for role [#{role}] do not contain any members."
+      end
+    else
+      describe "[#{gcp_project_id}] Admin role [#{role}]" do
+        subject { role_bindings }
+        its('members') { should_not include(/@[a-z][a-z0-9|-]{4,28}[a-z].iam.gserviceaccount.com/) }
+      end
     end
   end
 
