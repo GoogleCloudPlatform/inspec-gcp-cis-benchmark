@@ -44,8 +44,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
     describe "[#{gcp_project_id}] HTTPS Proxy: #{proxy}" do
       subject { google_compute_target_https_proxy(project: gcp_project_id, name: proxy) }
       it 'should have a custom SSL policy configured' do
-        #subject.ssl_policy.should_not cmp(nil)
-        expect(subject).to_not cmp(nil)
+        expect(subject.ssl_policy).to_not cmp(nil)
       end
     end
   end
