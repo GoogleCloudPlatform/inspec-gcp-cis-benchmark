@@ -54,20 +54,18 @@ When enabling DNSSEC for a managed zone, or creating a managed zone with DNSSEC,
         describe "[#{gcp_project_id}] DNS zone #{dnszone} has private visibility. This test is not applicable for private zones." do
           skip "[#{gcp_project_id}] DNS zone #{dnszone} has private visibility."
         end
+      elsif zone.dnssec_config.state == 'on'
+        zone.dnssec_config.default_key_specs.select { |spec| spec.key_type == 'keySigning' }.each do |spec|
+          describe "[#{gcp_project_id}] DNS Zone [#{dnszone}] with DNSSEC key-signing" do
+            subject { spec }
+            its('algorithm') { should_not cmp 'RSASHA1' }
+            its('algorithm') { should_not cmp nil }
+          end
+        end
       else
-        if zone.dnssec_config.state == 'on'
-          zone.dnssec_config.default_key_specs.select { |spec| spec.key_type == 'keySigning' }.each do |spec|
-            describe "[#{gcp_project_id}] DNS Zone [#{dnszone}] with DNSSEC key-signing" do
-              subject { spec }
-              its('algorithm') { should_not cmp 'RSASHA1' }
-              its('algorithm') { should_not cmp nil }
-            end
-          end
-        else
-          describe "[#{gcp_project_id}] DNS Zone [#{dnszone}] DNSSEC" do
-            subject { 'off' }
-            it { should cmp 'on' }
-          end
+        describe "[#{gcp_project_id}] DNS Zone [#{dnszone}] DNSSEC" do
+          subject { 'off' }
+          it { should cmp 'on' }
         end
       end
     end
