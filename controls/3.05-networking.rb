@@ -49,8 +49,12 @@ The algorithm used for key signing should be recommended one and it should not b
   else
     managed_zone_names.each do |dnszone|
       zone = google_dns_managed_zone(project: gcp_project_id, zone: dnszone)
-
-      if zone.dnssec_config.state == 'on'
+      if zone.visibility == 'private'
+        impact 'none'
+        describe "[#{gcp_project_id}] DNS zone #{dnszone} has private visibility. This test is not applicable for private zones." do
+          skip "[#{gcp_project_id}] DNS zone #{dnszone} has private visibility."
+        end
+      elsif zone.dnssec_config.state == 'on'
         zone.dnssec_config.default_key_specs.select { |spec| spec.key_type == 'zoneSigning' }.each do |spec|
           describe "[#{gcp_project_id}] DNS Zone [#{dnszone}] with DNSSEC zone-signing" do
             subject { spec }
