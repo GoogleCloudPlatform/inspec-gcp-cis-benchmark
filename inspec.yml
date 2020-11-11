@@ -19,7 +19,7 @@ copyright: "(c) 2020, Google, Inc."
 copyright_email: "copyright@google.com"
 license: "Apache-2.0"
 summary: "Inspec Google Cloud Platform Center for Internet Security Benchmark v1.1 Profile"
-version: 1.1.0-22
+version: 1.1.0-23
 
 supports:
   - platform: gcp
@@ -29,20 +29,13 @@ depends:
     url: https://github.com/GoogleCloudPlatform/inspec-gcp-helpers/archive/v1.0.7.tar.gz
 
 inputs:
-  # {{gcp_project_id}} and {{bucket_logging_ignore_regex}}
+  # {{gcp_project_id}}
   # must be defined at runtime by the user
   - name: gcp_project_id
     description: "The GCP project identifier."
     type: String
     required: true
     value: 'aaa-bbb-ccc-ddd'
-
-  # example = "-logging"
-  # "replace-with-bucket-name-or-partial-match"
-  - name: bucket_logging_ignore_regex
-    description: "Ignore this bucket by regex from requiring logging to be enabled"
-    type: String
-    required: false
 
   - name: cis_version
     description: "The short version of the GCP CIS Benchmark"

@@ -38,7 +38,6 @@ Further details can be found here: <https://docs.chef.io/inspec/inputs/>
 
 ### (Optional) User Provided Inputs
 
-- **bucket_logging_ignore_regex** - (type: String) - Ignore this bucket by regex from requiring logging to be enabled. Example: `-logging`
 - **sa_key_older_than_seconds** - (Default: 7776000, type: int, CIS IAM 1.15) - The maximum allowed age of GCP User-managed Service Account Keys (90 days in seconds).
 - **kms_rotation_period_seconds** - (Default: 7776000, type: int, CIS IAM 1.10) - The maximum allowed age of KMS keys (90 days in seconds).
 
