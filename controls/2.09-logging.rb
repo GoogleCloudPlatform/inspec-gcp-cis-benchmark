@@ -43,7 +43,7 @@ Monitoring changes to VPC will help ensure VPC traffic flow is not getting impac
   ref 'GCP Docs', url: 'https://cloud.google.com/logging/docs/reference/tools/gcloud-logging'
   ref 'GCP Docs', url: 'https://cloud.google.com/vpc/docs/overview'
 
-  log_filter = 'resource.type=gce_network AND jsonPayload.event_subtype="compute.networks.insert" OR jsonPayload.event_subtype="compute.networks.patch" OR jsonPayload.event_subtype="compute.networks.delete" OR jsonPayload.event_subtype="compute.networks.removePeering" OR jsonPayload.event_subtype="compute.networks.addPeering"'
+  log_filter = 'jsonPayload.event_subtype="compute.networks.insert" OR jsonPayload.event_subtype="compute.networks.patch" OR jsonPayload.event_subtype="compute.networks.delete" OR jsonPayload.event_subtype="compute.networks.removePeering" OR jsonPayload.event_subtype="compute.networks.addPeering"'
   describe "[#{gcp_project_id}] VPC Network changes filter" do
     subject { google_project_metrics(project: gcp_project_id).where(metric_filter: log_filter) }
     it { should exist }
@@ -57,10 +57,6 @@ Monitoring changes to VPC will help ensure VPC traffic flow is not getting impac
         describe "[#{gcp_project_id}] VPC Network changes alert policy" do
           subject { condition }
           it { should exist }
-          its('aggregation_cross_series_reducer') { should eq 'REDUCE_COUNT' }
-          its('aggregation_per_series_aligner') { should eq 'ALIGN_RATE' }
-          its('condition_threshold_value') { should eq 0.001 }
-          its('aggregation_alignment_period') { should eq '60s' }
         end
       end
     end

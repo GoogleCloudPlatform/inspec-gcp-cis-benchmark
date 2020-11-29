@@ -41,7 +41,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://cloud.google.com/logging/docs/reference/tools/gcloud-logging'
   ref 'GCP Docs', url: 'https://cloud.google.com/vpc/docs/firewalls'
 
-  log_filter = 'resource.type="gce_firewall_rule" AND jsonPayload.event_subtype="compute.firewalls.patch" OR jsonPayload.event_subtype="compute.firewalls.insert"'
+  log_filter = 'jsonPayload.event_subtype="compute.firewalls.patch" OR jsonPayload.event_subtype="compute.firewalls.insert"'
   describe "[#{gcp_project_id}] VPC FW Rule changes filter" do
     subject { google_project_metrics(project: gcp_project_id).where(metric_filter: log_filter) }
     it { should exist }
@@ -55,10 +55,6 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
         describe "[#{gcp_project_id}] VPC FW Rule changes alert policy" do
           subject { condition }
           it { should exist }
-          its('aggregation_cross_series_reducer') { should eq 'REDUCE_COUNT' }
-          its('aggregation_per_series_aligner') { should eq 'ALIGN_RATE' }
-          its('condition_threshold_value') { should eq 0.001 }
-          its('aggregation_alignment_period') { should eq '60s' }
         end
       end
     end

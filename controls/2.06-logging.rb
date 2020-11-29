@@ -41,7 +41,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://cloud.google.com/logging/docs/reference/tools/gcloud-logging'
   ref 'GCP Docs', url: 'https://cloud.google.com/iam/docs/understanding-custom-roles'
 
-  log_filter = 'resource.type="iam_role" AND protoPayload.methodName="google.iam.admin.v1.CreateRole" OR protoPayload.methodName="google.iam.admin.v1.DeleteRole" OR protoPayload.methodName="google.iam.admin.v1.UpdateRole"'
+  log_filter = 'protoPayload.methodName="google.iam.admin.v1.CreateRole" OR protoPayload.methodName="google.iam.admin.v1.DeleteRole" OR protoPayload.methodName="google.iam.admin.v1.UpdateRole"'
   describe "[#{gcp_project_id}] Custom Role changes filter" do
     subject { google_project_metrics(project: gcp_project_id).where(metric_filter: log_filter) }
     it { should exist }
@@ -55,10 +55,6 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
         describe "[#{gcp_project_id}] Custom Role changes alert policy" do
           subject { condition }
           it { should exist }
-          its('aggregation_cross_series_reducer') { should eq 'REDUCE_COUNT' }
-          its('aggregation_per_series_aligner') { should eq 'ALIGN_RATE' }
-          its('condition_threshold_value') { should eq 0.001 }
-          its('aggregation_alignment_period') { should eq '60s' }
         end
       end
     end
