@@ -72,10 +72,6 @@ Granting owner role to a member (user/Service-Account) will allow members to mod
         describe "[#{gcp_project_id}] Project Ownership changes alert policy" do
           subject { condition }
           it { should exist }
-          its('aggregation_cross_series_reducer') { should eq 'REDUCE_COUNT' }
-          its('aggregation_per_series_aligner') { should eq 'ALIGN_RATE' }
-          its('condition_threshold_value') { should eq 0.001 }
-          its('aggregation_alignment_period') { should eq '60s' }
         end
       end
     end
