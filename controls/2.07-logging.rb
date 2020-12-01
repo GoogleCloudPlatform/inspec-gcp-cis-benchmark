@@ -49,7 +49,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   google_project_metrics(project: gcp_project_id).where(metric_filter: log_filter).metric_types.each do |metrictype|
     describe.one do
-      filter = "metric.type=\"#{metrictype}\" resource.type=\"audited_resource\""
+      filter = "metric.type=\"#{metrictype}\" resource.type=\"global\""
       google_project_alert_policies(project: gcp_project_id).where(policy_enabled_state: true).policy_names.each do |policy|
         condition = google_project_alert_policy_condition(policy: policy, filter: filter)
         describe "[#{gcp_project_id}] VPC FW Rule changes alert policy" do
