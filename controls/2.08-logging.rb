@@ -43,7 +43,7 @@ Monitoring changes to route tables will help ensure that all VPC traffic flows t
   ref 'GCP Docs', url: 'https://cloud.google.com/logging/docs/reference/tools/gcloud-logging'
   ref 'GCP Docs', url: 'https://cloud.google.com/storage/docs/access-control/iam'
 
-  log_filter = 'jsonPayload.event_subtype="compute.routes.delete" OR jsonPayload.event_subtype="compute.routes.insert"'
+  log_filter = 'resource.type=global AND jsonPayload.event_subtype="compute.routes.delete" OR jsonPayload.event_subtype="compute.routes.insert"'
   describe "[#{gcp_project_id}] VPC Route changes filter" do
     subject { google_project_metrics(project: gcp_project_id).where(metric_filter: log_filter) }
     it { should exist }
@@ -51,7 +51,7 @@ Monitoring changes to route tables will help ensure that all VPC traffic flows t
 
   google_project_metrics(project: gcp_project_id).where(metric_filter: log_filter).metric_types.each do |metrictype|
     describe.one do
-      filter = "metric.type=\"#{metrictype}\" resource.type=\"audited_resource\""
+      filter = "metric.type=\"#{metrictype}\" resource.type=\"global\""
       google_project_alert_policies(project: gcp_project_id).where(policy_enabled_state: true).policy_names.each do |policy|
         condition = google_project_alert_policy_condition(policy: policy, filter: filter)
         describe "[#{gcp_project_id}] VPC Route changes alert policy" do
