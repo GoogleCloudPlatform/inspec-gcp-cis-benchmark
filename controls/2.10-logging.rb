@@ -61,3 +61,4 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
     end
   end
 end
+
