@@ -49,7 +49,7 @@ Below are the few of configurable Options which may impact security posture of a
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/mysql/'
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/'
 
-  log_filter = 'protoPayload.methodName="cloudsql.instances.update"'
+  log_filter = 'resource.type=audited_resource AND protoPayload.methodName="cloudsql.instances.update"'
   describe "[#{gcp_project_id}] Cloud SQL changes filter" do
     subject { google_project_metrics(project: gcp_project_id).where(metric_filter: log_filter) }
     it { should exist }

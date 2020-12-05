@@ -41,7 +41,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://cloud.google.com/logging/docs/reference/tools/gcloud-logging'
   ref 'GCP Docs', url: 'https://cloud.google.com/iam/docs/understanding-custom-roles'
 
-  log_filter = 'protoPayload.methodName="google.iam.admin.v1.CreateRole" OR protoPayload.methodName="google.iam.admin.v1.DeleteRole" OR protoPayload.methodName="google.iam.admin.v1.UpdateRole"'
+  log_filter = 'resource.type=audited_resource AND protoPayload.methodName="google.iam.admin.v1.CreateRole" OR protoPayload.methodName="google.iam.admin.v1.DeleteRole" OR protoPayload.methodName="google.iam.admin.v1.UpdateRole"'
   describe "[#{gcp_project_id}] Custom Role changes filter" do
     subject { google_project_metrics(project: gcp_project_id).where(metric_filter: log_filter) }
     it { should exist }
