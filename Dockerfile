@@ -18,4 +18,4 @@ COPY . /share/.
 
 RUN gem install rubocop
 
-ENTRYPOINT ["inspec"]
+ENTRYPOINT ["cinc-auditor"]
