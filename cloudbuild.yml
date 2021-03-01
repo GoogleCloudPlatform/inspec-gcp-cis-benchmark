@@ -77,7 +77,7 @@ steps:
 - id: 'Test Compliance'
   waitFor: ['Run CIS Profile on in-scope project']
   name: mitre/inspec_tools
-  args: ['compliance', '-j', '/workspace/cis_report.json', '-i', '{failed.total.max: 0}']
+  args: ['compliance', '-j', '/workspace/cis_report.json', '-i', '{failed.total.max: 1}']
 
 - id: 'Store json Report'
   waitFor: ['Test Compliance']
