@@ -44,7 +44,7 @@ bucket-level access guarantees that if a Storage bucket is not publicly accessib
 in the bucket is publicly accessible either."
 
   tag cis_scored: true
-  tag cis_level: 1
+  tag cis_level: 2
   tag cis_gcp: control_id.to_s
   tag cis_version: cis_version.to_s
   tag project: gcp_project_id.to_s
