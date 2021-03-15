@@ -49,7 +49,31 @@ Use this Cloud Shell Walkthrough for a hands-on example.
 
 ### CLI Example
 
+#### Ruby Gem
 
+```
+#install inspec
+$ gem install inspec-bin -v 4.26.15 --no-document --quiet
+```
+
+```
+# make sure you're authenticated to GCP
+$ gcloud auth list
+
+# acquire credentials to use with Application Default Credentials
+$ gcloud auth application-default login
+
+```
+
+```
+# scan a project with this profile, replace {{project-id}} with your project ID
+$ inspec exec https://github.com/GoogleCloudPlatform/inspec-gcp-cis-benchmark.git -t gcp:// --input gcp_project_id={{project-id}}  --reporter cli json:{{project-id}}_scan.json
+...snip...
+Profile Summary: 48 successful controls, 5 control failures, 7 controls skipped
+Test Summary: 166 successful, 7 failures, 7 skipped
+```
+
+#### Docker
 ```
 # pull inspec image
 $ docker pull chef/inspec:4.26.15
@@ -66,7 +90,7 @@ $ gcloud auth application-default login
 
 ```
 # create function for convenience
-$ function inspec-docker { docker run -it -e CHEF_LICENSE=accept-no-persist -e GOOGLE_AUTH_SUPPRESS_CREDENTIALS_WARNINGS=true --rm -v ~/.config:/root/.config -v $(pwd):/share chef/inspec:4.26.15 "$@"; }
+$ function inspec-docker { docker run -it -e GOOGLE_AUTH_SUPPRESS_CREDENTIALS_WARNINGS=true --rm -v ~/.config:/root/.config -v $(pwd):/share chef/inspec:4.26.15 "$@"; }
 
 # scan a project with this profile, replace {{project-id}} with your project ID
 $ inspec-docker exec https://github.com/GoogleCloudPlatform/inspec-gcp-cis-benchmark.git -t gcp:// --input gcp_project_id={{project-id}}  --reporter cli json:{{project-id}}_scan.json
