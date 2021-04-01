@@ -26,7 +26,7 @@ gce_instances = GCECache(project: gcp_project_id, gce_zones: gce_zones).gce_inst
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 'medium'
 
-  title "[#{control_abbrev.upcase}] Ensure VM disks for critical VMs are encrypted with CustomerSupplied Encryption Keys (CSEK)"
+  title "[#{control_abbrev.upcase}] Ensure Compute instances are launched with Shielded VM enabled"
 
   desc 'To defend against against advanced threats and ensure that the boot loader and firmware
   on your VMs are signed and untampered, it is recommended that Compute instances are
@@ -68,6 +68,9 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
           expect(false).to be true
         end
       else
+        it 'should have secure boot enabled' do
+          expect(instance_object.shielded_instance_config.enable_secure_boot).to be true
+        end
         it 'should have integrity monitoring enabled' do
           expect(instance_object.shielded_instance_config.enable_integrity_monitoring).to be true
         end
