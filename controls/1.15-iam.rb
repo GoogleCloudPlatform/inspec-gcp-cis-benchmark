@@ -41,6 +41,7 @@ Once the key is stolen, it has no expiration, so it may be used indefinitely, un
   tag cis_gcp: control_id.to_s
   tag cis_version: cis_version.to_s
   tag project: gcp_project_id.to_s
+  tag nist: []
 
   ref 'CIS Benchmark', url: cis_url.to_s
 
