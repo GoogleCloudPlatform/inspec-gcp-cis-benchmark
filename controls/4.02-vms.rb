@@ -42,7 +42,7 @@ When an instance is configured with Compute Engine default service account with 
   tag cis_gcp: control_id.to_s
   tag cis_version: cis_version.to_s
   tag project: gcp_project_id.to_s
-  tag nist: []
+  tag nist: ["AC-2", "AC-6"]
 
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/compute/docs/access/create-enable-service-accounts-for-instances'

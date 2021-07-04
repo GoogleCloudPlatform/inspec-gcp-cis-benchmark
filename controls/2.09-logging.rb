@@ -35,7 +35,7 @@ Monitoring changes to VPC will help ensure VPC traffic flow is not getting impac
   tag cis_gcp: control_id.to_s
   tag cis_version: cis_version.to_s
   tag project: gcp_project_id.to_s
-  tag nist: []
+  tag nist: ["AU-3", "AU-12"]
 
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/logging/docs/logs-based-metrics/'

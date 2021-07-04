@@ -38,7 +38,7 @@ Any user(s) should not have Cloud KMS Admin and any of the Cloud KMS CryptoKey E
   tag cis_gcp: control_id.to_s
   tag cis_version: cis_version.to_s
   tag project: gcp_project_id.to_s
-  tag nist: ["AC-5"]
+  tag nist: ["AC-2", "AC-3", "AC-6"]
 
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/kms/docs/separation-of-duties'
