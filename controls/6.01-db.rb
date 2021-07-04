@@ -40,7 +40,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   tag cis_gcp: sub_control_id.to_s
   tag cis_version: cis_version.to_s
   tag project: gcp_project_id.to_s
-  tag nist: ["IA-5"]
+  tag nist: ['IA-5']
 
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/mysql/create-manage-users'
@@ -68,7 +68,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   tag cis_gcp: sub_control_id.to_s
   tag cis_version: cis_version.to_s
   tag project: gcp_project_id.to_s
-  tag nist: ["SC-1"]
+  tag nist: ['SC-1']
 
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/mysql/flags'

@@ -33,7 +33,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   tag cis_gcp: control_id.to_s
   tag cis_version: cis_version.to_s
   tag project: gcp_project_id.to_s
-  tag nist: ["CM-7", "CA-3", "SC-7"]
+  tag nist: %w[CM-7 CA-3 SC-7]
 
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/vpc/docs/firewalls#blockedtraffic'

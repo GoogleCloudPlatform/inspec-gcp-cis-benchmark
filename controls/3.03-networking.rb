@@ -33,7 +33,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   tag cis_gcp: control_id.to_s
   tag cis_version: cis_version.to_s
   tag project: gcp_project_id.to_s
-  tag nist: ["CM-6"]
+  tag nist: ['CM-6']
 
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloudplatform.googleblog.com/2017/11/DNSSEC-now-available-in-Cloud-DNS.html'

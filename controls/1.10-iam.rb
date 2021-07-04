@@ -41,7 +41,7 @@ A key is used to protect some corpus of data. You could encrypt a collection of 
   tag cis_gcp: control_id.to_s
   tag cis_version: cis_version.to_s
   tag project: gcp_project_id.to_s
-  tag nist: ["AC-2"]
+  tag nist: ['AC-2']
 
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/kms/docs/key-rotation#frequency_of_key_rotation'

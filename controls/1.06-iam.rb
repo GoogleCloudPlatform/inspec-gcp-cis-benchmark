@@ -42,7 +42,7 @@ In order to implement least privileges best practices, IAM users should not be a
   tag cis_gcp: control_id.to_s
   tag cis_version: cis_version.to_s
   tag project: gcp_project_id.to_s
-  tag nist: ["AC-2", "AC-3"]
+  tag nist: %w[AC-2 AC-3]
 
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/iam/docs/service-accounts'
