@@ -35,6 +35,7 @@ When enabling DNSSEC for a managed zone, or creating a managed zone with DNSSEC,
   tag cis_gcp: control_id.to_s
   tag cis_version: cis_version.to_s
   tag project: gcp_project_id.to_s
+  tag nist: []
 
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/dns/dnssec-advanced#advanced_signing_options'
