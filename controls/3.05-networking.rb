@@ -35,7 +35,7 @@ The algorithm used for key signing should be recommended one and it should not b
   tag cis_gcp: control_id.to_s
   tag cis_version: cis_version.to_s
   tag project: gcp_project_id.to_s
-  tag nist: []
+  tag nist: ['CM-6']
 
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/dns/dnssec-advanced#advanced_signing_options'

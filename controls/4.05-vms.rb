@@ -42,7 +42,7 @@ Therefore interactive serial console support should be disabled."
   tag cis_gcp: control_id.to_s
   tag cis_version: cis_version.to_s
   tag project: gcp_project_id.to_s
-  tag nist: []
+  tag nist: ['CM-7']
 
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/compute/docs/instances/interacting-with-serial-console'

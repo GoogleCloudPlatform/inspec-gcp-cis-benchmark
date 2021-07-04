@@ -37,7 +37,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   tag cis_gcp: sub_control_id.to_s
   tag cis_version: cis_version.to_s
   tag project: gcp_project_id.to_s
-  tag nist: ["CA-3", "SC-7"]
+  tag nist: ['AU-3']
 
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/flags#setting_a_database_flag'
@@ -88,6 +88,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   tag cis_gcp: sub_control_id.to_s
   tag cis_version: cis_version.to_s
   tag project: gcp_project_id.to_s
+  tag nist: ['AU-3']
 
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/flags#setting_a_database_flag'
@@ -139,6 +140,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   tag cis_gcp: sub_control_id.to_s
   tag cis_version: cis_version.to_s
   tag project: gcp_project_id.to_s
+  tag nist: ['AU-3']
 
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/flags#setting_a_database_flag'
@@ -191,6 +193,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   tag cis_gcp: sub_control_id.to_s
   tag cis_version: cis_version.to_s
   tag project: gcp_project_id.to_s
+  tag nist: ['AU-3']
 
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/flags#setting_a_database_flag'
@@ -241,6 +244,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   tag cis_gcp: sub_control_id.to_s
   tag cis_version: cis_version.to_s
   tag project: gcp_project_id.to_s
+  tag nist: ['AU-3']
 
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/flags#setting_a_database_flag'
@@ -290,6 +294,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   tag cis_gcp: sub_control_id.to_s
   tag cis_version: cis_version.to_s
   tag project: gcp_project_id.to_s
+  tag nist: ['AU-3']
 
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/flags#setting_a_database_flag'
@@ -340,6 +345,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   tag cis_gcp: sub_control_id.to_s
   tag cis_version: cis_version.to_s
   tag project: gcp_project_id.to_s
+  tag nist: ['AU-3']
 
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/flags#setting_a_database_flag'

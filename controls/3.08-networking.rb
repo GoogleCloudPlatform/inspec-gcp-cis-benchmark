@@ -42,7 +42,7 @@ Flow Logs provide visibility into network traffic for each VM inside the subnet 
   tag cis_gcp: control_id.to_s
   tag cis_version: cis_version.to_s
   tag project: gcp_project_id.to_s
-  tag nist: ["SI-4"]
+  tag nist: %w[AU-12 SI-4]
 
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/vpc/docs/using-flow-logs#enabling_vpc_flow_logging'

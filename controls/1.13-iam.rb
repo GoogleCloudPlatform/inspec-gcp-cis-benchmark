@@ -41,7 +41,7 @@ In order to reduce attack vector, API-Keys can be restricted only to the trusted
   tag cis_gcp: control_id.to_s
   tag cis_version: cis_version.to_s
   tag project: gcp_project_id.to_s
-  tag nist: []
+  tag nist: ['AC-2']
 
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/docs/authentication/api-keys'
