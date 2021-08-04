@@ -82,7 +82,7 @@ The [MITRE SAF](https://saf.mitre.org) is an open-source community partnership i
 
 ### Download your JSON formatted results
 
-1. Right click on your `myscan.json` file
+1. Right click on your `{{project-id}}_scan.json` file
 2. Then select `Download` to save the `{{project-id}}_scan.json` file locally
 
 ### Go to Heimdall Lite and Load your JSON formatted Results
