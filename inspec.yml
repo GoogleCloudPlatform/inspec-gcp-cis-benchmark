@@ -62,8 +62,39 @@ inputs:
     type: Array
     value:
       - ""
+
   - name: gce_zones
     description: "The list of zone names where GCE instances are running. An empty array searches all locations"
     type: Array
     value:
       - ""
+
+  - name: log_min_messages
+    description: "(Cloud SQL PostgreSQL) The log_min_messages flag controls which message levels are written to the server log (see control 6.2.13). ERROR is cosidered best practice."
+    value: "ERROR"
+    type: String
+
+  - name: log_min_error_statement
+    description: "(Cloud SQL PostgreSQL) The log_min_error_statement flag controls which SQL statements that cause an error condition are recorded in the server log (see control 6.2.14). ERROR is cosidered best practice."
+    value: "ERROR"
+    type: String
+
+  - name: log_error_verbosity
+    description: "(Cloud SQL PostgreSQL) The log_min_error_statement flag controls the amount of detail written in the server log for each message that is logged (see control 6.2.2). DEFAULT is cosidered best practice."
+    value: "DEFAULT"
+    type: String
+
+  - name: log_statement
+    description: "(Cloud SQL PostgreSQL) The log_statement flag controls which SQL statements are logged. Valid values are none (off), ddl, mod, and all (all statements) (see control 6.2.7). ddl is cosidered best practice."
+    value: "ddl"
+    type: String
+
+  - name: log_hostname
+    description: "(Cloud SQL PostgreSQL) By default, connection log messages only show the IP address of the connecting host. Turning this parameter on causes logging of the host name as well (see control 6.2.8)."
+    value: "off"
+    type: String
+
+  - name: user_connections
+    description: "(Cloud SQL SQL Server) The user connections option specifies the maximum number of simultaneous user connections that are allowed on an instance of SQL Server. (see control 6.3.3)."
+    value: "0"
+    type: String
