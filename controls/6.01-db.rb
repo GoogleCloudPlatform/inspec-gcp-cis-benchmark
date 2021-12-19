@@ -56,6 +56,63 @@ sub_control_id = "#{control_id}.2"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   impact 'medium'
 
+  title "[#{control_abbrev.upcase}] Ensure 'skip_show_database' database flag for Cloud SQL Mysql
+  instance is set to 'on'"
+
+  desc 'It is recommended to set skip_show_database database flag for Cloud SQL Mysql instance to on'
+  desc 'rationale', "'skip_show_database' database flag prevents people from using the SHOW DATABASES
+statement if they do not have the SHOW DATABASES privilege. This can improve security if
+you have concerns about users being able to see databases belonging to other users. Its
+effect depends on the SHOW DATABASES privilege: If the variable value is ON, the SHOW
+DATABASES statement is permitted only to users who have the SHOW DATABASES
+privilege, and the statement displays all database names. If the value is OFF, SHOW
+DATABASES is permitted to all users, but displays the names of only those databases for
+which the user has the SHOW DATABASES or other privilege. This recommendation is
+applicable to Mysql database instances."
+
+  tag cis_scored: true
+  tag cis_level: 1
+  tag cis_gcp: sub_control_id.to_s
+  tag cis_version: cis_version.to_s
+  tag project: gcp_project_id.to_s
+  tag nist: ['AC-3']
+
+  ref 'CIS Benchmark', url: cis_url.to_s
+  ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/mysql/flags'
+
+  sql_cache.instance_names.each do |db|
+    if sql_cache.instance_objects[db].database_version.include? 'MYSQL'
+      if sql_cache.instance_objects[db].settings.database_flags.nil?
+        describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
+          subject { false }
+          it { should be true }
+        end
+      else
+        impact 'medium'
+        describe.one do
+          sql_cache.instance_objects[db].settings.database_flags.each do |flag|
+            next unless flag.name == 'skip_show_database'
+            describe flag do
+              its('name') { should cmp 'skip_show_database' }
+              its('value') { should cmp 'on' }
+            end
+          end
+        end
+      end
+    else
+      impact 'none'
+      describe "[#{gcp_project_id}] [#{db}] is not a MySQL database. This test is Not Applicable." do
+        skip "[#{gcp_project_id}] [#{db}] is not a MySQL database"
+      end
+    end
+  end
+end
+
+# 6.1.3
+sub_control_id = "#{control_id}.3"
+control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
+  impact 'medium'
+
   title "[#{control_abbrev.upcase}] Ensure that the 'local_infile' database flag for a Cloud SQL Mysql instance is set to 'off'"
 
   desc 'It is recommended to set the local_infile database flag for a Cloud SQL MySQL instance to off.'
