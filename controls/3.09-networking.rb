@@ -21,6 +21,9 @@ cis_url = input('cis_url')
 control_id = '3.9'
 control_abbrev = 'networking'
 
+gcp_https_proxies = google_compute_target_https_proxies(project: gcp_project_id).names
+gcp_ssl_policies = google_compute_ssl_policies(project: gcp_project_id).names
+
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 'low'
 
@@ -41,7 +44,8 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-52r.pdf'
 
   # All load balancers have custom/strong TLS profiles set
-  google_compute_target_https_proxies(project: gcp_project_id).names.each do |proxy|
+
+  gcp_https_proxies.each do |proxy|
     describe "[#{gcp_project_id}] HTTPS Proxy: #{proxy}" do
       subject { google_compute_target_https_proxy(project: gcp_project_id, name: proxy) }
       it 'should have a custom SSL policy configured' do
@@ -50,8 +54,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
     end
   end
   # Ensure SSL Policies use strong TLS
-
-  google_compute_ssl_policies(project: gcp_project_id).names.each do |policy|
+  gcp_ssl_policies.each do |policy|
     case google_compute_ssl_policy(project: gcp_project_id, name: policy).profile
     when 'MODERN'
       describe "[#{gcp_project_id}] SSL Policy: #{policy}" do
@@ -72,6 +75,13 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
         subject { google_compute_ssl_policy(project: gcp_project_id, name: policy) }
         its('custom_features') { should_not be_in %w[TLS_RSA_WITH_AES_128_GCM_SHA256 TLS_RSA_WITH_AES_256_GCM_SHA384 TLS_RSA_WITH_AES_128_CBC_SHA TLS_RSA_WITH_AES_256_CBC_SHA TLS_RSA_WITH_3DES_EDE_CBC_SHA] }
       end
+    end
+  end
+
+  if gcp_https_proxies.empty? && gcp_ssl_policies.empty?
+    impact 'none'
+    describe "[#{gcp_project_id}] No HTTPS or SSL proxy load balancers found. This test is Not Applicable." do
+      skip "[#{gcp_project_id}] No HTTPS or SSL proxy load balancers found"
     end
   end
 end

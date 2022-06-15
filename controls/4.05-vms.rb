@@ -53,4 +53,11 @@ Therefore interactive serial console support should be disabled."
       it { should have_serial_port_disabled }
     end
   end
+
+  if gce_instances.empty?
+    impact 'none'
+    describe "[#{gcp_project_id}] No Google Compute Engine instances were found. This test is Not Applicable." do
+      skip "[#{gcp_project_id}] No Google Compute Engine instances were found"
+    end
+  end
 end

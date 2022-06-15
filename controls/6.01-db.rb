@@ -23,6 +23,7 @@ control_id = '6.1'
 control_abbrev = 'db'
 
 sql_cache = CloudSQLCache(project: gcp_project_id)
+sql_instance_names = sql_cache.instance_names
 
 # 6.1.1
 sub_control_id = "#{control_id}.1"
@@ -80,7 +81,7 @@ applicable to Mysql database instances."
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/mysql/flags'
 
-  sql_cache.instance_names.each do |db|
+  sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'MYSQL'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
         describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
@@ -104,6 +105,13 @@ applicable to Mysql database instances."
       describe "[#{gcp_project_id}] [#{db}] is not a MySQL database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a MySQL database"
       end
+    end
+  end
+
+  if sql_instance_names.empty?
+    impact 'none'
+    describe 'There are no Cloud SQL Instances in this project. This test is Not Applicable.' do
+      skip 'There are no Cloud SQL Instances in this project'
     end
   end
 end
@@ -130,7 +138,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/mysql/flags'
 
-  sql_cache.instance_names.each do |db|
+  sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'MYSQL'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
         describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
@@ -154,6 +162,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
       describe "[#{gcp_project_id}] [#{db}] is not a MySQL database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a MySQL database"
       end
+    end
+  end
+
+  if sql_instance_names.empty?
+    impact 'none'
+    describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
+      skip "[#{gcp_project_id}] does not have CloudSQL instances."
     end
   end
 end

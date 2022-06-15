@@ -53,12 +53,21 @@ in the bucket is publicly accessible either."
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/storage/docs/uniform-bucket-level-access'
 
-  google_storage_buckets(project: gcp_project_id).bucket_names.each do |bucket|
+  storage_buckets = google_storage_buckets(project: gcp_project_id).bucket_names
+
+  storage_buckets.each do |bucket|
     uniform_bucket_level_access = google_storage_bucket(name: bucket).acl.nil?
     describe "[#{gcp_project_id}] GCS Bucket #{bucket}" do
       it 'should have uniform bucket-level access enabled' do
         expect(uniform_bucket_level_access).to be true
       end
+    end
+  end
+
+  if storage_buckets.empty?
+    impact 'none'
+    describe "[#{gcp_project_id}] No Google Storage Buckets were found. This test is Not Applicable." do
+      skip "[#{gcp_project_id}] No Google Storage Buckets were found"
     end
   end
 end

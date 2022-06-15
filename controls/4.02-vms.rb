@@ -59,4 +59,11 @@ When an instance is configured with Compute Engine default service account with 
       end
     end
   end
+
+  if gce_instances.empty?
+    impact 'none'
+    describe "[#{gcp_project_id}] No Google Compute Engine instances were found. This test is Not Applicable." do
+      skip "[#{gcp_project_id}] No Google Compute Engine instances were found"
+    end
+  end
 end
