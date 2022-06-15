@@ -30,7 +30,7 @@ sql_instance_names = sql_cache.instance_names
 # 6.2.1
 sub_control_id = "#{control_id}.1"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
-  impact 'medium'
+  impact 'none'
 
   title "[#{control_abbrev.upcase}] Ensure that the 'log_checkpoints' database flag for Cloud SQL PostgreSQL instance is set to 'on'"
 
@@ -49,14 +49,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
 
   sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
+      impact 'medium'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
-        impact 'medium'
         describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
           subject { false }
           it { should be true }
         end
       else
-        impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
             next unless flag.name == 'log_checkpoints'
@@ -69,7 +68,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
         end
       end
     else
-      impact 'none'
       describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
       end
@@ -77,7 +75,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   end
 
   if sql_instance_names.empty?
-    impact 'none'
     describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
       skip "[#{gcp_project_id}] does not have CloudSQL instances."
     end
@@ -87,7 +84,7 @@ end
 # 6.2.2
 sub_control_id = "#{control_id}.2"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
-  impact 'medium'
+  impact 'none'
 
   title "[#{control_abbrev.upcase}] Ensure 'log_error_verbosity' database flag for Cloud SQL
   PostgreSQL instance is set to 'DEFAULT' or stricter"
@@ -119,14 +116,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
 
   sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
+      impact 'medium'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
-        impact 'medium'
         describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
           subject { false }
           it { should be true }
         end
       else
-        impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
             next unless flag.name == 'log_error_verbosity'
@@ -139,7 +135,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
         end
       end
     else
-      impact 'none'
       describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
       end
@@ -147,7 +142,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   end
 
   if sql_instance_names.empty?
-    impact 'none'
     describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
       skip "[#{gcp_project_id}] does not have CloudSQL instances."
     end
@@ -157,7 +151,7 @@ end
 # 6.2.3
 sub_control_id = "#{control_id}.3"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
-  impact 'medium'
+  impact 'none'
 
   title "[#{control_abbrev.upcase}] Ensure that the 'log_connections' database flag for Cloud SQL PostgreSQL instance is set to 'on'"
 
@@ -178,14 +172,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
 
   sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
+      impact 'medium'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
-        impact 'medium'
         describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
           subject { false }
           it { should be true }
         end
       else
-        impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
             next unless flag.name == 'log_connections'
@@ -198,7 +191,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
         end
       end
     else
-      impact 'none'
       describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
       end
@@ -206,7 +198,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   end
 
   if sql_instance_names.empty?
-    impact 'none'
     describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
       skip "[#{gcp_project_id}] does not have CloudSQL instances."
     end
@@ -216,7 +207,7 @@ end
 # 6.2.4
 sub_control_id = "#{control_id}.4"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
-  impact 'medium'
+  impact 'none'
 
   title "[#{control_abbrev.upcase}] Ensure that the 'log_disconnections' database flag for Cloud SQL PostgreSQL instance is set to 'on'"
 
@@ -237,14 +228,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
 
   sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
+      impact 'medium'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
-        impact 'medium'
         describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
           subject { false }
           it { should be true }
         end
       else
-        impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
             next unless flag.name == 'log_disconnections'
@@ -257,7 +247,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
         end
       end
     else
-      impact 'none'
       describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
       end
@@ -265,7 +254,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   end
 
   if sql_instance_names.empty?
-    impact 'none'
     describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
       skip "[#{gcp_project_id}] does not have CloudSQL instances."
     end
@@ -275,7 +263,7 @@ end
 # 6.2.5
 sub_control_id = "#{control_id}.5"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
-  impact 'medium'
+  impact 'none'
 
   title "[#{control_abbrev.upcase}] Ensure 'log_duration' database flag for Cloud SQL PostgreSQL instance is set to 'on' "
 
@@ -301,14 +289,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
 
   sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
+      impact 'medium'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
-        impact 'medium'
         describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
           subject { false }
           it { should be true }
         end
       else
-        impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
             next unless flag.name == 'log_duration'
@@ -321,7 +308,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
         end
       end
     else
-      impact 'none'
       describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
       end
@@ -329,7 +315,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   end
 
   if sql_instance_names.empty?
-    impact 'none'
     describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
       skip "[#{gcp_project_id}] does not have CloudSQL instances."
     end
@@ -339,7 +324,7 @@ end
 # 6.2.6
 sub_control_id = "#{control_id}.6"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
-  impact 'medium'
+  impact 'none'
 
   title "[#{control_abbrev.upcase}] Ensure that the 'log_lock_waits' database flag for Cloud SQL PostgreSQL instance is set to 'on'"
 
@@ -361,14 +346,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
 
   sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
+      impact 'medium'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
-        impact 'medium'
         describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
           subject { false }
           it { should be true }
         end
       else
-        impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
             next unless flag.name == 'log_lock_waits'
@@ -381,7 +365,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
         end
       end
     else
-      impact 'none'
       describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
       end
@@ -389,7 +372,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   end
 
   if sql_instance_names.empty?
-    impact 'none'
     describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
       skip "[#{gcp_project_id}] does not have CloudSQL instances."
     end
@@ -399,7 +381,7 @@ end
 # 6.2.7
 sub_control_id = "#{control_id}.7"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
-  impact 'medium'
+  impact 'none'
 
   title "[#{control_abbrev.upcase}] Ensure 'log_statement' database flag for Cloud SQL PostgreSQL instance is set appropriately"
 
@@ -436,14 +418,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
 
   sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
+      impact 'medium'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
-        impact 'medium'
         describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
           subject { false }
           it { should be true }
         end
       else
-        impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
             next unless flag.name == 'log_statement'
@@ -456,7 +437,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
         end
       end
     else
-      impact 'none'
       describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
       end
@@ -464,7 +444,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   end
 
   if sql_instance_names.empty?
-    impact 'none'
     describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
       skip "[#{gcp_project_id}] does not have CloudSQL instances."
     end
@@ -474,7 +453,7 @@ end
 # 6.2.8
 sub_control_id = "#{control_id}.8"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
-  impact 'medium'
+  impact 'none'
 
   title "[#{control_abbrev.upcase}] Ensure 'log_hostname' database flag for Cloud SQL PostgreSQL instance is set appropriately"
 
@@ -502,14 +481,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
 
   sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
+      impact 'medium'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
-        impact 'medium'
         describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
           subject { false }
           it { should be true }
         end
       else
-        impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
             next unless flag.name == 'log_hostname'
@@ -522,7 +500,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
         end
       end
     else
-      impact 'none'
       describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
       end
@@ -530,7 +507,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   end
 
   if sql_instance_names.empty?
-    impact 'none'
     describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
       skip "[#{gcp_project_id}] does not have CloudSQL instances."
     end
@@ -540,7 +516,7 @@ end
 # 6.2.9
 sub_control_id = "#{control_id}.9"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
-  impact 'medium'
+  impact 'none'
 
   title "[#{control_abbrev.upcase}] Ensure 'log_parser_stats' database flag for Cloud SQL PostgreSQL
   instance is set to 'off'"
@@ -567,14 +543,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
 
   sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
+      impact 'medium'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
-        impact 'medium'
         describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
           subject { false }
           it { should be true }
         end
       else
-        impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
             next unless flag.name == 'log_parser_stats'
@@ -587,7 +562,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
         end
       end
     else
-      impact 'none'
       describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
       end
@@ -595,7 +569,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   end
 
   if sql_instance_names.empty?
-    impact 'none'
     describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
       skip "[#{gcp_project_id}] does not have CloudSQL instances."
     end
@@ -605,7 +578,7 @@ end
 # 6.2.10
 sub_control_id = "#{control_id}.10"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
-  impact 'medium'
+  impact 'none'
 
   title "[#{control_abbrev.upcase}] Ensure 'log_planner_stats' database flag for Cloud SQL
   PostgreSQL instance is set to 'off'"
@@ -632,14 +605,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
 
   sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
+      impact 'medium'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
-        impact 'medium'
         describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
           subject { false }
           it { should be true }
         end
       else
-        impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
             next unless flag.name == 'log_planner_stats'
@@ -652,7 +624,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
         end
       end
     else
-      impact 'none'
       describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
       end
@@ -660,7 +631,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   end
 
   if sql_instance_names.empty?
-    impact 'none'
     describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
       skip "[#{gcp_project_id}] does not have CloudSQL instances."
     end
@@ -697,14 +667,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
 
   sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
+      impact 'medium'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
-        impact 'medium'
         describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
           subject { false }
           it { should be true }
         end
       else
-        impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
             next unless flag.name == 'log_executor_stats'
@@ -717,7 +686,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
         end
       end
     else
-      impact 'none'
       describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
       end
@@ -735,7 +703,7 @@ end
 # 6.2.12
 sub_control_id = "#{control_id}.12"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
-  impact 'medium'
+  impact 'none'
 
   title "[#{control_abbrev.upcase}] Ensure 'log_statement_stats' database flag for Cloud SQL
   PostgreSQL instance is set to 'off'"
@@ -760,14 +728,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
 
   sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
+      impact 'medium'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
-        impact 'medium'
         describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
           subject { false }
           it { should be true }
         end
       else
-        impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
             next unless flag.name == 'log_statement_stats'
@@ -780,7 +747,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
         end
       end
     else
-      impact 'none'
       describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
       end
@@ -788,7 +754,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   end
 
   if sql_instance_names.empty?
-    impact 'none'
     describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
       skip "[#{gcp_project_id}] does not have CloudSQL instances."
     end
@@ -798,7 +763,7 @@ end
 # 6.2.13
 sub_control_id = "#{control_id}.13"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
-  impact 'medium'
+  impact 'none'
 
   title "[#{control_abbrev.upcase}] Ensure that the 'log_min_messages' database flag for Cloud SQL
   PostgreSQL instance is set appropriately"
@@ -830,14 +795,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
 
   sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
+      impact 'medium'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
-        impact 'medium'
         describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
           subject { false }
           it { should be true }
         end
       else
-        impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
             next unless flag.name == 'log_min_messages'
@@ -850,7 +814,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
         end
       end
     else
-      impact 'none'
       describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
       end
@@ -858,7 +821,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   end
 
   if sql_instance_names.empty?
-    impact 'none'
     describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
       skip "[#{gcp_project_id}] does not have CloudSQL instances."
     end
@@ -868,7 +830,7 @@ end
 # 6.2.14
 sub_control_id = "#{control_id}.14"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
-  impact 'medium'
+  impact 'none'
 
   title "[#{control_abbrev.upcase}] Ensure 'log_min_error_statement' database flag for Cloud SQL
   PostgreSQL instance is set to 'Error' or stricter"
@@ -898,14 +860,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
 
   sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
+      impact 'medium'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
-        impact 'medium'
         describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
           subject { false }
           it { should be true }
         end
       else
-        impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
             next unless flag.name == 'log_min_error_statement'
@@ -918,7 +879,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
         end
       end
     else
-      impact 'none'
       describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
       end
@@ -936,7 +896,7 @@ end
 # 6.2.15
 sub_control_id = "#{control_id}.15"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
-  impact 'medium'
+  impact 'none'
 
   title "[#{control_abbrev.upcase}] Ensure that the 'log_temp_files' database flag for Cloud SQL
   PostgreSQL instance is set to '0' (on)"
@@ -963,14 +923,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
 
   sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
+      impact 'medium'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
-        impact 'medium'
         describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
           subject { false }
           it { should be true }
         end
       else
-        impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
             next unless flag.name == 'log_temp_files'
@@ -983,7 +942,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
         end
       end
     else
-      impact 'none'
       describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
       end
@@ -991,7 +949,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   end
 
   if sql_instance_names.empty?
-    impact 'none'
     describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
       skip "[#{gcp_project_id}] does not have CloudSQL instances."
     end
@@ -1001,7 +958,7 @@ end
 # 6.2.16
 sub_control_id = "#{control_id}.16"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
-  impact 'medium'
+  impact 'none'
 
   title "[#{control_abbrev.upcase}] Ensure that the 'log_min_duration_statement' database flag for
   Cloud SQL PostgreSQL instance is set to '-1' (disabled)"
@@ -1024,14 +981,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
 
   sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
+      impact 'medium'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
-        impact 'medium'
         describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
           subject { false }
           it { should be true }
         end
       else
-        impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
             next unless flag.name == 'log_min_duration_statement'
@@ -1044,7 +1000,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
         end
       end
     else
-      impact 'none'
       describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
       end
@@ -1052,7 +1007,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   end
 
   if sql_instance_names.empty?
-    impact 'none'
     describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
       skip "[#{gcp_project_id}] does not have CloudSQL instances."
     end

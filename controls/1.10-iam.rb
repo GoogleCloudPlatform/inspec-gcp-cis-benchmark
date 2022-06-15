@@ -22,7 +22,7 @@ control_abbrev = 'iam'
 kms_rotation_period_seconds = input('kms_rotation_period_seconds')
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
-  impact 'medium'
+  impact 'none'
 
   title "[#{control_abbrev.upcase}] Ensure Encryption keys are rotated within a period of 90 days"
 
@@ -56,14 +56,12 @@ A key is used to protect some corpus of data. You could encrypt a collection of 
   # Ensure KMS keys autorotate 90d or less
   locations.each do |location|
     if kms_cache.kms_key_ring_names[location].empty?
-      impact 'none'
       describe "[#{gcp_project_id}] does not contain any key rings in [#{location}]. This test is Not Applicable." do
         skip "[#{gcp_project_id}] does not contain any key rings in [#{location}]"
       end
     else
       kms_cache.kms_key_ring_names[location].each do |keyring|
         if kms_cache.kms_crypto_keys[location][keyring].empty?
-          impact 'none'
           describe "[#{gcp_project_id}] key ring [#{keyring}] does not contain any cryptographic keys. This test is Not Applicable." do
             skip "[#{gcp_project_id}] key ring [#{keyring}] does not contain any cryptographic keys"
           end
@@ -71,6 +69,7 @@ A key is used to protect some corpus of data. You could encrypt a collection of 
           kms_cache.kms_crypto_keys[location][keyring].each do |keyname|
             key = google_kms_crypto_key(project: gcp_project_id, location: location, key_ring_name: keyring, name: keyname)
             next unless key.purpose == 'ENCRYPT_DECRYPT' && key.primary_state == 'ENABLED'
+            impact 'medium'
             describe "[#{gcp_project_id}] #{key.crypto_key_name}" do
               subject { key }
               its('rotation_period') { should_not eq nil }

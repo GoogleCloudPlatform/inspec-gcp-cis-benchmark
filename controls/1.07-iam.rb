@@ -24,7 +24,7 @@ sa_key_older_than_seconds = input('sa_key_older_than_seconds')
 service_account_cache = ServiceAccountCache(project: gcp_project_id)
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
-  impact 'medium'
+  impact 'none'
 
   title "[#{control_abbrev.upcase}] Ensure user-managed/external keys for service accounts are rotated every 90 days or less"
 
@@ -55,7 +55,6 @@ GCP provides option to create one or more user-managed (also called as external 
         it { should_not exist }
       end
     else
-      impact 'none'
       describe "[#{gcp_project_id}] ServiceAccount [#{sa_email}] does not have user-managed keys. This test is Not Applicable." do
         skip "[#{gcp_project_id}] ServiceAccount [#{sa_email}] does not have user-managed keys."
       end
