@@ -25,6 +25,7 @@ control_id = '6.2'
 control_abbrev = 'db'
 
 sql_cache = CloudSQLCache(project: gcp_project_id)
+sql_instance_names = sql_cache.instance_names
 
 # 6.2.1
 sub_control_id = "#{control_id}.1"
@@ -46,7 +47,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/flags#setting_a_database_flag'
 
-  sql_cache.instance_names.each do |db|
+  sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
         impact 'medium'
@@ -72,6 +73,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
       describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
       end
+    end
+  end
+
+  if sql_instance_names.empty?
+    impact 'none'
+    describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
+      skip "[#{gcp_project_id}] does not have CloudSQL instances."
     end
   end
 end
@@ -109,7 +117,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/flags#setting_a_database_flag'
   ref 'GCP Docs', url: 'https://www.postgresql.org/docs/9.6/runtime-config-logging.html#RUNTIME-CONFIG-LOGGING-WHAT'
 
-  sql_cache.instance_names.each do |db|
+  sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
         impact 'medium'
@@ -137,6 +145,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
       end
     end
   end
+
+  if sql_instance_names.empty?
+    impact 'none'
+    describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
+      skip "[#{gcp_project_id}] does not have CloudSQL instances."
+    end
+  end
 end
 
 # 6.2.3
@@ -161,7 +176,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/flags#setting_a_database_flag'
   ref 'GCP Docs', url: 'https://www.postgresql.org/docs/9.6/runtime-config-logging.html#RUNTIME-CONFIG-LOGGING-WHAT'
 
-  sql_cache.instance_names.each do |db|
+  sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
         impact 'medium'
@@ -189,6 +204,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
       end
     end
   end
+
+  if sql_instance_names.empty?
+    impact 'none'
+    describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
+      skip "[#{gcp_project_id}] does not have CloudSQL instances."
+    end
+  end
 end
 
 # 6.2.4
@@ -213,7 +235,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/flags#setting_a_database_flag'
   ref 'GCP Docs', url: 'https://www.postgresql.org/docs/9.6/runtime-config-logging.html#RUNTIME-CONFIG-LOGGING-WHAT'
 
-  sql_cache.instance_names.each do |db|
+  sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
         impact 'medium'
@@ -239,6 +261,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
       describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
       end
+    end
+  end
+
+  if sql_instance_names.empty?
+    impact 'none'
+    describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
+      skip "[#{gcp_project_id}] does not have CloudSQL instances."
     end
   end
 end
@@ -270,7 +299,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/flags'
   ref 'GCP Docs', url: 'https://www.postgresql.org/docs/9.6/runtime-config-logging.html#GUC-LOG-MIN-DURATION-STATEMENT'
 
-  sql_cache.instance_names.each do |db|
+  sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
         impact 'medium'
@@ -298,6 +327,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
       end
     end
   end
+
+  if sql_instance_names.empty?
+    impact 'none'
+    describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
+      skip "[#{gcp_project_id}] does not have CloudSQL instances."
+    end
+  end
 end
 
 # 6.2.6
@@ -323,7 +359,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/flags#setting_a_database_flag'
   ref 'GCP Docs', url: 'https://www.postgresql.org/docs/9.6/runtime-config-logging.html#RUNTIME-CONFIG-LOGGING-WHAT'
 
-  sql_cache.instance_names.each do |db|
+  sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
         impact 'medium'
@@ -349,6 +385,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
       describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
       end
+    end
+  end
+
+  if sql_instance_names.empty?
+    impact 'none'
+    describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
+      skip "[#{gcp_project_id}] does not have CloudSQL instances."
     end
   end
 end
@@ -391,7 +434,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/flags'
   ref 'GCP Docs', url: 'https://www.postgresql.org/docs/current/runtime-config-logging.html#RUNTIME-CONFIG-LOGGING-WHAT'
 
-  sql_cache.instance_names.each do |db|
+  sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
         impact 'medium'
@@ -417,6 +460,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
       describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
       end
+    end
+  end
+
+  if sql_instance_names.empty?
+    impact 'none'
+    describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
+      skip "[#{gcp_project_id}] does not have CloudSQL instances."
     end
   end
 end
@@ -450,7 +500,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/flags'
   ref 'GCP Docs', url: 'https://www.postgresql.org/docs/current/runtime-config-logging.html#RUNTIME-CONFIG-LOGGING-WHAT'
 
-  sql_cache.instance_names.each do |db|
+  sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
         impact 'medium'
@@ -476,6 +526,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
       describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
       end
+    end
+  end
+
+  if sql_instance_names.empty?
+    impact 'none'
+    describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
+      skip "[#{gcp_project_id}] does not have CloudSQL instances."
     end
   end
 end
@@ -508,7 +565,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://www.postgresql.org/docs/current/runtime-config-logging.html#RUNTIME-CONFIG-LOGGING-WHAT'
   ref 'GCP Docs', url: 'https://www.postgresql.org/docs/10/parser-stage.html'
 
-  sql_cache.instance_names.each do |db|
+  sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
         impact 'medium'
@@ -534,6 +591,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
       describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
       end
+    end
+  end
+
+  if sql_instance_names.empty?
+    impact 'none'
+    describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
+      skip "[#{gcp_project_id}] does not have CloudSQL instances."
     end
   end
 end
@@ -566,7 +630,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://www.postgresql.org/docs/9.6/runtime-config-statistics.html#RUNTIME-CONFIG-STATISTICS-MONITOR'
   ref 'GCP Docs', url: 'https://www.postgresql.org/docs/9.5/planner-optimizer.html'
 
-  sql_cache.instance_names.each do |db|
+  sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
         impact 'medium'
@@ -592,6 +656,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
       describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
       end
+    end
+  end
+
+  if sql_instance_names.empty?
+    impact 'none'
+    describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
+      skip "[#{gcp_project_id}] does not have CloudSQL instances."
     end
   end
 end
@@ -624,7 +695,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://www.postgresql.org/docs/current/runtime-config-logging.html#RUNTIME-CONFIG-LOGGING-WHAT'
   ref 'GCP Docs', url: 'https://www.postgresql.org/docs/8.2/executor.html'
 
-  sql_cache.instance_names.each do |db|
+  sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
         impact 'medium'
@@ -650,6 +721,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
       describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
       end
+    end
+  end
+
+  if sql_instance_names.empty?
+    impact 'none'
+    describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
+      skip "[#{gcp_project_id}] does not have CloudSQL instances."
     end
   end
 end
@@ -680,7 +758,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://www.postgresql.org/docs/9.6/runtime-config-statistics.html#RUNTIME-CONFIG-STATISTICS-MONITOR'
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/flags'
 
-  sql_cache.instance_names.each do |db|
+  sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
         impact 'medium'
@@ -706,6 +784,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
       describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
       end
+    end
+  end
+
+  if sql_instance_names.empty?
+    impact 'none'
+    describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
+      skip "[#{gcp_project_id}] does not have CloudSQL instances."
     end
   end
 end
@@ -743,7 +828,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/flags'
   ref 'GCP Docs', url: 'https://www.postgresql.org/docs/9.6/runtime-config-logging.html#RUNTIME-CONFIG-LOGGING-WHEN'
 
-  sql_cache.instance_names.each do |db|
+  sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
         impact 'medium'
@@ -769,6 +854,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
       describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
       end
+    end
+  end
+
+  if sql_instance_names.empty?
+    impact 'none'
+    describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
+      skip "[#{gcp_project_id}] does not have CloudSQL instances."
     end
   end
 end
@@ -804,7 +896,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/flags'
   ref 'GCP Docs', url: 'https://www.postgresql.org/docs/9.6/runtime-config-logging.html#RUNTIME-CONFIG-LOGGING-WHEN'
 
-  sql_cache.instance_names.each do |db|
+  sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
         impact 'medium'
@@ -830,6 +922,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
       describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
       end
+    end
+  end
+
+  if sql_instance_names.empty?
+    impact 'none'
+    describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
+      skip "[#{gcp_project_id}] does not have CloudSQL instances."
     end
   end
 end
@@ -862,7 +961,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://www.postgresql.org/docs/9.6/runtime-config-statistics.html#RUNTIME-CONFIG-STATISTICS-MONITOR'
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/flags'
 
-  sql_cache.instance_names.each do |db|
+  sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
         impact 'medium'
@@ -888,6 +987,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
       describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
       end
+    end
+  end
+
+  if sql_instance_names.empty?
+    impact 'none'
+    describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
+      skip "[#{gcp_project_id}] does not have CloudSQL instances."
     end
   end
 end
@@ -916,7 +1022,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/flags'
   ref 'GCP Docs', url: 'https://www.postgresql.org/docs/current/runtime-config-logging.html#RUNTIME-CONFIG-LOGGING-WHAT'
 
-  sql_cache.instance_names.each do |db|
+  sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
         impact 'medium'
@@ -942,6 +1048,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
       describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
       end
+    end
+  end
+
+  if sql_instance_names.empty?
+    impact 'none'
+    describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
+      skip "[#{gcp_project_id}] does not have CloudSQL instances."
     end
   end
 end

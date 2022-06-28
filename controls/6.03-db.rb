@@ -21,6 +21,7 @@ control_id = '6.3'
 control_abbrev = 'db'
 
 sql_cache = CloudSQLCache(project: gcp_project_id)
+sql_instance_names = sql_cache.instance_names
 
 # 6.3.1
 sub_control_id = "#{control_id}.1"
@@ -49,7 +50,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/sqlserver/flags'
   ref 'GCP Docs', url: 'https://docs.microsoft.com/en-us/sql/advanced-analytics/concepts/security?view=sql-server-ver15'
 
-  sql_cache.instance_names.each do |db|
+  sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'SQLSERVER'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
         impact 'medium'
@@ -77,6 +78,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
       end
     end
   end
+
+  if sql_instance_names.empty?
+    impact 'none'
+    describe 'There are no Cloud SQL Instances in this project. This test is Not Applicable.' do
+      skip 'There are no Cloud SQL Instances in this project'
+    end
+  end
 end
 
 # 6.3.2
@@ -100,7 +108,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/sqlserver/flags'
   ref 'GCP Docs', url: 'https://docs.microsoft.com/en-us/sql/database-engine/configure-windows/cross-db-ownership-chaining-server-configuration-option?view=sql-server-ver15'
 
-  sql_cache.instance_names.each do |db|
+  sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'SQLSERVER'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
         impact 'medium'
@@ -126,6 +134,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
       describe "[#{gcp_project_id}] [#{db}] is not a SQL Server database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a SQL Server database"
       end
+    end
+  end
+
+  if sql_instance_names.empty?
+    impact 'none'
+    describe 'There are no Cloud SQL Instances in this project. This test is Not Applicable.' do
+      skip 'There are no Cloud SQL Instances in this project'
     end
   end
 end
@@ -162,7 +177,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://docs.microsoft.com/en-us/sql/database-engine/configure-windows/configure-the-user-connections-server-configuration-option?view=sql-server-ver15'
   ref 'GCP Docs', url: 'https://www.stigviewer.com/stig/ms_sql_server_2016_instance/2018-03-09/finding/V-79119'
 
-  sql_cache.instance_names.each do |db|
+  sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'SQLSERVER'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
         impact 'medium'
@@ -188,6 +203,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
       describe "[#{gcp_project_id}] [#{db}] is not a SQL Server database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a SQL Server database"
       end
+    end
+  end
+
+  if sql_instance_names.empty?
+    impact 'none'
+    describe 'There are no Cloud SQL Instances in this project. This test is Not Applicable.' do
+      skip 'There are no Cloud SQL Instances in this project'
     end
   end
 end
@@ -222,7 +244,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://docs.microsoft.com/en-us/sql/database-engine/configure-windows/configure-the-user-options-server-configuration-option?view=sql-server-ver15'
   ref 'GCP Docs', url: 'https://www.stigviewer.com/stig/ms_sql_server_2016_instance/2018-03-09/finding/V-79335'
 
-  sql_cache.instance_names.each do |db|
+  sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'SQLSERVER'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
         impact 'medium'
@@ -247,6 +269,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
       describe "[#{gcp_project_id}] [#{db}] is not a SQL Server database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a SQL Server database"
       end
+    end
+  end
+
+  if sql_instance_names.empty?
+    impact 'none'
+    describe 'There are no Cloud SQL Instances in this project. This test is Not Applicable.' do
+      skip 'There are no Cloud SQL Instances in this project'
     end
   end
 end
@@ -282,7 +311,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/sqlserver/flags'
   ref 'GCP Docs', url: 'https://www.stigviewer.com/stig/ms_sql_server_2016_instance/2018-03-09/finding/V-79337'
 
-  sql_cache.instance_names.each do |db|
+  sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'SQLSERVER'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
         impact 'medium'
@@ -308,6 +337,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
       describe "[#{gcp_project_id}] [#{db}] is not a SQL Server database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a SQL Server database"
       end
+    end
+  end
+
+  if sql_instance_names.empty?
+    impact 'none'
+    describe 'There are no Cloud SQL Instances in this project. This test is Not Applicable.' do
+      skip 'There are no Cloud SQL Instances in this project'
     end
   end
 end
@@ -341,7 +377,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/sqlserver/flags'
   ref 'GCP Docs', url: 'https://docs.microsoft.com/en-us/sql/t-sql/database-console-commands/dbcc-traceon-trace-flags-transact-sql?view=sql-server-ver15#trace-flags'
 
-  sql_cache.instance_names.each do |db|
+  sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'SQLSERVER'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
         impact 'medium'
@@ -369,6 +405,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
       end
     end
   end
+
+  if sql_instance_names.empty?
+    impact 'none'
+    describe 'There are no Cloud SQL Instances in this project. This test is Not Applicable.' do
+      skip 'There are no Cloud SQL Instances in this project'
+    end
+  end
 end
 
 # 6.3.7
@@ -393,7 +436,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://docs.microsoft.com/en-us/sql/database-engine/configure-windows/contained-database-authentication-server-configuration-option?view=sql-server-ver15'
   ref 'GCP Docs', url: 'https://docs.microsoft.com/en-us/sql/relational-databases/databases/security-best-practices-with-contained-databases?view=sql-server-ver15'
 
-  sql_cache.instance_names.each do |db|
+  sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'SQLSERVER'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
         impact 'medium'
@@ -419,6 +462,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
       describe "[#{gcp_project_id}] [#{db}] is not a SQL Server database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a SQL Server database"
       end
+    end
+  end
+
+  if sql_instance_names.empty?
+    impact 'none'
+    describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
+      skip "[#{gcp_project_id}] does not have CloudSQL instances."
     end
   end
 end

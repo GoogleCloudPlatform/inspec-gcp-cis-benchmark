@@ -56,4 +56,11 @@ At least business critical VMs should have VM disks encrypted with CSEK."
       it { should have_disks_encrypted_with_csek }
     end
   end
+
+  if gce_instances.empty?
+    impact 'none'
+    describe "[#{gcp_project_id}] No Google Compute Engine instances were found. This test is Not Applicable." do
+      skip "[#{gcp_project_id}] No Google Compute Engine instances were found"
+    end
+  end
 end
