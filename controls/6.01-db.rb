@@ -138,8 +138,8 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
 
   sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'MYSQL'
+      impact 'medium'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
-        impact 'medium'
         describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
           subject { false }
           it { should be true }
@@ -148,7 +148,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
             next unless flag.name == 'local_infile'
-            impact 'medium'
             describe flag do
               its('name') { should cmp 'local_infile' }
               its('value') { should cmp 'off' }
