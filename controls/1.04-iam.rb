@@ -23,7 +23,7 @@ control_abbrev = 'iam'
 service_account_cache = ServiceAccountCache(project: gcp_project_id)
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
-  impact 'medium'
+  impact 'none'
 
   title "[#{control_abbrev.upcase}] Ensure that there are only GCP-managed service account keys for each service account"
 
@@ -58,7 +58,6 @@ Even after owners precaution, keys can be easily leaked by common development ma
         its('key_types') { should_not include 'USER_MANAGED' }
       end
     else
-      impact 'none'
       describe "[#{gcp_project_id}] ServiceAccount [#{sa_email}] does not have user-managed keys. This test is Not Applicable." do
         skip "[#{gcp_project_id}] ServiceAccount [#{sa_email}] does not have user-managed keys."
       end

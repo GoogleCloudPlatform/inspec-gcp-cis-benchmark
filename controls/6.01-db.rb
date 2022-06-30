@@ -55,7 +55,7 @@ end
 # 6.1.2
 sub_control_id = "#{control_id}.2"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
-  impact 'medium'
+  impact 'none'
 
   title "[#{control_abbrev.upcase}] Ensure 'skip_show_database' database flag for Cloud SQL Mysql
   instance is set to 'on'"
@@ -83,13 +83,13 @@ applicable to Mysql database instances."
 
   sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'MYSQL'
+      impact 'medium'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
         describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
           subject { false }
           it { should be true }
         end
       else
-        impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
             next unless flag.name == 'skip_show_database'
@@ -101,7 +101,6 @@ applicable to Mysql database instances."
         end
       end
     else
-      impact 'none'
       describe "[#{gcp_project_id}] [#{db}] is not a MySQL database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a MySQL database"
       end
@@ -109,7 +108,6 @@ applicable to Mysql database instances."
   end
 
   if sql_instance_names.empty?
-    impact 'none'
     describe 'There are no Cloud SQL Instances in this project. This test is Not Applicable.' do
       skip 'There are no Cloud SQL Instances in this project'
     end
@@ -119,7 +117,7 @@ end
 # 6.1.3
 sub_control_id = "#{control_id}.3"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
-  impact 'medium'
+  impact 'none'
 
   title "[#{control_abbrev.upcase}] Ensure that the 'local_infile' database flag for a Cloud SQL Mysql instance is set to 'off'"
 
@@ -140,13 +138,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
 
   sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'MYSQL'
+      impact 'medium'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
         describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
           subject { false }
           it { should be true }
         end
       else
-        impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
             next unless flag.name == 'local_infile'
@@ -158,7 +156,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
         end
       end
     else
-      impact 'none'
       describe "[#{gcp_project_id}] [#{db}] is not a MySQL database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a MySQL database"
       end
@@ -166,7 +163,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   end
 
   if sql_instance_names.empty?
-    impact 'none'
     describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
       skip "[#{gcp_project_id}] does not have CloudSQL instances."
     end

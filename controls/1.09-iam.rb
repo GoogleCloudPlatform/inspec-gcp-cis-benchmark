@@ -21,7 +21,7 @@ control_id = '1.9'
 control_abbrev = 'iam'
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
-  impact 'medium'
+  impact 'none'
 
   title "[#{control_abbrev.upcase}] Ensure that Cloud KMS cryptokeys are not anonymously or publicly accessible"
 
@@ -47,21 +47,18 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   # Ensure that keys aren't publicly accessible
   locations.each do |location|
     if kms_cache.kms_key_ring_names[location].empty?
-      impact 'none'
       describe "[#{gcp_project_id}] does not contain any key rings in [#{location}]. This test is Not Applicable." do
         skip "[#{gcp_project_id}] does not contain any key rings in [#{location}]"
       end
     else
       kms_cache.kms_key_ring_names[location].each do |keyring|
         if kms_cache.kms_crypto_keys[location][keyring].empty?
-          impact 'none'
           describe "[#{gcp_project_id}] key ring [#{keyring}] does not contain any cryptographic keys. This test is Not Applicable." do
             skip "[#{gcp_project_id}] key ring [#{keyring}] does not contain any cryptographic keys"
           end
         else
           kms_cache.kms_crypto_keys[location][keyring].each do |keyname|
             if google_kms_crypto_key_iam_policy(project: gcp_project_id, location: location, key_ring_name: keyring, crypto_key_name: keyname).bindings.nil?
-              impact 'none'
               describe "[#{gcp_project_id}] key ring [#{keyring}] key [#{keyname}] does not have any IAM bindings. This test is Not Applicable." do
                 skip "[#{gcp_project_id}] key ring [#{keyring}] key [#{keyname}] does not have any IAM bindings"
               end

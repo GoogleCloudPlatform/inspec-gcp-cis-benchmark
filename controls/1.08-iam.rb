@@ -23,7 +23,7 @@ control_abbrev = 'iam'
 iam_bindings_cache = IAMBindingsCache(project: gcp_project_id)
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
-  impact 'medium'
+  impact 'none'
 
   title "[#{control_abbrev.upcase}] Ensure that Separation of duties is enforced while assigning service account related roles to users"
 
@@ -48,16 +48,15 @@ Any user(s) should not have Service Account Admin and Service Account User, both
 
   sa_admins = iam_bindings_cache.iam_bindings['roles/iam.serviceAccountAdmin']
   if sa_admins.nil? || sa_admins.members.count.zero?
-    impact 'none'
     describe "[#{gcp_project_id}] does not contain users with roles/serviceAccountAdmin. This test is Not Applicable." do
       skip "[#{gcp_project_id}] does not contain users with roles/serviceAccountAdmin"
     end
   elsif iam_bindings_cache.iam_bindings['roles/iam.serviceAccountUser'].nil?
-    impact 'none'
     describe "[#{gcp_project_id}] does not contain users with roles/serviceAccountUser. This test is Not Applicable." do
       skip "[#{gcp_project_id}] does not contain users with roles/serviceAccountUser"
     end
   else
+    impact 'medium'
     describe "[#{gcp_project_id}] roles/serviceAccountUser" do
       subject { iam_bindings_cache.iam_bindings['roles/iam.serviceAccountUser'] }
       sa_admins.members.each do |sa_admin|

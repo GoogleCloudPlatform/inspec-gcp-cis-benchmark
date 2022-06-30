@@ -26,7 +26,7 @@ sql_instance_names = sql_cache.instance_names
 # 6.3.1
 sub_control_id = "#{control_id}.1"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
-  impact 'medium'
+  impact 'none'
 
   title "[#{control_abbrev.upcase}] Ensure 'external scripts enabled' database flag for Cloud SQL SQL Server instance is set to 'off'"
 
@@ -52,14 +52,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
 
   sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'SQLSERVER'
+      impact 'medium'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
-        impact 'medium'
         describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
           subject { false }
           it { should be true }
         end
       else
-        impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
             next unless flag.name == 'external scripts enabled'
@@ -72,7 +71,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
         end
       end
     else
-      impact 'none'
       describe "[#{gcp_project_id}] [#{db}] is not a SQL Server database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a SQL Server database"
       end
@@ -80,7 +78,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   end
 
   if sql_instance_names.empty?
-    impact 'none'
     describe 'There are no Cloud SQL Instances in this project. This test is Not Applicable.' do
       skip 'There are no Cloud SQL Instances in this project'
     end
@@ -90,7 +87,7 @@ end
 # 6.3.2
 sub_control_id = "#{control_id}.2"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
-  impact 'medium'
+  impact 'none'
 
   title "[#{control_abbrev.upcase}] Ensure that the 'cross db ownership chaining' database flag for Cloud SQL Server instance is set to 'off'"
 
@@ -110,14 +107,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
 
   sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'SQLSERVER'
+      impact 'medium'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
-        impact 'medium'
         describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
           subject { false }
           it { should be true }
         end
       else
-        impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
             next unless flag.name == 'cross db ownership chaining'
@@ -130,7 +126,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
         end
       end
     else
-      impact 'none'
       describe "[#{gcp_project_id}] [#{db}] is not a SQL Server database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a SQL Server database"
       end
@@ -148,7 +143,7 @@ end
 # 6.3.3
 sub_control_id = "#{control_id}.3"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
-  impact 'medium'
+  impact 'none'
 
   title "[#{control_abbrev.upcase}] Ensure 'user connections' database flag for Cloud SQL SQL Server instance is set as appropriate"
 
@@ -179,14 +174,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
 
   sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'SQLSERVER'
+      impact 'medium'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
-        impact 'medium'
         describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
           subject { false }
           it { should be true }
         end
       else
-        impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
             next unless flag.name == 'user connections'
@@ -199,7 +193,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
         end
       end
     else
-      impact 'none'
       describe "[#{gcp_project_id}] [#{db}] is not a SQL Server database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a SQL Server database"
       end
@@ -207,7 +200,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   end
 
   if sql_instance_names.empty?
-    impact 'none'
     describe 'There are no Cloud SQL Instances in this project. This test is Not Applicable.' do
       skip 'There are no Cloud SQL Instances in this project'
     end
@@ -217,7 +209,7 @@ end
 # 6.3.4
 sub_control_id = "#{control_id}.4"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
-  impact 'medium'
+  impact 'none'
 
   title "[#{control_abbrev.upcase}] Ensure 'user options' database flag for Cloud SQL SQL Server instance is not configured"
 
@@ -246,14 +238,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
 
   sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'SQLSERVER'
+      impact 'medium'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
-        impact 'medium'
         describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
           subject { false }
           it { should be true }
         end
       else
-        impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
             next unless flag.name == 'user options'
@@ -265,7 +256,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
         end
       end
     else
-      impact 'none'
       describe "[#{gcp_project_id}] [#{db}] is not a SQL Server database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a SQL Server database"
       end
@@ -273,7 +263,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   end
 
   if sql_instance_names.empty?
-    impact 'none'
     describe 'There are no Cloud SQL Instances in this project. This test is Not Applicable.' do
       skip 'There are no Cloud SQL Instances in this project'
     end
@@ -283,7 +272,7 @@ end
 # 6.3.5
 sub_control_id = "#{control_id}.5"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
-  impact 'medium'
+  impact 'none'
 
   title "[#{control_abbrev.upcase}] Ensure 'remote access' database flag for Cloud SQL SQL Server instance is set to 'off'"
 
@@ -313,14 +302,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
 
   sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'SQLSERVER'
+      impact 'medium'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
-        impact 'medium'
         describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
           subject { false }
           it { should be true }
         end
       else
-        impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
             next unless flag.name == 'remote access'
@@ -333,7 +321,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
         end
       end
     else
-      impact 'none'
       describe "[#{gcp_project_id}] [#{db}] is not a SQL Server database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a SQL Server database"
       end
@@ -341,7 +328,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   end
 
   if sql_instance_names.empty?
-    impact 'none'
     describe 'There are no Cloud SQL Instances in this project. This test is Not Applicable.' do
       skip 'There are no Cloud SQL Instances in this project'
     end
@@ -351,7 +337,7 @@ end
 # 6.3.6
 sub_control_id = "#{control_id}.6"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
-  impact 'medium'
+  impact 'none'
 
   title "[#{control_abbrev.upcase}] Ensure '3625 (trace flag)' database flag for Cloud SQL SQL Server instance is set to 'off'"
 
@@ -379,14 +365,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
 
   sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'SQLSERVER'
+      impact 'medium'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
-        impact 'medium'
         describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
           subject { false }
           it { should be true }
         end
       else
-        impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
             next unless flag.name == '3625'
@@ -407,7 +392,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   end
 
   if sql_instance_names.empty?
-    impact 'none'
     describe 'There are no Cloud SQL Instances in this project. This test is Not Applicable.' do
       skip 'There are no Cloud SQL Instances in this project'
     end
@@ -417,7 +401,7 @@ end
 # 6.3.7
 sub_control_id = "#{control_id}.7"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
-  impact 'medium'
+  impact 'none'
 
   title "[#{control_abbrev.upcase}] Ensure that the 'contained database authentication' database flag for Cloud SQL server instance is set to 'off'"
 
@@ -438,14 +422,13 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
 
   sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'SQLSERVER'
+      impact 'medium'
       if sql_cache.instance_objects[db].settings.database_flags.nil?
-        impact 'medium'
         describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
           subject { false }
           it { should be true }
         end
       else
-        impact 'medium'
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
             next unless flag.name == 'contained database authentication'
@@ -458,7 +441,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
         end
       end
     else
-      impact 'none'
       describe "[#{gcp_project_id}] [#{db}] is not a SQL Server database. This test is Not Applicable." do
         skip "[#{gcp_project_id}] [#{db}] is not a SQL Server database"
       end
@@ -466,7 +448,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   end
 
   if sql_instance_names.empty?
-    impact 'none'
     describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
       skip "[#{gcp_project_id}] does not have CloudSQL instances."
     end
