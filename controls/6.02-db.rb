@@ -32,60 +32,6 @@ sub_control_id = "#{control_id}.1"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   impact 'none'
 
-  title "[#{control_abbrev.upcase}] Ensure that the 'log_checkpoints' database flag for Cloud SQL PostgreSQL instance is set to 'on'"
-
-  desc 'Enabling log_checkpoints causes checkpoints and restart points to be logged in the server log. Some statistics are included in the log messages, including the number of buffers written and the time spent writing them. '
-  desc 'rationale', 'Enable system logging to include detailed information such as an event source, date,user, timestamp, source addresses, destination addresses, and other useful elements.'
-
-  tag cis_scored: true
-  tag cis_level: 1
-  tag cis_gcp: sub_control_id.to_s
-  tag cis_version: cis_version.to_s
-  tag project: gcp_project_id.to_s
-  tag nist: ['AU-3']
-
-  ref 'CIS Benchmark', url: cis_url.to_s
-  ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/flags#setting_a_database_flag'
-
-  sql_instance_names.each do |db|
-    if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
-      impact 'medium'
-      if sql_cache.instance_objects[db].settings.database_flags.nil?
-        describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
-          subject { false }
-          it { should be true }
-        end
-      else
-        describe.one do
-          sql_cache.instance_objects[db].settings.database_flags.each do |flag|
-            next unless flag.name == 'log_checkpoints'
-            describe "[#{gcp_project_id} , #{db} ] should have a database flag 'log_checkpoints' set to 'on' " do
-              subject { flag }
-              its('name') { should cmp 'log_checkpoints' }
-              its('value') { should cmp 'on' }
-            end
-          end
-        end
-      end
-    else
-      describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
-        skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
-      end
-    end
-  end
-
-  if sql_instance_names.empty?
-    describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
-      skip "[#{gcp_project_id}] does not have CloudSQL instances."
-    end
-  end
-end
-
-# 6.2.2
-sub_control_id = "#{control_id}.2"
-control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
-  impact 'none'
-
   title "[#{control_abbrev.upcase}] Ensure 'log_error_verbosity' database flag for Cloud SQL
   PostgreSQL instance is set to 'DEFAULT' or stricter"
 
@@ -148,8 +94,8 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   end
 end
 
-# 6.2.3
-sub_control_id = "#{control_id}.3"
+# 6.2.2
+sub_control_id = "#{control_id}.2"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   impact 'none'
 
@@ -204,8 +150,8 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   end
 end
 
-# 6.2.4
-sub_control_id = "#{control_id}.4"
+# 6.2.3
+sub_control_id = "#{control_id}.3"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   impact 'none'
 
@@ -260,126 +206,8 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   end
 end
 
-# 6.2.5
-sub_control_id = "#{control_id}.5"
-control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
-  impact 'none'
-
-  title "[#{control_abbrev.upcase}] Ensure 'log_duration' database flag for Cloud SQL PostgreSQL instance is set to 'on' "
-
-  desc 'Enabling the log_duration setting causes the duration of each completed statement to be
-  logged. This does not logs the text of the query and thus behaves different from the
-  log_min_duration_statement flag. This parameter cannot be changed after session start.'
-  desc 'rationale', "Monitoring the time taken to execute the queries can be crucial in identifying any resource
-  hogging queries and assessing the performance of the server. Further steps such as load
-  balancing and use of optimized queries can be taken to ensure the performance and
-  stability of the server. This recommendation is applicable to PostgreSQL database
-  instances."
-
-  tag cis_scored: true
-  tag cis_level: 1
-  tag cis_gcp: sub_control_id.to_s
-  tag cis_version: cis_version.to_s
-  tag project: gcp_project_id.to_s
-  tag nist: ['AU-3']
-
-  ref 'CIS Benchmark', url: cis_url.to_s
-  ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/flags'
-  ref 'GCP Docs', url: 'https://www.postgresql.org/docs/9.6/runtime-config-logging.html#GUC-LOG-MIN-DURATION-STATEMENT'
-
-  sql_instance_names.each do |db|
-    if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
-      impact 'medium'
-      if sql_cache.instance_objects[db].settings.database_flags.nil?
-        describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
-          subject { false }
-          it { should be true }
-        end
-      else
-        describe.one do
-          sql_cache.instance_objects[db].settings.database_flags.each do |flag|
-            next unless flag.name == 'log_duration'
-            describe "[#{gcp_project_id} , #{db} ] should have a database flag 'log_duration' set to 'on' " do
-              subject { flag }
-              its('name') { should cmp 'log_duration' }
-              its('value') { should cmp 'on' }
-            end
-          end
-        end
-      end
-    else
-      describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
-        skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
-      end
-    end
-  end
-
-  if sql_instance_names.empty?
-    describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
-      skip "[#{gcp_project_id}] does not have CloudSQL instances."
-    end
-  end
-end
-
-# 6.2.6
-sub_control_id = "#{control_id}.6"
-control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
-  impact 'none'
-
-  title "[#{control_abbrev.upcase}] Ensure that the 'log_lock_waits' database flag for Cloud SQL PostgreSQL instance is set to 'on'"
-
-  desc 'Enabling the log_lock_waits flag for a PostgreSQL instance creates a log for any session waits that take longer than the alloted deadlock_timeout time to acquire a lock.'
-  desc 'rationale', "The deadlock timeout defines the time to wait on a lock before checking for any conditions. Frequent run overs on deadlock timeout can be an indication of an
-                    underlying issue. Logging such waits on locks by enabling the log_lock_waits flag can be used to identify poor performance due to locking delays or if a
-                    specially-crafted SQL is attempting to starve resources through holding locks for excessive amounts of time."
-
-  tag cis_scored: true
-  tag cis_level: 1
-  tag cis_gcp: sub_control_id.to_s
-  tag cis_version: cis_version.to_s
-  tag project: gcp_project_id.to_s
-  tag nist: ['AU-3']
-
-  ref 'CIS Benchmark', url: cis_url.to_s
-  ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/flags#setting_a_database_flag'
-  ref 'GCP Docs', url: 'https://www.postgresql.org/docs/9.6/runtime-config-logging.html#RUNTIME-CONFIG-LOGGING-WHAT'
-
-  sql_instance_names.each do |db|
-    if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
-      impact 'medium'
-      if sql_cache.instance_objects[db].settings.database_flags.nil?
-        describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
-          subject { false }
-          it { should be true }
-        end
-      else
-        describe.one do
-          sql_cache.instance_objects[db].settings.database_flags.each do |flag|
-            next unless flag.name == 'log_lock_waits'
-            describe "[#{gcp_project_id} , #{db} ] should have a database flag 'log_lock_waits' set to 'on' " do
-              subject { flag }
-              its('name') { should cmp 'log_lock_waits' }
-              its('value') { should cmp 'on' }
-            end
-          end
-        end
-      end
-    else
-      describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
-        skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
-      end
-    end
-  end
-
-  if sql_instance_names.empty?
-    describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
-      skip "[#{gcp_project_id}] does not have CloudSQL instances."
-    end
-  end
-end
-
-# 6.2.7
-sub_control_id = "#{control_id}.7"
+# 6.2.4
+sub_control_id = "#{control_id}.4"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   impact 'none'
 
@@ -450,12 +278,12 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   end
 end
 
-# 6.2.8
-sub_control_id = "#{control_id}.8"
+# 6.2.5
+sub_control_id = "#{control_id}.5"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   impact 'none'
 
-  title "[#{control_abbrev.upcase}] Ensure 'log_hostname' database flag for Cloud SQL PostgreSQL instance is set appropriately"
+  title "[#{control_abbrev.upcase}] Ensure 'log_hostname' database flag for Cloud SQL PostgreSQL instance is set to 'on'"
 
   desc 'PostgreSQL logs only the IP address of the connecting hosts. The log_hostname flag
   controls the logging of hostnames in addition to the IP addresses logged. The performance
@@ -494,7 +322,196 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
             describe "[#{gcp_project_id} , #{db} ] should have a database flag 'log_hostname' set to #{log_hostname} " do
               subject { flag }
               its('name') { should cmp 'log_hostname' }
-              its('value') { should cmp log_hostname }
+              its('value') { should cmp 'on' }
+            end
+          end
+        end
+      end
+    else
+      describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
+        skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
+      end
+    end
+  end
+
+  if sql_instance_names.empty?
+    describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
+      skip "[#{gcp_project_id}] does not have CloudSQL instances."
+    end
+  end
+end
+
+# 6.2.6
+sub_control_id = "#{control_id}.6"
+control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
+  impact 'none'
+
+  title "[#{control_abbrev.upcase}] Ensure that the 'log_min_messages' database flag for Cloud SQL PostgreSQL instance is set  to at least 'warning'"
+
+  desc 'The log_min_messages flag defines the minimum message severity level that is considered
+  as an error statement. Messages for error statements are logged with the SQL statement.
+  Valid values include DEBUG5, DEBUG4, DEBUG3, DEBUG2, DEBUG1, INFO, NOTICE, WARNING, ERROR,
+  LOG, FATAL, and PANIC. Each severity level includes the subsequent levels mentioned above.
+  Note: To effectively turn off logging failing statements, set this parameter to PANIC.
+  ERROR is considered the best practice setting. Changes should only be made in accordance
+  with the organization\'s logging policy.'
+  desc 'rationale', 'Auditing helps in troubleshooting operational problems and also permits forensic analysis.
+  If log_min_error_statement is not set to the correct value, messages may not be classified
+  as error messages appropriately. Considering general log messages as error messages
+  would make it difficult to find actual errors, while considering only stricter severity levels
+  as error messages may skip actual errors to log their SQL statements. The
+  log_min_messages flag should be set in accordance with the organization\'s logging policy.
+  This recommendation is applicable to PostgreSQL database instances.'
+  tag cis_scored: true
+  tag cis_level: 1
+  tag cis_gcp: sub_control_id.to_s
+  tag cis_version: cis_version.to_s
+  tag project: gcp_project_id.to_s
+  tag nist: ['AU-3']
+
+  ref 'CIS Benchmark', url: cis_url.to_s
+  ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/flags'
+  ref 'GCP Docs', url: 'https://www.postgresql.org/docs/9.6/runtime-config-logging.html#RUNTIME-CONFIG-LOGGING-WHEN'
+
+  sql_instance_names.each do |db|
+    if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
+      impact 'medium'
+      if sql_cache.instance_objects[db].settings.database_flags.nil?
+        describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
+          subject { false }
+          it { should be true }
+        end
+      else
+        describe.one do
+          sql_cache.instance_objects[db].settings.database_flags.each do |flag|
+            next unless flag.name == 'log_min_messages'
+            describe "[#{gcp_project_id} , #{db} ] should have a database flag 'log_min_messages' set to #{log_min_messages}" do
+              subject { flag }
+              its('name') { should cmp 'log_min_messages' }
+              its('value') { should cmp log_min_messages }
+            end
+          end
+        end
+      end
+    else
+      describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
+        skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
+      end
+    end
+  end
+
+  if sql_instance_names.empty?
+    describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
+      skip "[#{gcp_project_id}] does not have CloudSQL instances."
+    end
+  end
+end
+
+# 6.2.7
+sub_control_id = "#{control_id}.7"
+control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
+  impact 'none'
+
+  title "[#{control_abbrev.upcase}] Ensure 'log_min_error_statement' database flag for Cloud SQL
+  PostgreSQL instance is set to 'Error' or stricter"
+
+  desc 'The log_min_error_statement flag defines the minimum message severity level that are
+  considered as an error statement. Messages for error statements are logged with the SQL
+  statement. Valid values include DEBUG5, DEBUG4, DEBUG3, DEBUG2, DEBUG1, INFO, NOTICE,
+  WARNING, ERROR, LOG, FATAL, and PANIC. Each severity level includes the subsequent levels
+  mentioned above. Ensure a value of ERROR or stricter is set.'
+  desc 'rationale', 'Auditing helps in troubleshooting operational problems and also permits forensic analysis.
+  If log_min_error_statement is not set to the correct value, messages may not be classified
+  as error messages appropriately. Considering general log messages as error messages
+  would make is difficult to find actual errors and considering only stricter severity levels as
+  error messages may skip actual errors to log their SQL statements. The
+  log_min_error_statement flag should be set to ERROR or stricter. This recommendation is
+  applicable to PostgreSQL database instances.'
+  tag cis_scored: true
+  tag cis_level: 1
+  tag cis_gcp: sub_control_id.to_s
+  tag cis_version: cis_version.to_s
+  tag project: gcp_project_id.to_s
+  tag nist: ['AU-3']
+
+  ref 'CIS Benchmark', url: cis_url.to_s
+  ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/flags'
+  ref 'GCP Docs', url: 'https://www.postgresql.org/docs/9.6/runtime-config-logging.html#RUNTIME-CONFIG-LOGGING-WHEN'
+
+  sql_instance_names.each do |db|
+    if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
+      impact 'medium'
+      if sql_cache.instance_objects[db].settings.database_flags.nil?
+        describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
+          subject { false }
+          it { should be true }
+        end
+      else
+        describe.one do
+          sql_cache.instance_objects[db].settings.database_flags.each do |flag|
+            next unless flag.name == 'log_min_error_statement'
+            describe "[#{gcp_project_id} , #{db} ] should have a database flag 'log_min_error_statement' set to #{log_min_error_statement}" do
+              subject { flag }
+              its('name') { should cmp 'log_min_error_statement' }
+              its('value') { should cmp log_min_error_statement }
+            end
+          end
+        end
+      end
+    else
+      describe "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database. This test is Not Applicable." do
+        skip "[#{gcp_project_id}] [#{db}] is not a PostgreSQL database"
+      end
+    end
+  end
+
+  if sql_instance_names.empty?
+    impact 'none'
+    describe "[#{gcp_project_id}] does not have CloudSQL instances. This test is Not Applicable." do
+      skip "[#{gcp_project_id}] does not have CloudSQL instances."
+    end
+  end
+end
+
+# 6.2.8
+sub_control_id = "#{control_id}.8"
+control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
+  impact 'none'
+
+  title "[#{control_abbrev.upcase}] Ensure that the 'log_min_duration_statement' database flag for Cloud SQL PostgreSQL instance is set to '-1' (disabled)"
+
+  desc 'The log_min_duration_statement flag defines the minimum amount of execution time of a
+  statement in milliseconds where the total duration of the statement is logged. Ensure that
+  log_min_duration_statement is disabled, i.e., a value of -1 is set.'
+  desc 'rationale', 'Logging SQL statements may include sensitive information that should not be recorded in
+  logs. This recommendation is applicable to PostgreSQL database instances.'
+  tag cis_scored: true
+  tag cis_level: 1
+  tag cis_gcp: sub_control_id.to_s
+  tag cis_version: cis_version.to_s
+  tag project: gcp_project_id.to_s
+  tag nist: ['AU-3']
+
+  ref 'CIS Benchmark', url: cis_url.to_s
+  ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/flags'
+  ref 'GCP Docs', url: 'https://www.postgresql.org/docs/current/runtime-config-logging.html#RUNTIME-CONFIG-LOGGING-WHAT'
+
+  sql_instance_names.each do |db|
+    if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
+      impact 'medium'
+      if sql_cache.instance_objects[db].settings.database_flags.nil?
+        describe "[#{gcp_project_id} , #{db} ] does not any have database flags." do
+          subject { false }
+          it { should be true }
+        end
+      else
+        describe.one do
+          sql_cache.instance_objects[db].settings.database_flags.each do |flag|
+            next unless flag.name == 'log_min_duration_statement'
+            describe "[#{gcp_project_id} , #{db} ] should have a database flag 'log_min_duration_statement' set to '-1' " do
+              subject { flag }
+              its('name') { should cmp 'log_min_duration_statement' }
+              its('value') { should cmp '-1' }
             end
           end
         end
@@ -518,22 +535,15 @@ sub_control_id = "#{control_id}.9"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   impact 'none'
 
-  title "[#{control_abbrev.upcase}] Ensure That 'cloudsql.enable_pgaudit' Database Flag for each 
-  Cloud Sql Postgresql Instance Is Set to 'on' For Centralized Logging"
+  title "[#{control_abbrev.upcase}] Ensure that 'cloudsql.enable_pgaudit' database flag for each Cloud SQL PostgreSQL instance is set to 'on' for centralized logging"
 
-  desc 'Ensure cloudsql.enable_pgaudit database flag for Cloud SQL PostgreSQL instance is set 
-  to on to allow for centralized logging.'
-  desc 'rationale', 'As numerous other recommendations in this section consist of turning on flags for logging 
-  purposes, your organization will need a way to manage these logs. You may have a solution 
-  already in place. If you do not, consider installing and enabling the open source pgaudit 
-  extension within PostgreSQL and enabling its corresponding flag of 
-  cloudsql.enable_pgaudit. This flag and installing the extension enables database auditing 
-  in PostgreSQL through the open-source pgAudit extension. This extension provides 
-  detailed session and object logging to comply with government, financial, & ISO standards 
-  and provides auditing capabilities to mitigate threats by monitoring security events on the 
-  instance. Enabling the flag and settings later in this recommendation will send these logs to 
-  Google Logs Explorer so that you can access them in a central location. to This 
-  recommendation is applicable only to PostgreSQL database instances.'
+  desc 'Ensure cloudsql.enable_pgaudit database flag for Cloud SQL PostgreSQL instance is set to on to allow for centralized logging.' 
+  desc 'rationale', 'As numerous other recommendations in this section consist of turning on flags for logging purposes, your organization will need a way to manage these logs.
+  You may have a solution already in place. If you do not, consider installing and enabling the open source pgaudit extension within PostgreSQL and enabling
+  its corresponding flag of cloudsql.enable_pgaudit. This flag and installing the extension enables database auditing in PostgreSQL through the open-source pgAudit extension.
+  This extension provides detailed session and object logging to comply with government, financial, & ISO standards and provides auditing capabilities to mitigate threats
+  by monitoring security events on the instance. Enabling the flag and settings later in this recommendation will send these logs to Google Logs Explorer so that you can access
+  them in a central location to. This recommendation is applicable only to PostgreSQL database instances.'
   tag cis_scored: true
   tag cis_level: 1
   tag cis_gcp: sub_control_id.to_s
@@ -542,8 +552,10 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   tag nist: ['AU-3']
 
   ref 'CIS Benchmark', url: cis_url.to_s
-  ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/flags'
-  ref 'GCP Docs', url: 'https://www.postgresql.org/docs/current/runtime-config-logging.html#RUNTIME-CONFIG-LOGGING-WHAT'
+  ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/flags#list-flags-postgres'
+  ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/pg-audit#enable-auditing-flag'
+  ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/pg-audit#customizing-database-audit-logging'
+  ref 'GCP Docs', url: 'https://cloud.google.com/logging/docs/audit/configure-data-access#config-console-enable'
 
   sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
