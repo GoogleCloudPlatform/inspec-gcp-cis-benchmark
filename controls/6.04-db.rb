@@ -50,7 +50,9 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
     sql_instance_names.each do |db|
       describe "[#{gcp_project_id}] CloudSQL #{db}" do
         subject { sql_cache.instance_objects[db] }
-        it { should have_ip_configuration_require_ssl }
+        ## skipped due to existing infrastructure implementation
+        # it { should have_ip_configuration_require_ssl }
+        skip 'This test skipped. See SAS-1034 for more details.'
       end
     end
   end
