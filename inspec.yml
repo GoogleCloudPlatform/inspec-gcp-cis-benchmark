@@ -19,7 +19,7 @@ copyright: "(c) 2022, Google, Inc."
 copyright_email: "copyright@google.com"
 license: "Apache-2.0"
 summary: "Inspec Google Cloud Platform Center for Internet Security Benchmark v1.2 Profile"
-version: 1.2.0-0
+version: 1.3.0-0
 
 supports:
   - platform: gcp
@@ -39,7 +39,7 @@ inputs:
 
   - name: cis_version
     description: "The short version of the GCP CIS Benchmark"
-    value: "1.2"
+    value: "1.3"
     type: String
 
   - name: cis_url

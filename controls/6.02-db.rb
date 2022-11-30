@@ -518,17 +518,22 @@ sub_control_id = "#{control_id}.9"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   impact 'none'
 
-  title "[#{control_abbrev.upcase}] Ensure 'log_parser_stats' database flag for Cloud SQL PostgreSQL
-  instance is set to 'off'"
+  title "[#{control_abbrev.upcase}] Ensure That 'cloudsql.enable_pgaudit' Database Flag for each 
+  Cloud Sql Postgresql Instance Is Set to 'on' For Centralized Logging"
 
-  desc 'The PostgreSQL planner/optimizer is responsible to parse and verify the syntax of each
-  query received by the server. If the syntax is correct a parse tree is built up else an error
-  is generated. The log_parser_stats flag controls the inclusion of parser performance
-  statistics in the PostgreSQL logs for each query.'
-  desc 'rationale', 'The log_parser_stats flag enables a crude profiling method for logging parser
-  performance statistics which even though can be useful for troubleshooting, it may
-  increase the amount of logs significantly and have performance overhead. This
-  recommendation is applicable to PostgreSQL database instances.'
+  desc 'Ensure cloudsql.enable_pgaudit database flag for Cloud SQL PostgreSQL instance is set 
+  to on to allow for centralized logging.'
+  desc 'rationale', 'As numerous other recommendations in this section consist of turning on flags for logging 
+  purposes, your organization will need a way to manage these logs. You may have a solution 
+  already in place. If you do not, consider installing and enabling the open source pgaudit 
+  extension within PostgreSQL and enabling its corresponding flag of 
+  cloudsql.enable_pgaudit. This flag and installing the extension enables database auditing 
+  in PostgreSQL through the open-source pgAudit extension. This extension provides 
+  detailed session and object logging to comply with government, financial, & ISO standards 
+  and provides auditing capabilities to mitigate threats by monitoring security events on the 
+  instance. Enabling the flag and settings later in this recommendation will send these logs to 
+  Google Logs Explorer so that you can access them in a central location. to This 
+  recommendation is applicable only to PostgreSQL database instances.'
   tag cis_scored: true
   tag cis_level: 1
   tag cis_gcp: sub_control_id.to_s
@@ -539,7 +544,6 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/flags'
   ref 'GCP Docs', url: 'https://www.postgresql.org/docs/current/runtime-config-logging.html#RUNTIME-CONFIG-LOGGING-WHAT'
-  ref 'GCP Docs', url: 'https://www.postgresql.org/docs/10/parser-stage.html'
 
   sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'POSTGRES'
@@ -552,11 +556,11 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
       else
         describe.one do
           sql_cache.instance_objects[db].settings.database_flags.each do |flag|
-            next unless flag.name == 'log_parser_stats'
-            describe "[#{gcp_project_id} , #{db} ] should have a database flag 'log_parser_stats' set to 'off' " do
+            next unless flag.name == 'cloudsql.enable_pgaudit'
+            describe "[#{gcp_project_id} , #{db} ] should have a database flag 'cloudsql.enable_pgaudit' set to 'on' " do
               subject { flag }
-              its('name') { should cmp 'log_parser_stats' }
-              its('value') { should cmp 'off' }
+              its('name') { should cmp 'cloudsql.enable_pgaudit' }
+              its('value') { should cmp 'on' }
             end
           end
         end
