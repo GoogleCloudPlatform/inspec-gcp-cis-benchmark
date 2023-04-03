@@ -21,6 +21,7 @@ log_min_messages = input('log_min_messages')
 log_min_error_statement = input('log_min_error_statement')
 log_error_verbosity = input('log_error_verbosity')
 log_statement = input('log_statement')
+log_hostname = input('log_hostname')
 control_id = '6.2'
 control_abbrev = 'db'
 
