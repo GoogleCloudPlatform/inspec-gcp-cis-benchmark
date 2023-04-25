@@ -4,3 +4,4 @@ attrs.yml
 Gemfile.lock
 inputs.yml
 vendor
+.DS_Store
