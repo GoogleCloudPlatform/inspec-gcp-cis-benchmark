@@ -1,0 +1,42 @@
+# Copyright 2025 The inspec-gcp-cis-benchmark Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+title 'Use Identity Aware Proxy (IAP) to Ensure Only Traffic From Google IP Addresses are Allowed'
+
+gcp_project_id = input('gcp_project_id')
+cis_version = input('cis_version')
+cis_url = input('cis_url')
+control_id = '3.10'
+control_abbrev = 'networking'
+
+control "cis-gcp-#{control_id}-#{control_abbrev}" do
+  impact 'medium'
+  title "[#{control_abbrev.upcase}] Use Identity Aware Proxy (IAP) to Ensure Only Traffic From Google IP Addresses are Allowed"
+  desc 'Identity-Aware Proxy (IAP) should be configured to allow traffic only from Google IP addresses for protected resources.'
+  desc 'rationale', 'Restricting access to resources through IAP to only Google IP addresses enhances security by preventing unauthorized external access.'
+
+  tag cis_scored: false
+  tag cis_level: 1
+  tag cis_gcp: control_id.to_s
+  tag cis_version: cis_version.to_s
+  tag project: gcp_project_id.to_s
+  tag nist: ['AC-1']
+
+  ref 'CIS Benchmark', url: cis_url.to_s
+  ref 'GCP Docs', url: 'https://cloud.google.com/iap'
+  
+  describe 'This control is not scored' do
+    skip 'This control is not scored'
+  end
+end
