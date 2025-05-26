@@ -1,6 +1,6 @@
-# GCP CIS 1.2.0 Benchmark Inspec Profile
+# GCP CIS 4.0.0 Benchmark Inspec Profile
 
-This repository holds the [Google Cloud Platform (GCP)](https://cloud.google.com/) [Center for Internet Security (CIS)](https://www.cisecurity.org) [version 1.2 Benchmark](https://www.cisecurity.org/benchmark/google_cloud_computing_platform/) [Inspec](https://www.inspec.io/) Profile.
+This repository holds the [Google Cloud Platform (GCP)](https://cloud.google.com/) [Center for Internet Security (CIS)](https://www.cisecurity.org) [version 4.0 Benchmark](https://www.cisecurity.org/benchmark/google_cloud_computing_platform/) [Inspec](https://www.inspec.io/) Profile.
 
 ## Required Disclaimer
 
@@ -8,16 +8,20 @@ This is not an officially supported Google product. This code is intended to hel
 
 ## Coverage
 
-The following GCP CIS v1.2.0 Benchmark Controls are not covered:
+The following GCP CIS v4.0.0 Benchmark Controls are not covered:
 
-- Identity and Access Management 1.2 - "Ensure that multi-factor authentication is enabled for all non-service accounts"
 - Identity and Access Management 1.3 - "Ensure that Security Key Enforcement is enabled for all admin accounts"
 - Identity and Access Management 1.12 - "Ensure API keys are not created for a project"
 - Identity and Access Management 1.13 - "Ensure API keys are restricted to use by only specified Hosts and Apps"
 - Identity and Access Management 1.14 - "Ensure API keys are restricted to only APIs that application needs access"
 - Identity and Access Management 1.15 - "Ensure API keys are rotated every 90 days"
-- Cloud SQL Database Services 6.3 - "Ensure that MySql database instance does not allow anyone to connect with administrative privileges"
-- Cloud SQL Database Services 6.4 - "Ensure that MySQL Database Instance does not allows root login from any Host"
+- Identity and Access Management 1.17 - "Ensure Secrets are Not Stored in Cloud Functions Environment Variables by Using Secret Manager"
+- Logging 2.14 - "Ensure 'Access Transparency' is 'Enabled'"
+- Networking 3.10 - "Use Identity Aware Proxy (IAP) to Ensure Only Traffic From Google IP Addresses are 'Allowed'"
+- VMs 4.10 - " Ensure That App Engine Applications Enforce HTTPS Connections"
+- VMs 4.12 - "Ensure the Latest Operating System Updates Are Installed On Your Virtual Machines in All Projects"
+- MySQL 6.1 - "Ensure that MySql database instances are secure"
+- BigQuery 7.4 - "Ensure that MySQL Database Instance does not allows root login from any Host"
 
 ## Usage
 
