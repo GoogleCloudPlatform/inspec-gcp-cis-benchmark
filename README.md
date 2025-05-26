@@ -164,6 +164,7 @@ On project level:
 - logging.logMetrics.list
 - logging.sinks.get
 - logging.sinks.list
+- monitoring.alertPolicies.get
 - monitoring.alertPolicies.list
 - resourcemanager.projects.get
 - resourcemanager.projects.getIamPolicy
