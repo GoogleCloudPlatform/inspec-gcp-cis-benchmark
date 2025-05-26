@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title 'Ensure that all BigQuery Tables are encrypted with Customermanaged encryption key (CMEK)'
+title 'Ensure that all BigQuery tables are encrypted with customer-managed encryption key (CMEK)'
 
 gcp_project_id = input('gcp_project_id')
 cis_version = input('cis_version')
@@ -23,27 +23,20 @@ control_abbrev = 'storage'
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 'high'
 
-  title "[#{control_abbrev.upcase}] Ensure that all BigQuery Tables are encrypted with Customermanaged encryption key (CMEK)"
+  title "[#{control_abbrev.upcase}] Ensure that all BigQuery tables are encrypted with customer-managed encryption key (CMEK)"
 
-  desc 'BigQuery by default encrypts the data as rest by employing Envelope Encryption using
-  Google managed cryptographic keys. The data is encrypted using the data encryption
-  keys and data encryption keys themselves are further encrypted using key encryption
-  keys. This is seamless and do not require any additional input from the user. However, if
-  you want to have greater control, Customer-managed encryption keys (CMEK) can be used
-  as encryption key management solution for BigQuery Data Sets. If CMEK is used, the CMEK
-  is used to encrypt the data encryption keys instead of using google-managed encryption
-  keys.'
-  desc 'rationale', 'BigQuery by default encrypts the data as rest by employing Envelope Encryption using
-  Google managed cryptographic keys. This is seamless and does not require any additional
-  input from the user.
-  For greater control over the encryption, customer-managed encryption keys (CMEK) can
-  be used as encryption key management solution for BigQuery tables. The CMEK is used to
-  encrypt the data encryption keys instead of using google-managed encryption keys.
-  BigQuery stores the table and CMEK association and the encryption/decryption is done
-  automatically.
-  Applying the Default Customer-managed keys on BigQuery data sets ensures that all the
-  new tables created in the future will be encrypted using CMEK but existing tables need to
-  be updated to use CMEK individually.'
+  desc 'BigQuery by default encrypts the data as rest by employing Envelope Encryption using Google managed cryptographic keys.
+  The data is encrypted using the data encryption keys and data encryption keys themselves are further encrypted using key
+  encryption keys. This is seamless and do not require any additional input from the user. However, if you want to have greater
+  control, Customer-managed encryption keys (CMEK) can be used as encryption key management solution for BigQuery Data Sets.
+  If CMEK is used, the CMEK is used to encrypt the data encryption keys instead of using google-managed encryption keys.'
+  desc 'rationale', 'BigQuery by default encrypts the data as rest by employing Envelope Encryption using Google managed
+  cryptographic keys. This is seamless and does not require any additional input from the user. For greater control over
+  the encryption, customer-managed encryption keys (CMEK) can be used as encryption key management solution for BigQuery tables.
+  The CMEK is used to encrypt the data encryption keys instead of using google-managed encryption keys. BigQuery stores the
+  table and CMEK association and the encryption/decryption is done automatically. Applying the Default Customer-managed keys on
+  BigQuery data sets ensures that all the new tables created in the future will be encrypted using CMEK but existing tables need
+  to be updated to use CMEK individually.'
 
   tag cis_scored: true
   tag cis_level: 2
