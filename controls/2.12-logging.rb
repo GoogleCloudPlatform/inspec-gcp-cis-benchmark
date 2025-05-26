@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title 'Ensure That Cloud DNS Logging Is Enabled for All VPC Networks (Automated)'
+title 'Ensure That Cloud DNS Logging Is Enabled for All VPC Networks'
 
 gcp_project_id = input('gcp_project_id')
 cis_version = input('cis_version')
@@ -23,10 +23,12 @@ control_abbrev = 'logging'
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 'low'
 
-  title "[#{control_abbrev.upcase}] Ensure That Cloud DNS Logging Is Enabled for All VPC Networks (Automated)"
+  title "[#{control_abbrev.upcase}] Ensure That Cloud DNS Logging Is Enabled for All VPC Networks"
 
   desc "Cloud DNS logging records the queries from the name servers within your VPC to Stackdriver. Logged queries can come from Compute Engine VMs, GKE containers, or other GCP resources provisioned within the VPC."
-  desc 'rationale', "Security monitoring and forensics cannot depend solely on IP addresses from VPC flow logs, especially when considering the dynamic IP usage of cloud resources, HTTP virtual host routing, and other technology that can obscure the DNS name used by a client from the IP address. Monitoring of Cloud DNS logs provides visibility to DNS names requested by the clients within the VPC. These logs can be monitored for anomalous domain names, evaluated against threat intelligence, and Note: For full capture of DNS, firewall must block egress UDP/53 (DNS) and TCP/443 (DNS over HTTPS) to prevent client from using external DNS name server for resolution."
+  desc 'rationale', "Security monitoring and forensics cannot depend solely on IP addresses from VPC flow logs, especially when considering the dynamic IP usage of cloud resources, HTTP virtual host routing, and other technology that can obscure the DNS name used by a client from the IP address. Monitoring of Cloud DNS logs provides visibility to DNS names requested by the clients within the VPC. These logs can be monitored for anomalous domain names, evaluated against threat intelligence, and
+  
+  Note: For full capture of DNS, firewall must block egress UDP/53 (DNS) and TCP/443 (DNS over HTTPS) to prevent client from using external DNS name server for resolution."
 
   tag cis_scored: true
   tag cis_level: 1

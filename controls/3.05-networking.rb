@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title 'Ensure that RSASHA1 is not used for zone-signing key in Cloud DNS DNSSEC'
+title 'Ensure That RSASHA1 Is Not Used for the Zone-Signing Key in Cloud DNS DNSSEC'
 
 gcp_project_id = input('gcp_project_id')
 cis_version = input('cis_version')
@@ -23,12 +23,14 @@ control_abbrev = 'networking'
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 'none'
 
-  title "[#{control_abbrev.upcase}] Ensure that RSASHA1 is not used for zone-signing key in Cloud DNS DNSSEC"
+  title "[#{control_abbrev.upcase}] Ensure That RSASHA1 Is Not Used for the Zone-Signing Key in Cloud DNS DNSSEC"
 
-  desc 'DNSSEC algorithm numbers in this registry may be used in CERT RRs. Zone signing (DNSSEC) and transaction security mechanisms (SIG(0) and TSIG) make use of particular subsets of these algorithms. The algorithm used for key signing should be recommended one and it should not be weak.'
-  desc 'rationale', "DNSSEC algorithm numbers in this registry may be used in CERT RRs. Zonesigning (DNSSEC) and transaction security mechanisms (SIG(0) and TSIG) make use of particular subsets of these algorithms.
+  desc 'NOTE: Currently, the SHA1 algorithm has been removed from general use by Google, and, if being used, needs to be whitelisted on a project basis by Google and will also, therefore, require a Google Cloud support contract.
 
-The algorithm used for key signing should be recommended one and it should not be weak.  When enabling DNSSEC for a managed zone, or creating a managed zone with DNSSEC, you can select the DNSSEC signing algorithms and the denial-of-existence type. Changing the DNSSEC settings is only effective for a managed zone if DNSSEC is not already enabled. If you need to change the settings for a managed zone where it has been enabled, you can turn DNSSEC off and then re-enable it with different settings."
+  DNSSEC algorithm numbers in this registry may be used in CERT RRs. Zone signing (DNSSEC) and transaction security mechanisms (SIG(0) and TSIG) make use of particular subsets of these algorithms. The algorithm used for key signing should be a recommended one and it should be strong.'
+  desc 'rationale', "DNSSEC algorithm numbers in this registry may be used in CERT RRs. Zone signing (DNSSEC) and transaction security mechanisms (SIG(0) and TSIG) make use of particular subsets of these algorithms.
+
+  The algorithm used for key signing should be a recommended one and it should be strong. When enabling DNSSEC for a managed zone, or creating a managed zone with DNSSEC, the DNSSEC signing algorithms and the denial-of-existence type can be selected. Changing the DNSSEC settings is only effective for a managed zone if DNSSEC is not already enabled. If the need exists to change the settings for a managed zone where it has been enabled, turn DNSSEC off and then re-enable it with different settings."
 
   tag cis_scored: false
   tag cis_level: 1

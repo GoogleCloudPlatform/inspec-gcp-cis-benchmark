@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title 'Ensure log metric filter and alerts exists for VPC network changes'
+title 'Ensure That the Log Metric Filter and Alerts Exist for VPC Network Changes'
 
 gcp_project_id = input('gcp_project_id')
 cis_version = input('cis_version')
@@ -23,15 +23,15 @@ control_abbrev = 'logging'
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 'low'
 
-  title "[#{control_abbrev.upcase}] Ensure log metric filter and alerts exists for VPC network changes "
+  title "[#{control_abbrev.upcase}] Ensure That the Log Metric Filter and Alerts Exist for VPC Network Changes"
 
-  desc 'It is recommended that a metric filter and alarm be established for VPC network changes.'
-  desc 'rationale', "It is possible to have more than 1 VPC within an project, in addition it is also possible to create a peer connection between 2 VPCs enabling network traffic to route between VPCs.
+  desc 'It is recommended that a metric filter and alarm be established for Virtual Private Cloud (VPC) network changes.'
+  desc 'rationale', "It is possible to have more than one VPC within a project. In addition, it is also possible to create a peer connection between two VPCs enabling network traffic to route between VPCs.
 
-Monitoring changes to VPC will help ensure VPC traffic flow is not getting impacted."
+  Monitoring changes to a VPC will help ensure VPC traffic flow is not getting impacted."
 
   tag cis_scored: true
-  tag cis_level: 1
+  tag cis_level: 2
   tag cis_gcp: control_id.to_s
   tag cis_version: cis_version.to_s
   tag project: gcp_project_id.to_s

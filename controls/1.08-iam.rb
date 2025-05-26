@@ -27,12 +27,13 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   title "[#{control_abbrev.upcase}] Ensure that Separation of duties is enforced while assigning service account related roles to users"
 
-  desc "It is recommended that the principle of 'Separation of Duties' is enforced while assigning service account related roles to users."
-  desc 'rationale', "Built-in/Predefined IAM role Service Account admin allows user/identity to create, delete, manage service account(s). Built-in/Predefined IAM role Service Account User allows user/identity (with adequate privileges on Compute and App Engine) to assign service account(s) to Apps/Compute Instances.
+  desc "It is recommended that the principle of 'Separation of Duties' is enforced while assigning service-account related roles to users."
+  desc 'rationale', "The built-in/predefined IAM role Service Account admin allows the user/identity to create, delete, and manage service account(s). The built-in/predefined IAM role Service Account User allows the user/identity (with adequate privileges on Compute and App Engine) to assign service account(s) to Apps/Compute Instances.
 
-Separation of duties is the concept of ensuring that one individual does not have all necessary permissions to be able to complete a malicious action. In Cloud IAM - service accounts, this could be an action such as using a service account to access resources that user should not normally have access to. Separation of duties is a business control typically used in larger organizations, meant to help avoid security or privacy incidents and errors.  It is considered best practice.
+  Separation of duties is the concept of ensuring that one individual does not have all necessary permissions to be able to complete a malicious action. In Cloud IAM - service accounts, this could be an action such as using a service account to access resources that user should not normally have access to.
+  Separation of duties is a business control typically used in larger organizations, meant to help avoid security or privacy incidents and errors. It is considered best practice.
 
-Any user(s) should not have Service Account Admin and Service Account User, both roles assigned at a time."
+  No user should have Service Account Admin and Service Account User roles assigned at the same time."
 
   tag cis_scored: false
   tag cis_level: 2

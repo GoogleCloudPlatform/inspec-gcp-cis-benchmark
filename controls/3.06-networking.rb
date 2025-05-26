@@ -25,8 +25,10 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   title "[#{control_abbrev.upcase}] Ensure that SSH access is restricted from the internet"
 
-  desc 'GCP Firewall Rules are specific to a VPC Network. Each rule either allows or denies traffic when its conditions are met. Its conditions allow you to specify the type of traffic, such as ports and protocols, and the source or destination of the traffic, including IP addresses, subnets, and instances. Firewall rules are defined at the VPC network level, and are specific to the network in which they are defined. The rules themselves cannot be shared among networks. Firewall rules only support IPv4 traffic. When specifying a source for an ingress rule or a destination for an egress rule by address, you can only use an IPv4 address or IPv4 block in CIDR notation. Generic (0.0.0.0/0) incoming traffic from internet to VPC or VM instance using SSH on Port 22 can be avoided.'
-  desc 'rationale', 'GCP Firewall Rules within a VPC Network. These rules apply to outgoing (egress) traffic from instances and incoming (ingress) traffic to instances in the network. Egress and ingress traffic are controlled even if the traffic stays within the network (for example, instance-to-instance communication). For an instance to have outgoing Internet access, the network must have a valid Internet gateway route or custom route whose destination IP is specified. This route simply defines the path to the Internet, to avoid the most general (0.0.0.0/0) destination IP Range specified from Internet through SSH with default Port 22. We need to restrict generic access from Internet to specific IP Range.'
+  desc 'GCP Firewall Rules are specific to a VPC Network. Each rule either allows or denies traffic when its conditions are met. Its conditions allow the user to specify the type of traffic, such as ports and protocols, and the source or destination of the traffic, including IP addresses, subnets, and instances.
+
+  Firewall rules are defined at the VPC network level and are specific to the network in which they are defined. The rules themselves cannot be shared among networks. Firewall rules only support IPv4 traffic. When specifying a source for an ingress rule or a destination for an egress rule by address, only an IPv4 address or IPv4 block in CIDR notation can be used. Generic (0.0.0.0/0) incoming traffic from the internet to VPC or VM instance using SSH on Port 22 can be avoided.'
+  desc 'rationale', 'GCP Firewall Rules within a VPC Network apply to outgoing (egress) traffic from instances and incoming (ingress) traffic to instances in the network. Egress and ingress traffic flows are controlled even if the traffic stays within the network (for example, instance-to-instance communication). For an instance to have outgoing Internet access, the network must have a valid Internet gateway route or custom route whose destination IP is specified. This route simply defines the path to the Internet, to avoid the most general (0.0.0.0/0) destination IP Range specified from the Internet through SSH with the default Port 22. Generic access from the Internet to a specific IP Range needs to be restricted.'
 
   tag cis_scored: true
   tag cis_level: 2
@@ -37,6 +39,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/vpc/docs/firewalls#blockedtraffic'
+  ref 'GCP Docs', url: 'https://cloud.google.com/blog/products/identity-security/cloud-iap-enables-context-aware-access-to-vms-via-ssh-and-rdp-without-bastion-hosts'
 
   google_compute_firewalls(project: gcp_project_id).where(firewall_direction: 'INGRESS').firewall_names.each do |firewall_name|
     describe "[#{gcp_project_id}] #{firewall_name}" do

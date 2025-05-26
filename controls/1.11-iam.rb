@@ -27,11 +27,13 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   desc "It is recommended that the principle of 'Separation of Duties' is enforced while assigning KMS related roles to users."
 
-  desc 'rationale', "Built-in/Predefined IAM role Cloud KMS Admin allows user/identity to create, delete, and manage service account(s). Built-in/Predefined IAM role Cloud KMS CryptoKey Encrypter/Decrypter allows user/identity (with adequate privileges on concerned resources) to encrypt and decrypt data at rest using encryption key(s). Built-in/Predefined IAM role Cloud KMS CryptoKey Encrypter allows user/identity (with adequate privileges on concerned resources) to encrypt data at rest using encryption key(s). Builtin/Predefined IAM role Cloud KMS CryptoKey Decrypter allows user/identity (with adequate privileges on concerned resources) to decrypt data at rest using encryption key(s).
+  desc 'rationale', "The built-in/predefined IAM role Cloud KMS Admin allows the user/identity to create, delete, and manage service account(s). The built-in/predefined IAM role Cloud KMS CryptoKey Encrypter/Decrypter allows the user/identity (with adequate privileges on concerned resources) to encrypt and decrypt data at rest using an encryption key(s).
 
-Separation of duties is the concept of ensuring that one individual does not have all necessary permissions to be able to complete a malicious action. In Cloud KMS, this could be an action such as using a key to access and decrypt data that that user should not normally have access to. Separation of duties is a business control typically used in larger organizations, meant to help avoid security or privacy incidents and errors. It is considered best practice.
+  The built-in/predefined IAM role Cloud KMS CryptoKey Encrypter allows the user/identity (with adequate privileges on concerned resources) to encrypt data at rest using an encryption key(s). The built-in/predefined IAM role Cloud KMS CryptoKey Decrypter allows the user/identity (with adequate privileges on concerned resources) to decrypt data at rest using an encryption key(s).
 
-Any user(s) should not have Cloud KMS Admin and any of the Cloud KMS CryptoKey Encrypter/Decrypter, Cloud KMS CryptoKey Encrypter, Cloud KMS CryptoKey Decrypter roles assigned at a time."
+  Separation of duties is the concept of ensuring that one individual does not have all necessary permissions to be able to complete a malicious action. In Cloud KMS, this could be an action such as using a key to access and decrypt data a user should not normally have access to. Separation of duties is a business control typically used in larger organizations, meant to help avoid security or privacy incidents and errors. It is considered best practice.
+
+  No user(s) should have Cloud KMS Admin and any of the Cloud KMS CryptoKey Encrypter/Decrypter, Cloud KMS CryptoKey Encrypter, Cloud KMS CryptoKey Decrypter roles assigned at the same time."
 
   tag cis_scored: true
   tag cis_level: 2

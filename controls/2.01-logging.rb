@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title 'Ensure that Cloud Audit Logging is configured properly across all services and all users from a project '
+title 'Ensure That Cloud Audit Logging Is Configured Properly'
 
 gcp_project_id = input('gcp_project_id')
 cis_version = input('cis_version')
@@ -23,11 +23,9 @@ control_abbrev = 'logging'
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 'low'
 
-  title "[#{control_abbrev.upcase}] Ensure that Cloud Audit Logging is configured properly across all services and a
-ll users from a project "
+  title "[#{control_abbrev.upcase}] Ensure That Cloud Audit Logging Is Configured Properly"
 
-  desc "It is recommended that Cloud Audit Logging is configured to track all Admin activities and
-read, write access to user data."
+  desc "It is recommended that Cloud Audit Logging is configured to track all admin activities and read, write access to user data."
   desc 'rationale', "Cloud Audit Logging maintains two audit logs for each project and organization: Admin Activity
 nd Data Access.
 

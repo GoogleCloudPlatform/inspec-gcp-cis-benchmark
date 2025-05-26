@@ -27,8 +27,8 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   title "[#{control_abbrev.upcase}] Ensure that corporate login credentials are used"
 
-  desc 'Use corporate login credentials instead of personal accounts, such as Gmail accounts.'
-  desc 'rationale', "It is recommended fully-managed corporate Google accounts be used for increased visibility, auditing, and controlling access to Cloud Platform resources. Email accounts based outside of the user's organization, such as personal accounts, should not be used for business purposes."
+  desc 'Use corporate login credentials instead of consumer accounts, such as Gmail accounts.'
+  desc 'rationale', "It is recommended fully-managed corporate Google accounts be used for increased visibility, auditing, and controlling access to Cloud Platform resources. Email accounts based outside of the user's organization, such as consumer accounts, should not be used for business purposes."
 
   tag cis_scored: true
   tag cis_level: 1
@@ -38,28 +38,27 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   tag nist: ['AC-2']
 
   ref 'CIS Benchmark', url: cis_url.to_s
-  ref 'GCP Docs', url: 'https://cloud.google.com/docs/enterprise/best-practices-for-enterprise-organizations#use_corporate_login_credentials'
+  ref 'GCP Docs', url: 'https://support.google.com/work/android/answer/6371476'
+  ref 'GCP Docs', url: 'https://cloud.google.com/sdk/gcloud/reference/projects/get-iam-policy'
+  ref 'GCP Docs', url: 'https://cloud.google.com/sdk/gcloud/reference/resource-manager/folders/get-iam-policy'
+  ref 'GCP Docs', url: 'https://cloud.google.com/sdk/gcloud/reference/organizations/get-iam-policy'
+  ref 'GCP Docs', url: 'https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains'
+  ref 'GCP Docs', url: 'https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints'
+
 
   # determine the organization's email domain
-  case google_project(project: gcp_project_id).parent.type
-  when 'organization'
-    org_domain = google_organization(name: "organizations/#{google_project(project: gcp_project_id).parent.id}").display_name
-  when 'folder'
-    parent = 'folder'
-    folder_id = google_project(project: gcp_project_id).parent.id
-    while parent == 'folder'
-      if google_resourcemanager_folder(name: "folders/#{folder_id}").parent.include?('folders')
-        folder_id = google_resourcemanager_folder(name: "folders/#{folder_id}").parent.sub('folders/', '')
-      else
-        parent = 'organization'
-        org_domain = google_organization(name: google_resourcemanager_folder(name: "folders/#{folder_id}").parent.to_s).display_name
-      end
-    end
-  end
+  # Use google_project.ancestry to determine the organization ID.  This simplifies the logic and
+  # handles more complex hierarchy scenarios.
+  org_id = google_project(project: gcp_project_id).ancestry.last
+  org_domain = google_organization(name: org_id).display_name
 
   iam_bindings_cache.iam_binding_roles.each do |role|
     iam_bindings_cache.iam_bindings[role].members.each do |member|
+      # Skip service accounts as they are not personal accounts.
       next if member.to_s.end_with?('.gserviceaccount.com')
+      # Skip Google-managed service accounts
+      next if member.to_s.start_with?('serviceAccount:service-')
+
       describe "[#{gcp_project_id}] [Role:#{role}] Its member #{member}" do
         subject { member.to_s }
         it { should match(/@#{org_domain}/) }

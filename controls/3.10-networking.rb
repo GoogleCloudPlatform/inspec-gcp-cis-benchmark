@@ -23,11 +23,11 @@ control_abbrev = 'networking'
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 'medium'
   title "[#{control_abbrev.upcase}] Use Identity Aware Proxy (IAP) to Ensure Only Traffic From Google IP Addresses are Allowed"
-  desc 'Identity-Aware Proxy (IAP) should be configured to allow traffic only from Google IP addresses for protected resources.'
-  desc 'rationale', 'Restricting access to resources through IAP to only Google IP addresses enhances security by preventing unauthorized external access.'
+  desc 'IAP authenticates the user requests to your apps via a Google single sign in. You can then manage these users with permissions to control access. It is recommended to use both IAP permissions and firewalls to restrict this access to your apps with sensitive information.'
+  desc 'rationale', 'IAP ensure that access to VMs is controlled by authenticating incoming requests. Access to your apps and the VMs should be restricted by firewall rules that allow only the proxy IAP IP addresses contained in the 35.235.240.0/20 subnet. Otherwise, unauthenticated requests can be made to your apps. To ensure that load balancing works correctly health checks should also be allowed.'
 
   tag cis_scored: false
-  tag cis_level: 1
+  tag cis_level: 2
   tag cis_gcp: control_id.to_s
   tag cis_version: cis_version.to_s
   tag project: gcp_project_id.to_s
@@ -35,7 +35,10 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/iap'
-  
+  ref 'GCP Docs', url: 'https://cloud.google.com/iap/docs/load-balancer-howto'
+  ref 'GCP Docs', url: 'https://cloud.google.com/load-balancing/docs/health-checks'
+  ref 'GCP Docs', url: 'https://cloud.google.com/blog/products/identity-security/cloud-iap-enables-context-aware-access-to-vms-via-ssh-and-rdp-without-bastion-hosts'
+
   describe 'This control is not scored' do
     skip 'This control is not scored'
   end

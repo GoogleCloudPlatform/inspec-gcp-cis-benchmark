@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title 'Ensure the default network does not exist in a project'
+title 'Ensure That the Default Network Does Not Exist in a Project'
 
 gcp_project_id = input('gcp_project_id')
 cis_version = input('cis_version')
@@ -23,10 +23,19 @@ control_abbrev = 'networking'
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 'medium'
 
-  title "[#{control_abbrev.upcase}] Ensure the default network does not exist in a project"
+  title "[#{control_abbrev.upcase}] Ensure That the Default Network Does Not Exist in a Project"
 
   desc 'To prevent use of default network, a project should not have a default network.'
-  desc 'rationale', 'The default network has automatically created firewall rules and has pre-fabricated network configuration. Based on your security and networking requirements, you should create your network and delete the default network.'
+  desc 'rationale', "The default network has a preconfigured network configuration and automatically generates the following insecure firewall rules:
+  - default-allow-internal: Allows ingress connections for all protocols and ports among instances in the network.
+  - default-allow-ssh: Allows ingress connections on TCP port 22(SSH) from any source to any instance in the network.
+  - default-allow-rdp: Allows ingress connections on TCP port 3389(RDP) from any source to any instance in the network.
+  - default-allow-icmp: Allows ingress ICMP traffic from any source to any instance in the network.
+  These automatically created firewall rules do not get audit logged by default.
+  
+  Furthermore, the default network is an auto mode network, which means that its subnets use the same predefined range of IP addresses, and as a result, it's not possible to use Cloud VPN or VPC Network Peering with the default network.
+
+  Based on organization security and networking requirements, the organization should create a new network and delete the default network."
 
   tag cis_scored: true
   tag cis_level: 2
@@ -39,7 +48,9 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://cloud.google.com/compute/docs/networking#firewall_rules'
   ref 'GCP Docs', url: 'https://cloud.google.com/compute/docs/reference/latest/networks/insert'
   ref 'GCP Docs', url: 'https://cloud.google.com/compute/docs/reference/latest/networks/delete'
-
+  ref 'GCP Docs', url: 'https://cloud.google.com/vpc/docs/firewall-rules-logging'
+  ref 'GCP Docs', url: 'https://cloud.google.com/vpc/docs/vpc#default-network'
+  ref 'GCP Docs', url: 'https://cloud.google.com/sdk/gcloud/reference/compute/networks/delete'
   describe "[#{gcp_project_id}] Subnets" do
     subject { google_compute_networks(project: gcp_project_id) }
     its('network_names') { should_not include 'default' }

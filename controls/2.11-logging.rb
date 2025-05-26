@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title ' Ensure log metric filter and alerts exists for SQL instance configuration changes'
+title 'Ensure That the Log Metric Filter and Alerts Exist for SQL Instance Configuration Changes'
 
 gcp_project_id = input('gcp_project_id')
 cis_version = input('cis_version')
@@ -25,16 +25,14 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   title "[#{control_abbrev.upcase}] Ensure log metric filter and alerts exists for SQL instance configuration changes"
 
-  desc 'It is recommended that a metric filter and alarm be established for SQL Instance configuration changes.'
-  desc 'rationale', "Monitoring changes to Sql Instance configuration changes may reduce time to detect and correct misconfigurations done on sql server.
-
-Below are the few of configurable Options which may impact security posture of a SQL Instance:
-
-- Enable auto backups and high availability: Misconfiguration may adversely impact Business continuity, Disaster Recovery and High Availability
-- Authorize networks : Misconfiguration may increase exposure to the untrusted networks"
+  desc 'It is recommended that a metric filter and alarm be established for SQL instance configuration changes.'
+  desc 'rationale', "Monitoring changes to SQL instance configuration changes may reduce the time needed to detect and correct misconfigurations done on the SQL server.
+  Below are a few of the configurable options which may the impact security posture of an SQL instance:
+  - Enable auto backups and high availability: Misconfiguration may adversely impact business continuity, disaster recovery, and high availability
+  - Authorize networks: Misconfiguration may increase exposure to untrusted networks"
 
   tag cis_scored: true
-  tag cis_level: 1
+  tag cis_level: 2
   tag cis_gcp: control_id.to_s
   tag cis_version: cis_version.to_s
   tag project: gcp_project_id.to_s

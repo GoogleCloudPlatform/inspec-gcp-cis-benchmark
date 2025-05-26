@@ -24,8 +24,8 @@ control_abbrev = 'iam'
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 'medium'
   title "[#{control_abbrev.upcase}] Ensure Secrets are Not Stored in Cloud Functions Environment Variables by Using Secret Manager"
-  desc 'Secrets should not be stored in Cloud Functions environment variables. Use Secret Manager instead.'
-  desc 'rationale', 'Storing secrets in environment variables can lead to accidental exposure. Secret Manager provides a secure and centralized way to manage secrets.'
+  desc 'Google Cloud Functions allow you to host serverless code that is executed when an event is triggered, without the requiring the management a host operating system. These functions can also store environment variables to be used by the code that may contain authentication or other information that needs to remain confidential.'
+  desc 'rationale', 'It is recommended to use the Secret Manager, because environment variables are stored unencrypted, and accessible for all users who have access to the code.'
 
   tag cis_scored: false
   tag cis_level: 1
@@ -36,7 +36,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/functions/docs/configuring/env-var#managing_secrets'
-
+  ref 'GCP Docs', url: 'https://cloud.google.com/secret-manager/docs/overview'
   describe 'This control is not scored' do
     skip 'This control is not scored'
   end

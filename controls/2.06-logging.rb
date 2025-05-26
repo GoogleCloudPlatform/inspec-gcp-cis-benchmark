@@ -25,8 +25,8 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   title "[#{control_abbrev.upcase}] Ensure log metric filter and alerts exists for Custom Role changes"
 
-  desc 'It is recommended that a metric filter and alarm be established for changes IAM Role creation, deletion and updating activities.'
-  desc 'rationale', 'Google Cloud Identity and Access Management (Cloud IAM) provides predefined roles that give granular access to specific Google Cloud Platform resources and prevent unwanted access to other resources. However to cater organization specific needs, Cloud IAM also provides ability to create custom roles. Project Owner and administrators with Organization Role Administrator role or the IAM Role Administrator role can create custom roles. Monitoring role creation, deletion and updating activities will help in identifying over-privileged role at early stages.'
+  desc 'It is recommended that a metric filter and alarm be established for changes to Identity and Access Management (IAM) role creation, deletion and updating activities.'
+  desc 'rationale', 'Google Cloud IAM provides predefined roles that give granular access to specific Google Cloud Platform resources and prevent unwanted access to other resources. However, to cater to organization-specific needs, Cloud IAM also provides the ability to create custom roles. Project owners and administrators with the Organization Role Administrator role or the IAM Role Administrator role can create custom roles. Monitoring role creation, deletion and updating activities will help in identifying any over-privileged role at early stages.'
 
   tag cis_scored: true
   tag cis_level: 1

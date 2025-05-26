@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title 'Ensure Encryption keys are rotated within a period of 90 days'
+title 'Ensure KMS Encryption Keys Are Rotated Within a Period of 90 Days'
 
 gcp_project_id = input('gcp_project_id')
 cis_version = input('cis_version')
@@ -24,17 +24,15 @@ kms_rotation_period_seconds = input('kms_rotation_period_seconds')
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 'none'
 
-  title "[#{control_abbrev.upcase}] Ensure Encryption keys are rotated within a period of 90 days"
+  title "[#{control_abbrev.upcase}] Ensure KMS Encryption Keys Are Rotated Within a Period of 90 Days"
 
-  desc "Google Cloud Key Management Service (KMS) stores cryptographic keys in a hierarchical structure designed for useful and elegant access control management.
+  desc "Google Cloud Key Management Service stores cryptographic keys in a hierarchical structure designed for useful and elegant access control management.
 
-Automatic cryptographic key rotation is only available for symmetric keys. Cloud KMS does not support automatic rotation of asymmetric keys so such keys are out of scope for this control. More information can be found in the GCP documentation references of this control.
-
-The format for the rotation schedule depends on the client library that is used. For the gcloud command-line tool, the next rotation time must be in ISO or RFC3339 format, and the rotation period must be in the form INTEGER[UNIT], where units can be one of seconds (s), minutes (m), hours (h) or days (d)."
+  The format for the rotation schedule depends on the client library that is used. For the gcloud command-line tool, the next rotation time must be in ISO or RFC3339 format, and the rotation period must be in the form INTEGER[UNIT], where units can be one of seconds (s), minutes (m), hours (h) or days (d)."
 
   desc 'rationale', "Set a key rotation period and starting time. A key can be created with a specified rotation period, which is the time between when new key versions are generated automatically. A key can also be created with a specified next rotation time. A key is a named object representing a cryptographic key used for a specific purpose. The key material, the actual bits used for encryption, can change over time as new key versions are created.
-
-A key is used to protect some corpus of data. You could encrypt a collection of files with the same key, and people with decrypt permissions on that key would be able to decrypt those files. Hence it's necessary to make sure rotation period is set to specific time."
+  
+  A key is used to protect some corpus of data. A collection of files could be encrypted with the same key and people with decrypt permissions on that key would be able to decrypt those files. Therefore, it's necessary to make sure the rotation period is set to a specific time."
 
   tag cis_scored: true
   tag cis_level: 1
@@ -45,7 +43,7 @@ A key is used to protect some corpus of data. You could encrypt a collection of 
 
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/kms/docs/key-rotation#frequency_of_key_rotation'
-  ref 'GCP Docs', url: 'https://cloud.google.com/kms/docs/key-rotation#asymmetric'
+  ref 'GCP Docs', url: 'https://cloud.google.com/kms/docs/re-encrypt-data'
 
   # Get all "normal" regions and add dual/multi regions
   locations = google_compute_regions(project: gcp_project_id).region_names

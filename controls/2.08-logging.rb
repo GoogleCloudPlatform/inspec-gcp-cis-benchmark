@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title 'Ensure log metric filter and alerts exists for VPC network route changes'
+title 'Ensure That the Log Metric Filter and Alerts Exist for VPC Network Route Changes'
 
 gcp_project_id = input('gcp_project_id')
 cis_version = input('cis_version')
@@ -23,15 +23,15 @@ control_abbrev = 'logging'
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 'low'
 
-  title "[#{control_abbrev.upcase}] Ensure log metric filter and alerts exists for VPC network route changes "
+  title "[#{control_abbrev.upcase}] Ensure That the Log Metric Filter and Alerts Exist for VPC Network Route Changes"
 
-  desc 'It is recommended that a metric filter and alarm be established for VPC network route changes.'
-  desc 'rationale', "Google Cloud Platform (GCP) routes define the paths network traffic takes from a VM instance to another destinations. The other destination can be inside your VPC network (such as another VM) or outside of it. Every route consists of a destination and a next hop.  Traffic whose destination IP is within the destination range is sent to the next hop for delivery.
+  desc 'It is recommended that a metric filter and alarm be established for Virtual Private Cloud (VPC) network route changes.'
+  desc 'rationale', "Google Cloud Platform (GCP) routes define the paths network traffic takes from a VM instance to another destination. The other destination can be inside the organization VPC network (such as another VM) or outside of it. Every route consists of a destination and a next hop. Traffic whose destination IP is within the destination range is sent to the next hop for delivery.
 
-Monitoring changes to route tables will help ensure that all VPC traffic flows through an expected path."
+  Monitoring changes to route tables will help ensure that all VPC traffic flows through an expected path."
 
   tag cis_scored: true
-  tag cis_level: 1
+  tag cis_level: 2
   tag cis_gcp: control_id.to_s
   tag cis_version: cis_version.to_s
   tag project: gcp_project_id.to_s
@@ -43,6 +43,8 @@ Monitoring changes to route tables will help ensure that all VPC traffic flows t
   ref 'GCP Docs', url: 'https://cloud.google.com/monitoring/alerts/'
   ref 'GCP Docs', url: 'https://cloud.google.com/logging/docs/reference/tools/gcloud-logging'
   ref 'GCP Docs', url: 'https://cloud.google.com/storage/docs/access-control/iam'
+  ref 'GCP Docs', url: 'https://cloud.google.com/sdk/gcloud/reference/beta/logging/metrics/create'
+  ref 'GCP Docs', url: 'https://cloud.google.com/sdk/gcloud/reference/alpha/monitoring/policies/create'
 
   log_filter = 'resource.type=global AND jsonPayload.event_subtype="compute.routes.delete" OR jsonPayload.event_subtype="compute.routes.insert"'
   describe "[#{gcp_project_id}] VPC Route changes filter" do

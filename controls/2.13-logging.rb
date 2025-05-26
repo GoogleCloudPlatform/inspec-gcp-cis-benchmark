@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title 'Ensure Cloud Asset Inventory Is Enabled (Automated)'
+title 'Ensure Cloud Asset Inventory Is Enabled'
 
 gcp_project_id = input('gcp_project_id')
 cis_version = input('cis_version')
@@ -23,10 +23,14 @@ control_abbrev = 'logging' # As per existing structure, though control is about 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 'low'
 
-  title "[#{control_abbrev.upcase}] Ensure Cloud Asset Inventory Is Enabled (Automated)"
+  title "[#{control_abbrev.upcase}] Ensure Cloud Asset Inventory Is Enabled"
 
-  desc "GCP Cloud Asset Inventory is services that provides a historical view of GCP resources and IAM policies through a time-series database. The information recorded includes metadata on Google Cloud resources, metadata on policies set on Google Cloud projects or resources, and runtime information gathered within a Google Cloud resource. Cloud Asset Inventory Service (CAIS) API enablement is not required for operation of the service, but rather enables the mechanism for searching/exporting CAIS asset data directly."
-  desc 'rationale', "The GCP resources and IAM policies captured by GCP Cloud Asset Inventory enables security analysis, resource change tracking, and compliance auditing. It is recommended GCP Cloud Asset Inventory be enabled for all GCP projects."
+  desc "GCP Cloud Asset Inventory is services that provides a historical view of GCP resources and IAM policies through a time-series database. The information recorded includes metadata on Google Cloud resources, metadata on policies set on Google Cloud projects or resources, and runtime information gathered within a Google Cloud resource.
+
+  Cloud Asset Inventory Service (CAIS) API enablement is not required for operation of the service, but rather enables the mechanism for searching/exporting CAIS asset data directly."
+  desc 'rationale', "The GCP resources and IAM policies captured by GCP Cloud Asset Inventory enables security analysis, resource change tracking, and compliance auditing.
+  
+  It is recommended GCP Cloud Asset Inventory be enabled for all GCP projects."
 
   tag cis_scored: true
   tag cis_level: 1

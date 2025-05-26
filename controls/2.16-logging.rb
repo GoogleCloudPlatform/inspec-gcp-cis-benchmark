@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title "Ensure Logging is enabled for HTTP(S) Load Balancer (Automated)"
+title "Ensure Logging is enabled for HTTP(S) Load Balancer"
 
 gcp_project_id = input('gcp_project_id')
 cis_version = input('cis_version')
@@ -23,7 +23,7 @@ control_abbrev = 'logging'
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 'medium'
 
-  title "[#{control_abbrev.upcase}] Ensure Logging is enabled for HTTP(S) Load Balancer (Automated)"
+  title "[#{control_abbrev.upcase}] Ensure Logging is enabled for HTTP(S) Load Balancer"
 
   desc "Logging enabled on a HTTPS Load Balancer will show all network traffic and its destination."
   desc 'rationale', "Logging will allow you to view HTTPS network traffic to your web applications. On high use systems with a high percentage sample rate, the logging file may grow to high capacity in a short amount of time. Ensure that the sample rate is set appropriately so that storage costs are not exorbitant."

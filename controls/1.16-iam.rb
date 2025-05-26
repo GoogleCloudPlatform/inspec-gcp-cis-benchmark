@@ -23,8 +23,8 @@ control_abbrev = 'iam'
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 'low'
   title "[#{control_abbrev.upcase}] Ensure Essential Contacts is Configured for Organization"
-  desc 'Essential Contacts should be configured for the organization.'
-  desc 'rationale', 'Essential Contacts ensures that Google can reach the appropriate individuals in case of security incidents or other important events related to your organization.  Specifically, this control checks for LEGAL, SECURITY, SUSPENSIONS, and TECHNICAL contacts.'
+  desc 'It is recommended that Essential Contacts is configured to designate email addresses for Google Cloud services to notify of important technical or security information.'
+  desc 'rationale', 'Many Google Cloud services, such as Cloud Billing, send out notifications to share important information with Google Cloud users. By default, these notifications are sent to members with certain Identity and Access Management (IAM) roles. With Essential Contacts, you can customize who receives notifications by providing your own list of contacts.'
 
   tag cis_scored: true
   tag cis_level: 1
