@@ -23,8 +23,13 @@ control_abbrev = 'storage'
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 'medium'
   title "[#{control_abbrev.upcase}] Ensure all data in BigQuery has been classified"
-  desc 'All data in BigQuery should be classified according to its sensitivity level.'
-  desc 'rationale', 'Classifying data helps to understand its sensitivity and apply appropriate security controls. This control requires manual verification or integration with a data catalog.'
+  desc 'BigQuery tables can contain sensitive data that for security purposes should be discovered, monitored,
+  classified, and protected. Google Clouds Sensitive Data Protection tools can automatically provide data classification
+  of all BigQuery data across an organization.'
+  desc 'rationale', 'Using a cloud service or 3rd party software to continuously monitor and automate the process of data
+  discovery and classification for BigQuery tables is an important part of protecting the data.
+  Sensitive Data Protection is a fully managed data protection and data privacy platform that uses machine learning and pattern
+  matching to discover and classify sensitive data in Google Cloud.'
 
   tag cis_scored: false
   tag cis_level: 2
