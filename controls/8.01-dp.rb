@@ -23,8 +23,13 @@ control_abbrev = 'dataproc'
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 'medium'
   title "[#{control_abbrev.upcase}] Ensure that Dataproc Cluster is encrypted using Customer-Managed Encryption Key"
-  desc 'Dataproc clusters should be encrypted with customer-managed encryption keys (CMEK).'
-  desc 'rationale', 'Using CMEK for Dataproc cluster encryption allows for greater control over key management and encryption settings, enhancing security.'
+  desc 'When you use Dataproc, cluster and job data is stored on Persistent Disks (PDs) associated with the Compute Engine VMs in your cluster
+        and in a Cloud Storage staging bucket. This PD and bucket data is encrypted using a Google-generated data encryption key (DEK) and key
+        encryption key (KEK). The CMEK feature allows you to create, use, and revoke the key encryption key (KEK). Google still controls the data
+        encryption key (DEK).'
+  desc 'rationale', 'Cloud services offer the ability to protect data related to those services using encryption keys managed by the customer within
+        Cloud KMS. These encryption keys are called customer-managed encryption keys (CMEK). When you protect data in Google Cloud services with CMEK,
+        the CMEK key is within your control.'
 
   tag cis_scored: true
   tag cis_level: 2
