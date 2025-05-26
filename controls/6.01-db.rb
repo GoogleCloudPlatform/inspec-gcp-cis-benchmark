@@ -32,9 +32,9 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
 
   title "[#{control_abbrev.upcase}] Ensure that MySql database instance does not allow anyone to connect with administrative privileges."
 
-  desc "It is recommended to set a password for the administrative user (root by default) to prevent unauthorized access to the SQL database Instances.
-        This recommendation is applicable only for MySql Instances. PostgreSQL does not offer any setting for No Password from cloud console."
-  desc 'rationale', 'At the time of MySql Instance creation, not providing a administrative password allows anyone to connect to the SQL database instance with administrative privileges. Root password should be set to ensure only authorized users have these privileges.'
+  desc "It is recommended to set a password for the administrative user (root by default) to prevent unauthorized access to the SQL database instances.
+        This recommendation is applicable only for MySQL Instances. PostgreSQL does not offer any setting for No Password from the cloud console."
+  desc 'rationale', 'At the time of MySQL Instance creation, not providing an administrative password allows anyone to connect to the SQL database instance with administrative privileges. The root password should be set to ensure only authorized users have these privileges.'
 
   tag cis_scored: true
   tag cis_level: 1
@@ -57,19 +57,15 @@ sub_control_id = "#{control_id}.2"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   impact 'none'
 
-  title "[#{control_abbrev.upcase}] Ensure 'skip_show_database' database flag for Cloud SQL Mysql
-  instance is set to 'on'"
+  title "[#{control_abbrev.upcase}] Ensure ‘Skip_show_database’ database flag for cloud SQL MySQL instance is set to ‘On’"
 
   desc 'It is recommended to set skip_show_database database flag for Cloud SQL Mysql instance to on'
-  desc 'rationale', "'skip_show_database' database flag prevents people from using the SHOW DATABASES
-statement if they do not have the SHOW DATABASES privilege. This can improve security if
-you have concerns about users being able to see databases belonging to other users. Its
-effect depends on the SHOW DATABASES privilege: If the variable value is ON, the SHOW
-DATABASES statement is permitted only to users who have the SHOW DATABASES
-privilege, and the statement displays all database names. If the value is OFF, SHOW
-DATABASES is permitted to all users, but displays the names of only those databases for
-which the user has the SHOW DATABASES or other privilege. This recommendation is
-applicable to Mysql database instances."
+  desc 'rationale', "skip_show_database database flag prevents people from using the SHOW DATABASES statement if they do not
+    have the SHOW DATABASES privilege. This can improve security if you have concerns about users being able to see databases
+    belonging to other users. Its effect depends on the SHOW DATABASES privilege: If the variable value is ON, the SHOW DATABASES
+    statement is permitted only to users who have the SHOW DATABASES privilege, and the statement displays all database names. If
+    the value is OFF, SHOW DATABASES is permitted to all users, but displays the names of only those databases for which the user
+    has the SHOW DATABASES or other privilege. This recommendation is applicable to Mysql database instances."
 
   tag cis_scored: true
   tag cis_level: 1
@@ -80,6 +76,7 @@ applicable to Mysql database instances."
 
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/mysql/flags'
+  ref 'GCP Docs', url: 'https://dev.mysql.com/doc/refman/5.7/en/server-system-variables.html#sysvar_skip_show_database'
 
   sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'MYSQL'
@@ -119,12 +116,14 @@ sub_control_id = "#{control_id}.3"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   impact 'none'
 
-  title "[#{control_abbrev.upcase}] Ensure that the 'local_infile' database flag for a Cloud SQL Mysql instance is set to 'off'"
+  title "[#{control_abbrev.upcase}] Ensure that the ‘Local_infile’ database flag for a cloud SQL MySQL instance is set to ‘off’"
 
   desc 'It is recommended to set the local_infile database flag for a Cloud SQL MySQL instance to off.'
   desc 'rationale', "The local_infile flag controls the server-side LOCAL capability for LOAD DATA statements. Depending on the
-                    local_infile setting, the server refuses or permits local data loading by clients that have LOCAL enabled on
-                    the client side."
+        local_infile setting, the server refuses or permits local data loading by clients that have LOCAL enabled on the client side.
+        To explicitly cause the server to refuse LOAD DATA LOCAL statements (regardless of how client programs and libraries are configured
+        at build time or runtime), start mysqld with local_infile disabled. local_infile can also be set at runtime.
+        Due to security issues associated with the local_infile flag, it is recommended to disable it. This recommendation is applicable to MySQL database instances."
 
   tag cis_scored: true
   tag cis_level: 1
@@ -135,6 +134,8 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
 
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/mysql/flags'
+  ref 'GCP Docs', url: 'https://dev.mysql.com/doc/refman/5.7/en/server-system-variables.html#sysvar_local_infile'
+  ref 'GCP Docs', url: 'https://dev.mysql.com/doc/refman/5.7/en/load-data-local.html'
 
   sql_instance_names.each do |db|
     if sql_cache.instance_objects[db].database_version.include? 'MYSQL'

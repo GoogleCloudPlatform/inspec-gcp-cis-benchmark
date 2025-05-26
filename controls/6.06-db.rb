@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title 'Ensure that Cloud SQL database instances do not have public IPs'
+title 'Ensure That Cloud SQL Database Instances Do Not Have Public IPs'
 
 gcp_project_id = input('gcp_project_id')
 cis_version = input('cis_version')
@@ -25,10 +25,11 @@ sql_cache = CloudSQLCache(project: gcp_project_id)
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 'high'
 
-  title "[#{control_abbrev.upcase}] Ensure that Cloud SQL database instances do not have public IPs"
+  title "[#{control_abbrev.upcase}] Ensure That Cloud SQL Database Instances Do Not Have Public IPs"
 
   desc 'It is recommended to configure Second Generation Sql instance to use private IPs instead of public IPs.'
-  desc 'rationale', "To lower the organization's attack surface, Cloud SQL databases should not have public IPs. Private IPs provide improved network security and lower latency for your application."
+  desc 'rationale', "To lower the organization's attack surface, Cloud SQL databases should not have public IPs.
+        Private IPs provide improved network security and lower latency for your application."
 
   tag cis_scored: true
   tag cis_level: 2
@@ -39,6 +40,9 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/mysql/configure-private-ip'
+  ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/mysql/private-ip'
+  ref 'GCP Docs', url: 'https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints'
+  ref 'GCP Docs', url: 'https://console.cloud.google.com/iam-admin/orgpolicies/sql-restrictPublicIp'
 
   if sql_cache.instance_names.empty?
     impact 'none'
