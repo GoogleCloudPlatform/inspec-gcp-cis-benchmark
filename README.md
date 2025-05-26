@@ -53,7 +53,7 @@ Use this Cloud Shell Walkthrough for a hands-on example.
 
 ```
 #install inspec
-$ gem install inspec-bin -v 4.26.15 --no-document --quiet
+$ gem install inspec-bin -v 6.8.24 --no-document --quiet
 ```
 
 ```
