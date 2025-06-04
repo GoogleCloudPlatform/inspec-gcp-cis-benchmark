@@ -2,11 +2,11 @@
 
 This repository holds the [Google Cloud Platform (GCP)](https://cloud.google.com/) [Center for Internet Security (CIS)](https://www.cisecurity.org) [version 4.0 Benchmark](https://www.cisecurity.org/benchmark/google_cloud_computing_platform/) [Inspec](https://www.inspec.io/) Profile.
 
-## Required Disclaimer
+## 🚧 Required Disclaimer
 
 This is not an officially supported Google product. This code is intended to help users assess their security posture on the Google Cloud against the CIS Benchmark. This code is not certified by CIS.
 
-## Coverage
+## ✅ Coverage
 
 The following GCP CIS v4.0.0 Benchmark Controls are not covered:
 
@@ -23,13 +23,13 @@ The following GCP CIS v4.0.0 Benchmark Controls are not covered:
 - MySQL 6.1 - "Ensure that MySql database instances are secure"
 - BigQuery 7.4 - "Ensure that MySQL Database Instance does not allows root login from any Host"
 
-## Usage
+## 🚀 Usage
 
 ### Profile Inputs (see `inspec.yml` file)
 
 This profile uses InSpec Inputs to make the tests more flexible. You are able to provide inputs at runtime either via the `cli` or via `YAML files` to help the profile work best in your deployment.
 
-**pro tip**: Do not change the inputs in the `inspec.yml` file directly, either:
+**pro-tip**: Do not change the inputs in the `inspec.yml` file directly, either:
 
 - update them via the cli - via the `--input` flag
 - pass them in via a YAML file as shown in the `Example` - via the `--input-file` flag
@@ -53,17 +53,19 @@ Use this Cloud Shell Walkthrough for a hands-on example.
 
 ### CLI Example
 
-#### Ruby Gem
+#### 💎 Ruby Gem
 
 ```
-#install inspec
+# install inspec
 $ gem install inspec-bin -v 4.26.15 --no-document --quiet
 ```
 
 ```
 # make sure you're authenticated to GCP
 $ gcloud auth list
+```
 
+```
 # acquire credentials to use with Application Default Credentials
 $ gcloud auth application-default login
 
@@ -77,7 +79,7 @@ Profile Summary: 48 successful controls, 5 control failures, 7 controls skipped
 Test Summary: 166 successful, 7 failures, 7 skipped
 ```
 
-#### Docker
+#### 🐳 Docker
 ```
 # pull inspec image
 $ docker pull chef/inspec:4.26.15
@@ -86,7 +88,9 @@ $ docker pull chef/inspec:4.26.15
 ```
 # make sure you're authenticated to GCP
 $ gcloud auth list
+```
 
+```
 # acquire credentials to use with Application Default Credentials
 $ gcloud auth application-default login
 
@@ -95,7 +99,9 @@ $ gcloud auth application-default login
 ```
 # create function for convenience
 $ function inspec-docker { docker run -it -e GOOGLE_AUTH_SUPPRESS_CREDENTIALS_WARNINGS=true --rm -v ~/.config:/root/.config -v $(pwd):/share chef/inspec:4.26.15 "$@"; }
+```
 
+```
 # scan a project with this profile, replace {{project-id}} with your project ID
 $ inspec-docker exec https://github.com/GoogleCloudPlatform/inspec-gcp-cis-benchmark.git -t gcp:// --input gcp_project_id={{project-id}}  --reporter cli json:{{project-id}}_scan.json
 ...snip...
@@ -103,7 +109,7 @@ Profile Summary: 48 successful controls, 5 control failures, 7 controls skipped
 Test Summary: 166 successful, 7 failures, 7 skipped
 ```
 
-### Required APIs
+## ⚙️ Required APIs
 
 Consider these GCP projects, which may all be the same or different:
 
@@ -123,7 +129,7 @@ The following GCP APIs should be enabled in **all** of these projects:
 - sqladmin.googleapis.com
 - storage-api.googleapis.com
 
-### Required Permissions
+## 🔑 Required Permissions
 
 The following permissions are required to run the CIS benchmark profile:
 
