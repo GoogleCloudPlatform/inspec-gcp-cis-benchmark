@@ -28,15 +28,15 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   desc 'It is recommended that uniform bucket-level access is enabled on Cloud Storage buckets.'
   desc 'rationale', "It is recommended to use uniform bucket-level access to unify and simplify
   how you grant access to your Cloud Storage resources.
-  
+
   Cloud Storage offers two systems for granting users permission to access your buckets and objects:
-  Cloud Identity and Access Management (Cloud IAM) and Access Control Lists (ACLs).These systems act in parallel - 
+  Cloud Identity and Access Management (Cloud IAM) and Access Control Lists (ACLs).These systems act in parallel -
   in order for a user to access a Cloud Storage resource, only one of the systems needs to grant the user permission.
   Cloud IAM is used throughout Google Cloud and allows you to grant a variety of permissions at the bucket and project levels.
   ACLs are used only by Cloud Storage and have limited permission options, but they allow you to grant permissions on a per-object basis.
 
   In order to support a uniform permissioning system, Cloud Storage has uniform bucket-level access. Using this feature disables ACLs for
-  all Cloud Storage resources: access to Cloud Storage resources then is granted exclusively through Cloud IAM. Enabling uniform 
+  all Cloud Storage resources: access to Cloud Storage resources then is granted exclusively through Cloud IAM. Enabling uniform
   bucket-level access guarantees that if a Storage bucket is not publicly accessible, no object in the bucket is publicly accessible either."
 
   tag cis_scored: true

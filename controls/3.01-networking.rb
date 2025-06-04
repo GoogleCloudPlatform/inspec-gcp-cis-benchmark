@@ -32,7 +32,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   - default-allow-rdp: Allows ingress connections on TCP port 3389(RDP) from any source to any instance in the network.
   - default-allow-icmp: Allows ingress ICMP traffic from any source to any instance in the network.
   These automatically created firewall rules do not get audit logged by default.
-  
+
   Furthermore, the default network is an auto mode network, which means that its subnets use the same predefined range of IP addresses, and as a result, it's not possible to use Cloud VPN or VPC Network Peering with the default network.
 
   Based on organization security and networking requirements, the organization should create a new network and delete the default network."

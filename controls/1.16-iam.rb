@@ -1,4 +1,4 @@
-# Copyright 2025 The inspec-gcp-cis-benchmark Authors
+# Copyright 2019 The inspec-gcp-cis-benchmark Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   begin
     contacts = JSON.parse(contacts_output)['contacts']
-  rescue JSON::ParserError => e
+  rescue JSON::ParserError
     describe 'Error parsing essential contacts output' do
       subject { contacts_output }
       it { should_not be_empty }
@@ -52,7 +52,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
     return # Stop the control if parsing fails
   end
 
-  required_contact_types = ['LEGAL', 'SECURITY', 'SUSPENSIONS', 'TECHNICAL']
+  required_contact_types = %w[LEGAL SECURITY SUSPENSIONS TECHNICAL]
 
   required_contact_types.each do |contact_type|
     describe "[#{org_id}] Essential Contact: #{contact_type}" do

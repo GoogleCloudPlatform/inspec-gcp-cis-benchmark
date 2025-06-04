@@ -45,7 +45,6 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://cloud.google.com/resource-manager/docs/organization-policy/restricting-domains'
   ref 'GCP Docs', url: 'https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints'
 
-
   # determine the organization's email domain
   # Use google_project.ancestry to determine the organization ID.  This simplifies the logic and
   # handles more complex hierarchy scenarios.

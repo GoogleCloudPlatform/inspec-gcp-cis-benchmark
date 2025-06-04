@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title "Ensure That Compute Instances Do Not Have Public IP Addresses (Automated)"
+title 'Ensure That Compute Instances Do Not Have Public IP Addresses (Automated)'
 
 gcp_project_id = input('gcp_project_id')
 cis_version = input('cis_version')
@@ -25,7 +25,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   title "[#{control_abbrev.upcase}] Ensure That Compute Instances Do Not Have Public IP Addresses (Automated)"
 
-  desc "Compute instances should not be configured to have external IP addresses. Removing the external IP address from your Compute instance may cause some applications to stop working."
+  desc 'Compute instances should not be configured to have external IP addresses. Removing the external IP address from your Compute instance may cause some applications to stop working.'
   desc 'rationale', "To reduce your attack surface, Compute instances should not have public IP addresses. Instead, instances should be configured behind load balancers, to minimize the instance's exposure to the internet."
 
   tag cis_scored: true
@@ -47,7 +47,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   instances_found = false
   google_compute_zones(project: gcp_project_id).zone_names.each do |zone_name|
-    google_compute_instances(project: gcp_project_id, zone: zone_name).where{ instance_name !~ /^gke-/ }.where(status: 'RUNNING').instance_names.each do |instance_name|
+    google_compute_instances(project: gcp_project_id, zone: zone_name).where { instance_name !~ /^gke-/ }.where(status: 'RUNNING').instance_names.each do |instance_name|
       instances_found = true
       describe "[#{gcp_project_id}] Instance: #{instance_name} in Zone: #{zone_name}" do
         subject { google_compute_instance(project: gcp_project_id, zone: zone_name, name: instance_name) }
@@ -56,9 +56,9 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
     end
   end
 
-  if !instances_found
+  unless instances_found
     describe "[#{control_abbrev.upcase}] #{control_id} - No Non-GKE Running Instances Found" do
-      skip "No non-GKE running compute instances were found in the project, this control is Not Applicable."
+      skip 'No non-GKE running compute instances were found in the project, this control is Not Applicable.'
     end
   end
 end

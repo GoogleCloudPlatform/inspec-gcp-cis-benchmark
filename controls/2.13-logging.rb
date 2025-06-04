@@ -29,7 +29,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   Cloud Asset Inventory Service (CAIS) API enablement is not required for operation of the service, but rather enables the mechanism for searching/exporting CAIS asset data directly."
   desc 'rationale', "The GCP resources and IAM policies captured by GCP Cloud Asset Inventory enables security analysis, resource change tracking, and compliance auditing.
-  
+
   It is recommended GCP Cloud Asset Inventory be enabled for all GCP projects."
 
   tag cis_scored: true

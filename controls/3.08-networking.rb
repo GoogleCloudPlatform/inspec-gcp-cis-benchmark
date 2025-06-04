@@ -33,9 +33,9 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   - Understanding network usage and optimizing network traffic expenses
   - Network forensics
   - Real-time security analysis
-  
+
   Flow Logs provide visibility into network traffic for each VM inside the subnet and can be used to detect anomalous traffic or provide insight during security workflows.
-  
+
   The Flow Logs must be configured such that all network traffic is logged, the interval of logging is granular to provide detailed information on the connections, no logs are filtered, and metadata to facilitate investigations are included."
 
   tag cis_scored: true

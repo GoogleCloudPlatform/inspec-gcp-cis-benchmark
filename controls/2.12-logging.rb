@@ -25,9 +25,9 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   title "[#{control_abbrev.upcase}] Ensure That Cloud DNS Logging Is Enabled for All VPC Networks"
 
-  desc "Cloud DNS logging records the queries from the name servers within your VPC to Stackdriver. Logged queries can come from Compute Engine VMs, GKE containers, or other GCP resources provisioned within the VPC."
+  desc 'Cloud DNS logging records the queries from the name servers within your VPC to Stackdriver. Logged queries can come from Compute Engine VMs, GKE containers, or other GCP resources provisioned within the VPC.'
   desc 'rationale', "Security monitoring and forensics cannot depend solely on IP addresses from VPC flow logs, especially when considering the dynamic IP usage of cloud resources, HTTP virtual host routing, and other technology that can obscure the DNS name used by a client from the IP address. Monitoring of Cloud DNS logs provides visibility to DNS names requested by the clients within the VPC. These logs can be monitored for anomalous domain names, evaluated against threat intelligence, and
-  
+
   Note: For full capture of DNS, firewall must block egress UDP/53 (DNS) and TCP/443 (DNS over HTTPS) to prevent client from using external DNS name server for resolution."
 
   tag cis_scored: true
@@ -44,8 +44,8 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   dns_policies = google_dns_policies(project: gcp_project_id)
 
   if vpc_networks.empty?
-    describe "[No VPC Networks Found]" do
-      skip "No VPC networks found in the project, so this control is not applicable."
+    describe '[No VPC Networks Found]' do
+      skip 'No VPC networks found in the project, so this control is not applicable.'
     end
   else
     vpc_networks.each do |network_name|

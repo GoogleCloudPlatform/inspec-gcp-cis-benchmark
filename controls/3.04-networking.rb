@@ -26,7 +26,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   title "[#{control_abbrev.upcase}] Ensure that RSASHA1 is not used for key-signing key in Cloud DNS DNSSEC"
 
   desc 'NOTE: Currently, the SHA1 algorithm has been removed from general use by Google, and, if being used, needs to be whitelisted on a project basis by Google and will also, therefore, require a Google Cloud support contract.
-  
+
   DNSSEC algorithm numbers in this registry may be used in CERT RRs. Zone signing (DNSSEC) and transaction security mechanisms (SIG(0) and TSIG) make use of particular subsets of these algorithms. The algorithm used for key signing should be a recommended one and it should be strong.'
   desc 'rationale', 'Domain Name System Security Extensions (DNSSEC) algorithm numbers in this registry may be used in CERT RRs. Zonesigning (DNSSEC) and transaction security mechanisms (SIG(0) and TSIG) make use of particular subsets of these algorithms.
 

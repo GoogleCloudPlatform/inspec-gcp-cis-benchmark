@@ -21,7 +21,6 @@ log_min_messages = input('log_min_messages')
 log_min_error_statement = input('log_min_error_statement')
 log_error_verbosity = input('log_error_verbosity')
 log_statement = input('log_statement')
-log_hostname = input('log_hostname')
 control_id = '6.2'
 control_abbrev = 'db'
 
@@ -216,7 +215,7 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
 
   title "[#{control_abbrev.upcase}] Ensure ‘Log_statement’ database flag for cloud SQL PostgreSQL instance is set appropriately"
 
-  desc 'The value of log_statement flag determined the SQL statements that are logged. Valid values are:
+  desc "The value of log_statement flag determined the SQL statements that are logged. Valid values are:
         • none
         • ddl
         • mod
@@ -224,11 +223,11 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
       The value ddl logs all data definition statements. The value mod logs all ddl statements, plus data-modifying statements.
       The statements are logged after a basic parsing is done and statement type is determined, thus this does not logs statements
       with errors. When using extended query protocol, logging occurs after an Execute message is received and values of the Bind parameters are included.
-      A value of 'ddl' is recommended unless otherwise directed by your organizations logging policy.
+      A value of 'ddl' is recommended unless otherwise directed by your organizations logging policy."
   desc 'rationale', "Auditing helps in forensic analysis. If log_statement is not set to the correct value, too many statements may be
       logged leading to issues in finding the relevant information from the logs, or too few statements may be logged with relevant information
       missing from the logs. Setting log_statement to align with your organizations security and logging policies facilitates later auditing and
-      review of database activities. This recommendation is applicable to PostgreSQL database instances."'
+      review of database activities. This recommendation is applicable to PostgreSQL database instances."
 
   tag cis_scored: true
   tag cis_level: 2
@@ -358,10 +357,10 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
         are logged with the SQL statement. Valid values include (from lowest to highest severity) DEBUG5, DEBUG4, DEBUG3, DEBUG2, DEBUG1, INFO, NOTICE,
         WARNING, ERROR, LOG, FATAL, and PANIC. Each severity level includes the subsequent levels mentioned above. ERROR is considered the best practice
         setting. Changes should only be made in accordance with the organizations logging policy'
-  desc 'rationale', 'Auditing helps in troubleshooting operational problems and also permits forensic analysis. If log_min_messages is not set to the
+  desc 'rationale', "Auditing helps in troubleshooting operational problems and also permits forensic analysis. If log_min_messages is not set to the
         correct value, messages may not be classified as error messages appropriately. Setting the threshold to 'Warning' will log messages for
         the most needed error messages.
-        This recommendation is applicable to PostgreSQL database instances.'
+        This recommendation is applicable to PostgreSQL database instances."
   tag cis_scored: true
   tag cis_level: 1
   tag cis_gcp: sub_control_id.to_s
@@ -591,4 +590,3 @@ control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
     end
   end
 end
-

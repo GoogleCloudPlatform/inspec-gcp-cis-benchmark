@@ -26,7 +26,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   title "[#{control_abbrev.upcase}] Ensure 'Access Transparency' is 'Enabled'"
 
-  desc "GCP Access Transparency provides audit logs for all actions that Google personnel take in your Google Cloud resources."
+  desc 'GCP Access Transparency provides audit logs for all actions that Google personnel take in your Google Cloud resources.'
   desc 'rationale', "Controlling access to your information is one of the foundations of information security. Given that Google Employees do have access to your organizations' projects for support reasons, you should have logging in place to view who, when, and why your information is being accessed. To use Access Transparency your organization will need to have at one of the following support level: Premium, Enterprise, Platinum, or Gold. There will be subscription costs associated with support, as well as increased storage costs for storing the logs."
 
   tag cis_scored: false

@@ -44,8 +44,8 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   describe google_access_approval_project_settings(project_id: gcp_project_id) do
     it { should exist }
-    its('enrolled_services.count') { should > 0 } # Ensure at least one service is enrolled
-    its('notification_emails.count') { should > 0 } # Ensure there's at least one notification email
+    its('enrolled_services.count') { should.positive? } # Ensure at least one service is enrolled
+    its('notification_emails.count') { should.positive? } # Ensure there's at least one notification email
     # Note: The resource returns enrolled_ancestor as a boolean.
     # If Access Approval is enabled at the org/folder level, this might be true for the project.
     # The benchmark implies project-level or inherited enablement is acceptable.

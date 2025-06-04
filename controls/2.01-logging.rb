@@ -25,7 +25,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   title "[#{control_abbrev.upcase}] Ensure That Cloud Audit Logging Is Configured Properly"
 
-  desc "It is recommended that Cloud Audit Logging is configured to track all admin activities and read, write access to user data."
+  desc 'It is recommended that Cloud Audit Logging is configured to track all admin activities and read, write access to user data.'
   desc 'rationale', "Cloud Audit Logging maintains two audit logs for each project and organization: Admin Activity
 nd Data Access.
 

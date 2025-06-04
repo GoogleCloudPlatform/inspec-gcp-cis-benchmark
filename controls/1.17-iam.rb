@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 title 'Ensure Secrets are Not Stored in Cloud Functions Environment Variables by Using Secret Manager'
 
 gcp_project_id = input('gcp_project_id')

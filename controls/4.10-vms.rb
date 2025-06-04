@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title "Ensure That App Engine Applications Enforce HTTPS Connections (Manual)"
+title 'Ensure That App Engine Applications Enforce HTTPS Connections (Manual)'
 
 gcp_project_id = input('gcp_project_id')
 cis_version = input('cis_version')
@@ -25,8 +25,8 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   title "[#{control_abbrev.upcase}] Ensure That App Engine Applications Enforce HTTPS Connections (Manual)"
 
-  desc "In order to maintain the highest level of security all connections to an application should be secure by default."
-  desc 'rationale', "Insecure HTTP connections maybe subject to eavesdropping which can expose sensitive data. All connections to appengine will automatically be redirected to the HTTPS endpoint ensuring that all connections are secured by TLS."
+  desc 'In order to maintain the highest level of security all connections to an application should be secure by default.'
+  desc 'rationale', 'Insecure HTTP connections maybe subject to eavesdropping which can expose sensitive data. All connections to appengine will automatically be redirected to the HTTPS endpoint ensuring that all connections are secured by TLS.'
 
   tag cis_scored: false
   tag cis_level: 2

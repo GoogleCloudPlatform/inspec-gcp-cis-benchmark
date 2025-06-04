@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title "Ensure the Latest Operating System Updates Are Installed On Your Virtual Machines in All Projects (Manual)"
+title 'Ensure the Latest Operating System Updates Are Installed On Your Virtual Machines in All Projects (Manual)'
 
 gcp_project_id = input('gcp_project_id')
 cis_version = input('cis_version')
@@ -25,8 +25,8 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   title "[#{control_abbrev.upcase}] Ensure the Latest Operating System Updates Are Installed On Your Virtual Machines in All Projects (Manual)"
 
-  desc "Google Cloud Virtual Machines have the ability via an OS Config agent API to periodically (about every 10 minutes) report OS inventory data. A patch compliance API periodically reads this data, and cross references metadata to determine if the latest updates are installed. This is not the only Patch Management solution available to your organization and you should weigh your needs before committing to using this method. Most Operating Systems require a restart or changing critical resources to apply the updates. Using the Google Cloud VM manager for its OS Patch management will incur additional costs for each VM managed by it."
-  desc 'rationale', "Keeping virtual machine operating systems up to date is a security best practice. Using this service will simplify this process."
+  desc 'Google Cloud Virtual Machines have the ability via an OS Config agent API to periodically (about every 10 minutes) report OS inventory data. A patch compliance API periodically reads this data, and cross references metadata to determine if the latest updates are installed. This is not the only Patch Management solution available to your organization and you should weigh your needs before committing to using this method. Most Operating Systems require a restart or changing critical resources to apply the updates. Using the Google Cloud VM manager for its OS Patch management will incur additional costs for each VM managed by it.'
+  desc 'rationale', 'Keeping virtual machine operating systems up to date is a security best practice. Using this service will simplify this process.'
 
   tag cis_scored: false
   tag cis_level: 2
