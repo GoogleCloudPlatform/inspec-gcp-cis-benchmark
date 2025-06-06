@@ -26,7 +26,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   desc 'It is recommended that Essential Contacts is configured to designate email addresses for Google Cloud services to notify of important technical or security information.'
   desc 'rationale', 'Many Google Cloud services, such as Cloud Billing, send out notifications to share important information with Google Cloud users. By default, these notifications are sent to members with certain Identity and Access Management (IAM) roles. With Essential Contacts, you can customize who receives notifications by providing your own list of contacts.'
 
-  tag cis_scored: false
+  tag cis_scored: true
   tag cis_level: 1
   tag cis_gcp: control_id.to_s
   tag cis_version: cis_version.to_s
@@ -35,7 +35,29 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/resource-manager/docs/managing-notification-contacts'
-  describe 'This control is not scored' do
-    skip 'This control is not scored'
+
+  # Get the organization ID.
+  org_id = google_project(project: gcp_project_id).ancestry.last
+
+  # Get essential contacts for the organization using gcloud.
+  contacts_output = command("gcloud essential-contacts list --organization=#{org_id} --format='json(contacts)'").stdout
+
+  begin
+    contacts = JSON.parse(contacts_output)['contacts']
+  rescue JSON::ParserError
+    describe 'Error parsing essential contacts output' do
+      subject { contacts_output }
+      it { should_not be_empty }
+    end
+    return # Stop the control if parsing fails
+  end
+
+  required_contact_types = %w[LEGAL SECURITY SUSPENSIONS TECHNICAL]
+
+  required_contact_types.each do |contact_type|
+    describe "[#{org_id}] Essential Contact: #{contact_type}" do
+      subject { contacts.select { |c| c['type'] == contact_type } }
+      it { should_not be_empty }
+    end
   end
 end

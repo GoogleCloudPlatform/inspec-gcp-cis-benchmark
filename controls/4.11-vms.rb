@@ -17,7 +17,7 @@ title 'Ensure That Compute Instances Have Confidential Computing Enabled (Automa
 gcp_project_id = input('gcp_project_id')
 cis_version = input('cis_version')
 cis_url = input('cis_url')
-supported_confidential_vm_types = input('supported_confidential_vm_types', value: /^(n2d|c2d|n3d)/, description: 'Regex for machine types supporting Confidential Computing. N2D, C2D (AMD SEV). N3D (AMD SEV-SNP). T2D (Intel TDX) might also be relevant if supported by InSpec resources.')
+supported_confidential_vm_types = input('supported_confidential_vm_types', default: /^(n2d|c2d|n3d)/, description: 'Regex for machine types supporting Confidential Computing. N2D, C2D (AMD SEV). N3D (AMD SEV-SNP). T2D (Intel TDX) might also be relevant if supported by InSpec resources.')
 control_id = '4.11'
 control_abbrev = 'vms'
 

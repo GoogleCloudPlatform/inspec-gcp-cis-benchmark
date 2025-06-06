@@ -30,7 +30,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   Note: For full capture of DNS, firewall must block egress UDP/53 (DNS) and TCP/443 (DNS over HTTPS) to prevent client from using external DNS name server for resolution."
 
-  tag cis_scored: false
+  tag cis_scored: true
   tag cis_level: 1
   tag cis_gcp: control_id.to_s
   tag cis_version: cis_version.to_s
@@ -40,7 +40,25 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/dns/docs/monitoring'
 
-  describe 'This control is not scored' do
-    skip 'This control is not scored'
+  vpc_networks = google_compute_networks(project: gcp_project_id).network_names
+  dns_policies = google_dns_policies(project: gcp_project_id)
+
+  if vpc_networks.empty?
+    describe '[No VPC Networks Found]' do
+      skip 'No VPC networks found in the project, so this control is not applicable.'
+    end
+  else
+    vpc_networks.each do |network_name|
+      describe "DNS Policy Logging for VPC Network: #{network_name}" do
+        subject do
+          dns_policies.entries.find do |policy|
+            policy.enable_logging && policy.networks.any? { |net| net.network_url.include?(network_name) }
+          end
+        end
+        it 'should have an associated DNS policy with logging enabled' do
+          expect(subject).not_to be_nil, "No DNS policy with logging enabled found for VPC Network: #{network_name}"
+        end
+      end
+    end
   end
 end
