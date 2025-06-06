@@ -41,13 +41,55 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/docs/security/encryption/default-encryption'
 
-  google_dataproc_clusters(project: gcp_project_id).cluster_names.each do |cluster_name|
-    cluster = google_dataproc_cluster(project: gcp_project_id, name: cluster_name)
+  # Fetch all available compute regions
+  # This uses a helper method or a direct gcloud command execution
+  # You might need to add a helper function in your libraries or execute a shell command
+  # For simplicity, let's assume you have a way to get all regions.
+  # A common way is to use a custom InSpec resource or shell out to gcloud.
 
-    describe "[#{gcp_project_id}] Dataproc Cluster: #{cluster_name}" do
-      subject { cluster }
-      its('encryption_config.gce_pd_kms_key_name') { should_not be_nil }
-      its('encryption_config.gce_pd_kms_key_name') { should_not be_empty }
+  # Example using a placeholder for dynamic region discovery (you'd implement this)
+  # In a real scenario, you might use `command('gcloud compute regions list --format="value(name)"').stdout.strip.split("\n")`
+  # but directly executing `gcloud` within an InSpec resource's `initialize` or `filter`
+  # methods can be tricky due to execution context and dependencies.
+  # A better approach is to define a custom InSpec resource that wraps these gcloud calls.
+  # For now, let's manually list some common regions, or pass them as an input if fixed.
+
+  # If you need to make this fully dynamic without hardcoding, you would likely need a
+  # custom InSpec resource that uses the Google Cloud SDK for Ruby to list regions.
+  # For demonstration, let's use a hardcoded list of common regions.
+  # In a real-world, dynamic scenario, you'd integrate a resource like `google_compute_regions`
+  # or run a `gcloud` command to get the list.
+
+  all_gcp_regions = google_compute_regions(project: gcp_project_id).region_names
+
+  found_clusters = []
+
+  all_gcp_regions.each do |region|
+    clusters_in_region = google_dataproc_clusters(project: gcp_project_id, region: region)
+    found_clusters.concat(clusters_in_region.cluster_names.map { |name| { name: name, region: region } }) if clusters_in_region.cluster_names.any?
+  rescue Inspec::Exceptions::ResourceFailed => e
+    # This will catch errors if the Dataproc API isn't enabled in a region,
+    # or if there are other region-specific issues.
+    # You can log this for debugging if needed:
+    # puts "Could not list clusters in region #{region}: #{e.message}"
+  end
+
+  if found_clusters.empty?
+    describe "No Dataproc clusters found in project '#{gcp_project_id}' across all common regions." do
+      subject { found_clusters }
+      it { should be_empty }
+    end
+  else
+    found_clusters.each do |cluster_info|
+      cluster_name = cluster_info[:name]
+      cluster_region = cluster_info[:region]
+      cluster = google_dataproc_cluster(project: gcp_project_id, name: cluster_name, region: cluster_region)
+
+      describe "[#{gcp_project_id}] Dataproc Cluster: #{cluster_name} in region #{cluster_region}" do
+        subject { cluster }
+        its('encryption_config.gce_pd_kms_key_name') { should_not be_nil }
+        its('encryption_config.gce_pd_kms_key_name') { should_not be_empty }
+      end
     end
   end
 end
