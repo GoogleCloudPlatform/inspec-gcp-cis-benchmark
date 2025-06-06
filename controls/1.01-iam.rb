@@ -51,7 +51,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
     # or you might need a different way to define the 'corporate domain'.
     # For now, we'll skip if no parent is found.
     describe "Project #{gcp_project_id} has no organization or folder parent." do
-      skip "Cannot determine corporate domain. Skipping check for corporate login credentials."
+      skip 'Cannot determine corporate domain. Skipping check for corporate login credentials.'
     end
   else
     case project_parent.type
@@ -63,7 +63,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
       else
         # Fallback if organization resource doesn't exist or is inaccessible
         describe "Could not retrieve organization details for ID: #{org_id}." do
-          skip "Cannot determine corporate domain. Skipping check for corporate login credentials."
+          skip 'Cannot determine corporate domain. Skipping check for corporate login credentials.'
         end
       end
     when 'folder'
@@ -73,7 +73,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
       while current_folder_id
         folder_resource = google_resourcemanager_folder(name: "folders/#{current_folder_id}")
 
-        if folder_resource.exists?
+        if folder_resource.exists? # rubocop:disable Metrics/BlockNesting
           parent_name = folder_resource.parent # This will be like "folders/123" or "organizations/456"
 
           if parent_name.include?('organizations/')
@@ -86,7 +86,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
             else
               # Organization parent exists but cannot be retrieved
               describe "Could not retrieve organization details for ID: #{org_id} (parent of folder #{current_folder_id})." do
-                skip "Cannot determine corporate domain. Skipping check for corporate login credentials."
+                skip 'Cannot determine corporate domain. Skipping check for corporate login credentials.'
               end
               break # Exit loop as we hit an issue
             end
@@ -95,14 +95,14 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
           else
             # Unexpected parent type for a folder
             describe "Unexpected parent type '#{parent_name}' for folder #{current_folder_id}." do
-              skip "Cannot determine corporate domain. Skipping check for corporate login credentials."
+              skip 'Cannot determine corporate domain. Skipping check for corporate login credentials.'
             end
             break # Exit loop
           end
         else
           # Folder resource itself doesn't exist or is inaccessible
           describe "Folder resource 'folders/#{current_folder_id}' not found or inaccessible." do
-            skip "Cannot determine corporate domain. Skipping check for corporate login credentials."
+            skip 'Cannot determine corporate domain. Skipping check for corporate login credentials.'
           end
           break # Exit loop
         end
@@ -110,21 +110,21 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
       unless found_organization
         describe "Could not find an organization parent for project #{gcp_project_id} through its folder hierarchy." do
-          skip "Cannot determine corporate domain. Skipping check for corporate login credentials."
+          skip 'Cannot determine corporate domain. Skipping check for corporate login credentials.'
         end
       end
     else
       # Handle other potential parent types (e.g., `None` for standalone projects, or future types)
       describe "Project #{gcp_project_id} has an unsupported parent type: #{project_parent.type}." do
-        skip "Cannot determine corporate domain. Skipping check for corporate login credentials."
+        skip 'Cannot determine corporate domain. Skipping check for corporate login credentials.'
       end
     end
   end
 
   # Proceed with IAM checks only if org_domain was successfully determined
   if org_domain.nil?
-    describe "Corporate domain could not be determined." do
-      skip "Skipping IAM member checks as corporate domain is unknown."
+    describe 'Corporate domain could not be determined.' do
+      skip 'Skipping IAM member checks as corporate domain is unknown.'
     end
   else
     iam_bindings_cache.iam_binding_roles.each do |role|
@@ -132,7 +132,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
         # Skip service accounts
         next if member.to_s.end_with?('.gserviceaccount.com')
         # Skip allUsers and allAuthenticatedUsers
-        next if member.to_s == 'allUsers' || member.to_s == 'allAuthenticatedUsers'
+        next if %w[allUsers allAuthenticatedUsers].include?(member.to_s)
 
         describe "[#{gcp_project_id}] [Role:#{role}] Its member #{member}" do
           subject { member.to_s }
