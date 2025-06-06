@@ -32,7 +32,7 @@ sub_control_id = "#{control_id}.1"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   impact 'none'
 
-  title "[#{control_abbrev.upcase}] Ensure ‘Log_error_verbosity’ Database Flag for Cloud SQL PostgreSQL Instance Is Set to ‘DEFAULT’ or Stricter"
+  title "[#{control_abbrev.upcase}] Ensure 'Log_error_verbosity’ Database Flag for Cloud SQL PostgreSQL Instance Is Set to 'DEFAULT’ or Stricter"
 
   desc 'The log_error_verbosity flag controls the verbosity/details of messages logged. Valid values are:
         • TERSE
@@ -97,7 +97,7 @@ sub_control_id = "#{control_id}.2"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   impact 'none'
 
-  title "[#{control_abbrev.upcase}] Ensure that the ‘Log_connections’ database flag for cloud SQL PostgreSQL instance is set to ‘on’"
+  title "[#{control_abbrev.upcase}] Ensure that the 'Log_connections’ database flag for cloud SQL PostgreSQL instance is set to 'on’"
 
   desc 'Enabling the log_connections setting causes each attempted connection to the server to be logged, along with successful completion
         of client authentication. This parameter cannot be changed after the session starts.'
@@ -155,7 +155,7 @@ sub_control_id = "#{control_id}.3"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   impact 'none'
 
-  title "[#{control_abbrev.upcase}] Ensure that the ‘Log_disconnections’ database flag for cloud SQL PostgreSQL instance is set to ‘on’"
+  title "[#{control_abbrev.upcase}] Ensure that the 'Log_disconnections’ database flag for cloud SQL PostgreSQL instance is set to 'on’"
 
   desc 'Enabling the log_disconnections setting logs the end of each session, including the session duration.'
   desc 'rationale', "PostgreSQL does not log session details such as duration and session end by default. Enabling the log_disconnections
@@ -213,7 +213,7 @@ sub_control_id = "#{control_id}.4"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   impact 'none'
 
-  title "[#{control_abbrev.upcase}] Ensure ‘Log_statement’ database flag for cloud SQL PostgreSQL instance is set appropriately"
+  title "[#{control_abbrev.upcase}] Ensure 'Log_statement’ database flag for cloud SQL PostgreSQL instance is set appropriately"
 
   desc "The value of log_statement flag determined the SQL statements that are logged. Valid values are:
         • none
@@ -351,7 +351,7 @@ sub_control_id = "#{control_id}.5"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   impact 'none'
 
-  title "[#{control_abbrev.upcase}] Ensure that the ‘Log_min_messages’ flag for a cloud SQL PostgreSQL instance is set at minimum to 'warning'"
+  title "[#{control_abbrev.upcase}] Ensure that the 'Log_min_messages’ flag for a cloud SQL PostgreSQL instance is set at minimum to 'warning'"
 
   desc 'The log_min_messages flag defines the minimum message severity level that is considered as an error statement. Messages for error statements
         are logged with the SQL statement. Valid values include (from lowest to highest severity) DEBUG5, DEBUG4, DEBUG3, DEBUG2, DEBUG1, INFO, NOTICE,
@@ -411,8 +411,8 @@ sub_control_id = "#{control_id}.6"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   impact 'none'
 
-  title "[#{control_abbrev.upcase}] Ensure ‘Log_min_error_statement’ database flag for cloud SQL PostgreSQL instance
-  is set to ‘Error’ or stricter"
+  title "[#{control_abbrev.upcase}] Ensure 'Log_min_error_statement’ database flag for cloud SQL PostgreSQL instance
+  is set to 'Error’ or stricter"
 
   desc 'The log_min_error_statement flag defines the minimum message severity level that are considered as an error statement.
         Messages for error statements are logged with the SQL statement. Valid values include (from lowest to highest severity) DEBUG5,
@@ -474,7 +474,7 @@ sub_control_id = "#{control_id}.7"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   impact 'none'
 
-  title "[#{control_abbrev.upcase}] Ensure That the ‘Log_min_duration_statement’ Database Flag for Cloud SQL PostgreSQL
+  title "[#{control_abbrev.upcase}] Ensure That the 'Log_min_duration_statement’ Database Flag for Cloud SQL PostgreSQL
   Instance Is Set to '-1' (Disabled)"
 
   desc 'The log_min_duration_statement flag defines the minimum amount of execution time of a statement in milliseconds
