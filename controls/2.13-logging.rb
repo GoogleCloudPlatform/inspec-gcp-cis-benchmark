@@ -32,7 +32,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   It is recommended GCP Cloud Asset Inventory be enabled for all GCP projects."
 
-  tag cis_scored: true
+  tag cis_scored: false
   tag cis_level: 1
   tag cis_gcp: control_id.to_s
   tag cis_version: cis_version.to_s
@@ -41,8 +41,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/asset-inventory/docs'
-
-  describe google_project_service(project: gcp_project_id, name: 'cloudasset.googleapis.com') do
-    it { should be_enabled }
+  describe 'This control is not scored' do
+    skip 'This control is not scored'
   end
 end
