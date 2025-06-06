@@ -48,6 +48,16 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://cloud.google.com/iam/docs/service-accounts'
 
   service_account_cache.service_account_emails.each do |sa_email|
+    # Fetch the service account details to check its status
+    sa_details = service_account_cache.service_accounts_by_email[sa_email]
+
+    if sa_details&.disabled
+      describe "[#{gcp_project_id}] ServiceAccount [#{sa_email}] is disabled. This test is Not Applicable." do
+        skip "[#{gcp_project_id}] ServiceAccount [#{sa_email}] is disabled."
+      end
+      next # Skip to the next service account
+    end
+
     if service_account_cache.service_account_keys[sa_email].key_names.count > 1
       impact 'medium'
       describe "[#{gcp_project_id}] ServiceAccount Keys for #{sa_email} older than #{sa_key_older_than_seconds} seconds" do
