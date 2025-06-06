@@ -25,8 +25,8 @@ supports:
   - platform: gcp
 
 depends:
-  - name: inspec-gcp
-    url: https://github.com/inspec/inspec-gcp/archive/v1.11.135.tar.gz
+  - name: inspec-gcp-helpers
+    url: https://github.com/lxndrblz/inspec-gcp-helpers/archive/1.0.10.tar.gz
 inputs:
   # {{gcp_project_id}}
   # must be defined at runtime by the user
