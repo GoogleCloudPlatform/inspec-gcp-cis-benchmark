@@ -57,7 +57,7 @@ sub_control_id = "#{control_id}.2"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   impact 'none'
 
-  title "[#{control_abbrev.upcase}] Ensure ‘Skip_show_database’ database flag for cloud SQL MySQL instance is set to ‘On’"
+  title "[#{control_abbrev.upcase}] Ensure 'Skip_show_database’ database flag for cloud SQL MySQL instance is set to 'On’"
 
   desc 'It is recommended to set skip_show_database database flag for Cloud SQL Mysql instance to on'
   desc 'rationale', "skip_show_database database flag prevents people from using the SHOW DATABASES statement if they do not
@@ -116,7 +116,7 @@ sub_control_id = "#{control_id}.3"
 control "cis-gcp-#{sub_control_id}-#{control_abbrev}" do
   impact 'none'
 
-  title "[#{control_abbrev.upcase}] Ensure that the ‘Local_infile’ database flag for a cloud SQL MySQL instance is set to ‘off’"
+  title "[#{control_abbrev.upcase}] Ensure that the 'Local_infile’ database flag for a cloud SQL MySQL instance is set to 'off’"
 
   desc 'It is recommended to set the local_infile database flag for a Cloud SQL MySQL instance to off.'
   desc 'rationale', "The local_infile flag controls the server-side LOCAL capability for LOAD DATA statements. Depending on the
