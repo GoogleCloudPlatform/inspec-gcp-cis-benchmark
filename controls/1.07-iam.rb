@@ -48,15 +48,22 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://cloud.google.com/iam/docs/service-accounts'
 
   service_account_cache.service_account_emails.each do |sa_email|
-    if service_account_cache.service_account_keys[sa_email].key_names.count > 1
+    # First, get all user-managed keys for the current service account
+    user_managed_keys_for_sa = service_account_cache.service_account_keys[sa_email].where { key_type == 'USER_MANAGED' }
+
+    # Then, filter for only the enabled ones among them (where 'disabled' attribute is false)
+    enabled_user_managed_keys = user_managed_keys_for_sa.where { !disabled }
+
+    if enabled_user_managed_keys.count > 0
       impact 'medium'
-      describe "[#{gcp_project_id}] ServiceAccount Keys for #{sa_email} older than #{sa_key_older_than_seconds} seconds" do
-        subject { service_account_cache.service_account_keys[sa_email].where { (Time.now - sa_key_older_than_seconds > valid_after_time) } }
+      describe "[#{gcp_project_id}] Enabled user-managed ServiceAccount Keys for #{sa_email} older than #{sa_key_older_than_seconds} seconds" do
+        # Now, for the actual check: filter the *enabled* keys for those older than the specified time
+        subject { enabled_user_managed_keys.where { (Time.now - sa_key_older_than_seconds > valid_after_time) } }
         it { should_not exist }
       end
     else
-      describe "[#{gcp_project_id}] ServiceAccount [#{sa_email}] does not have user-managed keys. This test is Not Applicable." do
-        skip "[#{gcp_project_id}] ServiceAccount [#{sa_email}] does not have user-managed keys."
+      describe "[#{gcp_project_id}] ServiceAccount [#{sa_email}] does not have enabled user-managed keys. This test is Not Applicable." do
+        skip "[#{gcp_project_id}] ServiceAccount [#{sa_email}] does not have enabled user-managed keys."
       end
     end
   end
