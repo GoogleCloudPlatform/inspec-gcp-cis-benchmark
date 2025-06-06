@@ -39,11 +39,11 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://cloud.google.com/resource-manager/docs/organization-policy/restricting-service-accounts'
 
   # Use google_service_accounts instead of the custom cache.
-  google_service_accounts(project: gcp_project_id).service_account_emails.each do |sa_email|
+  google_service_accounts(project: gcp_project_id).service_account_emails.each do |service_account|
     # Use google_service_account_keys to get key types directly.
-    keys = google_service_account_keys(service_account: sa_email)
+    keys = google_service_account_keys(project: gcp_project_id, service_account: service_account)
 
-    describe "[#{gcp_project_id}] Service Account: #{sa_email}" do
+    describe "[#{gcp_project_id}] Service Account: #{service_account}" do
       subject { keys }
       it 'should not have user-managed keys' do
         expect(keys.key_types).to_not include('USER_MANAGED')
