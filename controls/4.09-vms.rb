@@ -47,13 +47,21 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   instances_found = false
   google_compute_zones(project: gcp_project_id).zone_names.each do |zone_name|
-    google_compute_instances(project: gcp_project_id, zone: zone_name).where { instance_name !~ /^gke-/ }.where(status: 'RUNNING').instance_names.each do |instance_name|
-      instances_found = true
-      describe "[#{gcp_project_id}] Instance: #{instance_name} in Zone: #{zone_name}" do
-        subject { google_compute_instance(project: gcp_project_id, zone: zone_name, name: instance_name) }
-        its('public_ip_configured?') { should be false }
+    google_compute_instances(project: gcp_project_id, zone: zone_name)
+      .where { instance_name !~ /^gke-/ }
+      .where(status: 'RUNNING')
+      .instance_names.each do |instance_name|
+        instances_found = true
+        describe "[#{gcp_project_id}] Instance: #{instance_name} in Zone: #{zone_name}" do
+          subject { google_compute_instance(project: gcp_project_id, zone: zone_name, name: instance_name) }
+          it 'should not have an external IP assigned' do
+            subject.network_interfaces.each do |iface|
+              has_external_ip = iface.access_configs&.any? { |ac| !ac.nat_ip.nil? && !ac.nat_ip.empty? }
+              expect(has_external_ip).to be_falsey
+            end
+          end
+        end
       end
-    end
   end
 
   unless instances_found
