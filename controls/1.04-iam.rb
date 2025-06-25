@@ -21,7 +21,7 @@ control_id = '1.4'
 control_abbrev = 'iam'
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
-  impact 'none'
+  impact 'medium'
 
   title "[#{control_abbrev.upcase}] Ensure that there are only GCP-managed service account keys for each service account"
   desc 'User managed service account should not have user managed keys.'
