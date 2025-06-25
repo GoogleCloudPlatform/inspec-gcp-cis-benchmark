@@ -54,11 +54,20 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
       skip "[#{gcp_project_id}] does not have BigQuery Datasets"
     end
   else
-    google_bigquery_datasets(project: gcp_project_id).ids.each do |dataset_name|
-      google_bigquery_tables(project: gcp_project_id, dataset: dataset_name.split(':').last).table_references.each do |table_reference|
-        describe "[#{gcp_project_id}] BigQuery Table #{table_reference.table_id} should use customer-managed encryption keys (CMEK)" do
-          subject { google_bigquery_table(project: gcp_project_id, dataset: dataset_name.split(':').last, name: table_reference.table_id).encryption_configuration }
-          its('kms_key_name') { should_not eq nil }
+    google_bigquery_datasets(project: gcp_project_id).ids.each do |dataset_full_id|
+      dataset_id = dataset_full_id.split(':', 2).last
+      tables = google_bigquery_tables(project: gcp_project_id, dataset: dataset_id).table_references
+
+      if tables.empty?
+        describe "[#{gcp_project_id}] BigQuery Dataset #{dataset_id} has no tables, this test is Not Applicable." do
+          skip "[#{gcp_project_id}] BigQuery Dataset #{dataset_id} has no tables"
+        end
+      else
+        tables.each do |table_reference|
+          describe "[#{gcp_project_id}] BigQuery Table #{table_reference.table_id} should use customer-managed encryption keys (CMEK)" do
+            subject { google_bigquery_table(project: gcp_project_id, dataset: dataset_id, name: table_reference.table_id).encryption_configuration }
+            its('kms_key_name') { should_not eq nil }
+          end
         end
       end
     end
