@@ -26,7 +26,7 @@ supports:
 
 depends:
   - name: inspec-gcp-helpers
-    url: https://github.com/lxndrblz/inspec-gcp-helpers/archive/1.0.10.tar.gz
+    url: https://github.com/lxndrblz/inspec-gcp-helpers/archive/1.0.11.tar.gz
 inputs:
   # {{gcp_project_id}}
   # must be defined at runtime by the user
