@@ -83,7 +83,7 @@ Test Summary: 166 successful, 7 failures, 7 skipped
 #### 🐳 Docker
 ```
 # pull inspec image
-$ docker pull chef/inspec:4.26.15
+$ docker pull chef/inspec:5.22.80
 ```
 
 ```
@@ -99,8 +99,9 @@ $ gcloud auth application-default login
 
 ```
 # create function for convenience
-$ function inspec-docker { docker run -it -e GOOGLE_AUTH_SUPPRESS_CREDENTIALS_WARNINGS=true --rm -v ~/.config:/root/.config -v $(pwd):/share chef/inspec:4.26.15 "$@"; }
-```
+
+$ function inspec-docker { docker run -it -e GOOGLE_AUTH_SUPPRESS_CREDENTIALS_WARNINGS=true --rm -v ~/.config:/root/.config -v $(pwd):/share chef/inspec:5.22.80 "$@"; }
+
 
 ```
 # scan a project with this profile, replace {{project-id}} with your project ID
