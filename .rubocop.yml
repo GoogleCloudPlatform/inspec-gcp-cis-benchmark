@@ -1,6 +1,7 @@
 ---
 AllCops:
-  TargetRubyVersion: 2.6.3p62
+  TargetRubyVersion: 3.1.6p260
+  NewCops: disable
   Exclude:
   - Gemfile
 

@@ -1,0 +1,29 @@
+{
+    "name": "InSpec Custom Controls Development",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "burtlo.inspec",
+                "misogi.ruby-rubocop",
+                "Shopify.ruby-lsp"
+            ],
+            // VS Code settings specific to this dev container
+            "settings": {
+                // Use the Ruby LSP as the default formatter
+                "[ruby]": {
+                    "editor.defaultFormatter": "Shopify.ruby-lsp",
+                    "editor.formatOnSave": true,
+                    "editor.tabSize": 2,
+                    "editor.insertSpaces": true
+                },
+                // Optional: Configure rdbg for debugging if you use it
+                "ruby_lsp.debug.rdbg.attachUrl": "tcp://localhost:1234",
+                "ruby_lsp.debug.rdbg.logOutput": true
+            }
+        }
+    },
+    "postCreateCommand": "bundle check || bundle install"
+}

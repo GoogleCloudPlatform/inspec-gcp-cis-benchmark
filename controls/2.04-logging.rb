@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title 'Ensure log metric filter and alerts exists for Project Ownership assignments/changes'
+title 'Ensure Log Metric Filter and Alerts Exist for Project Ownership Assignments/Changes'
 
 gcp_project_id = input('gcp_project_id')
 cis_version = input('cis_version')
@@ -23,22 +23,22 @@ control_abbrev = 'logging'
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 'low'
 
-  title "[#{control_abbrev.upcase}] Ensure log metric filter and alerts exists for Project Ownership assignments/changes"
+  title "[#{control_abbrev.upcase}] Ensure Log Metric Filter and Alerts Exist for Project Ownership Assignments/Changes"
 
-  desc "In order to prevent unnecessarily project ownership assignments to users/serviceaccounts and further misuses of project and resources, all roles/Owner assignments should be monitored.
+  desc "In order to prevent unnecessary project ownership assignments to users/service-accounts and further misuses of projects and resources, all roles/Owner assignments should be monitored.
 
-Members (users/Service-Accounts) with role assignment to primitive role roles/owner are Project Owners.
+  Members (users/Service-Accounts) with role assignment to primitive role roles/owner are Project Owners.
 
-Project Owner has all the privileges on a project it belongs to. These can be summarized as below:
+  Project Owner has all the privileges on a project it belongs to. These can be summarized as below:
 
-- All viewer permissions on All GCP Services part within the project
-- Permissions for actions that modify state of All GCP Services within the
-project
-- Manage roles and permissions for a project and all resources within the
-project
-- Set up billing for a project
+  - All viewer permissions on All GCP Services part within the project
+  - Permissions for actions that modify state of All GCP Services within the
+  project
+  - Manage roles and permissions for a project and all resources within the
+  project
+  - Set up billing for a project
 
-Granting owner role to a member (user/Service-Account) will allow members to modify the IAM policy. Therefore grant the owner role only if the member has a legitimate purpose to manage the IAM policy. This is because as project IAM policy contains sensitive access control data and having a minimal set of users manage it will simplify any auditing that you may have to do."
+  Granting owner role to a member (user/Service-Account) will allow members to modify the IAM policy. Therefore grant the owner role only if the member has a legitimate purpose to manage the IAM policy. This is because as project IAM policy contains sensitive access control data and having a minimal set of users manage it will simplify any auditing that you may have to do."
   desc 'rationale', "Project Ownership Having highest level of privileges on a project, to avoid misuse of project resources project ownership assignment/change actions mentioned should be monitored and alerted to concerned recipients.
 
 - Sending project ownership Invites

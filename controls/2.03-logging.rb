@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title 'Ensure that retention policies on log buckets are configured using Bucket Lock'
+title 'Ensure That Retention Policies on Cloud Storage Buckets Used for Exporting Logs Are Configured Using Bucket Lock'
 
 gcp_project_id = input('gcp_project_id')
 cis_version = input('cis_version')
@@ -23,15 +23,15 @@ control_abbrev = 'logging'
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 'low'
 
-  title "[#{control_abbrev.upcase}] Ensure that retention policies on log buckets are configured using Bucket Lock"
+  title "[#{control_abbrev.upcase}] Ensure That Retention Policies on Cloud Storage Buckets Used for Exporting Logs Are Configured Using Bucket Lock"
 
-  desc 'It is recommended to set up retention policies and configure Bucket Lock on all storage buckets that are used as log sinks.'
-  desc 'rationale', "Logs can be exported by creating one or more sinks that include a log filter and a destination. As Stackdriver Logging receives new log entries, they are compared against each sink. If a log entry matches a sink's filter, then a copy of the log entry is written to the destination.
+  desc 'Enabling retention policies on log buckets will protect logs stored in cloud storage buckets from being overwritten or accidentally deleted. It is recommended to set up retention policies and configure Bucket Lock on all storage buckets that are used as log sinks.'
+  desc 'rationale', "Logs can be exported by creating one or more sinks that include a log filter and a destination. As Cloud Logging receives new log entries, they are compared against each sink. If a log entry matches a sink's filter, then a copy of the log entry is written to the destination.
 
-Sinks can be configured to export logs in storage buckets. It is recommended to configure a data retention policy for these cloud storage buckets and to lock the data retention policy; thus permanently preventing the policy from being reduced or removed. This way, if the system is ever compromised by an attacker or a malicious insider who wants to cover their tracks, the activity logs are definitely preserved for forensics and security investigations."
+  Sinks can be configured to export logs in storage buckets. It is recommended to configure a data retention policy for these cloud storage buckets and to lock the data retention policy; thus permanently preventing the policy from being reduced or removed. This way, if the system is ever compromised by an attacker or a malicious insider who wants to cover their tracks, the activity logs are definitely preserved for forensics and security investigations."
 
   tag cis_scored: true
-  tag cis_level: 1
+  tag cis_level: 2
   tag cis_gcp: control_id.to_s
   tag cis_version: cis_version.to_s
   tag project: gcp_project_id.to_s
@@ -39,6 +39,7 @@ Sinks can be configured to export logs in storage buckets. It is recommended to 
 
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/storage/docs/bucket-lock'
+  ref 'GCP Docs', url: 'https://cloud.google.com/storage/docs/using-bucket-lock'
 
   if google_logging_project_sinks(project: gcp_project_id).where(destination: /storage.googleapis.com/).destinations.empty?
     describe "[#{gcp_project_id}] does not have logging sinks configured." do

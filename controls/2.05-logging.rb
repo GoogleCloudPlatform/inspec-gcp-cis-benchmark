@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title 'Ensure log metric filter and alerts exists for Audit Configuration Changes'
+title 'Ensure That the Log Metric Filter and Alerts Exist for Audit Configuration Changes'
 
 gcp_project_id = input('gcp_project_id')
 cis_version = input('cis_version')
@@ -23,10 +23,14 @@ control_abbrev = 'logging'
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 'low'
 
-  title "[#{control_abbrev.upcase}] Ensure log metric filter and alerts exists for Audit Configuration Changes"
+  title "[#{control_abbrev.upcase}] Ensure That the Log Metric Filter and Alerts Exist for Audit Configuration Changes"
 
-  desc "Google Cloud Platform services write audit log entries to Admin Activity and Data Access logs to helps answer the questions of 'who did what, where, and when?' within Google Cloud Platform projects. Cloud Audit logging records information includes the identity of the API caller, the time of the API call, the source IP address of the API caller, the request parameters, and the response elements returned by the GCP services. Cloud Audit logging provides a history of AWS API calls for an account, including API calls made via the Console, SDKs, command line tools, and other GCP services."
-  desc 'rationale', 'Admin activity and Data access logs produced by Cloud audit logging enables security analysis, resource change tracking, and compliance auditing. Configuring metric filter and alerts for Audit Configuration Changes ensures recommended state of audit configuration and hence, all the activities in project are audit-able at any point in time.'
+  desc "Google Cloud Platform (GCP) services write audit log entries to the Admin Activity and Data Access logs to help answer the questions of, 'who did what, where, and when?' within GCP projects.
+
+  Cloud audit logging records information includes the identity of the API caller, the time of the API call, the source IP address of the API caller, the request parameters, and the response elements returned by GCP services. Cloud audit logging provides a history of GCP API calls for an account, including API calls made via the console, SDKs, command-line tools, and other GCP services."
+  desc 'rationale', 'Admin activity and data access logs produced by cloud audit logging enable security analysis, resource change tracking, and compliance auditing.
+
+  Configuring the metric filter and alerts for audit configuration changes ensures the recommended state of audit configuration is maintained so that all activities in the project are audit-able at any point in time.'
 
   tag cis_scored: true
   tag cis_level: 1

@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title 'Ensure that Cloud SQL database instance requires all incoming connections to use SSL'
+title 'Ensure That the Cloud SQL Database Instance Requires All Incoming Connections To Use SSL'
 
 gcp_project_id = input('gcp_project_id')
 cis_version = input('cis_version')
@@ -26,10 +26,10 @@ sql_instance_names = sql_cache.instance_names
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 'high'
 
-  title "[#{control_abbrev.upcase}] Ensure that Cloud SQL database instance requires all incoming connections to use SSL"
+  title "[#{control_abbrev.upcase}] Ensure That the Cloud SQL Database Instance Requires All Incoming Connections To Use SSL"
 
   desc 'It is recommended to enforce all incoming connections to SQL database instance to use SSL.'
-  desc 'rationale', 'SQL database connections if successfully trapped (MITM); can reveal sensitive data like credentials, database queries, query outputs etc. For security, it is recommended to always use SSL encryption when connecting to your instance. This recommendation is applicable for Postgresql, MySql generation 1 and MySql generation 2 Instances.'
+  desc 'rationale', 'SQL database connections if successfully trapped (MITM); can reveal sensitive data like credentials, database queries, query outputs etc. For security, it is recommended to always use SSL encryption when connecting to your instance. This recommendation is applicable for Postgresql, MySql generation 1, MySql generation 2 and SQL Server 2017 instances.'
 
   tag cis_scored: true
   tag cis_level: 1
@@ -39,7 +39,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   tag nist: %w[SC-1 SC-8]
 
   ref 'CIS Benchmark', url: cis_url.to_s
-  ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/configure-ssl-instance'
+  ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/configure-ssl-instance/'
 
   if sql_instance_names.empty?
     impact 'none'
