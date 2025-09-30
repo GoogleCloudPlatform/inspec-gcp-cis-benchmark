@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM cincproject/auditor:5.22.80
+FROM cincproject/auditor:5.23.6
 
 COPY . /share/.
 
