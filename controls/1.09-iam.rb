@@ -37,7 +37,10 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   tag nist: ['AC-3']
 
   ref 'CIS Benchmark', url: cis_url.to_s
-  ref 'GCP Docs', url: 'https://cloud.google.com/kms/docs/key-rotation#frequency_of_key_rotation'
+  ref 'GCP Docs', url: 'https://cloud.google.com/sdk/gcloud/reference/kms/keys/remove-iam-policy-binding'
+  ref 'GCP Docs', url: 'https://cloud.google.com/sdk/gcloud/reference/kms/keys/set-iam-policy'
+  ref 'GCP Docs', url: 'https://cloud.google.com/sdk/gcloud/reference/kms/keys/get-iam-policy'
+  ref 'GCP Docs', url: 'https://cloud.google.com/kms/docs/object-hierarchy#key_resource_id'
 
   # Get all "normal" regions and add dual/multi regions
   locations = google_compute_regions(project: gcp_project_id).region_names

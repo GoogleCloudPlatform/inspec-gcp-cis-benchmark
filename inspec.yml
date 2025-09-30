@@ -13,21 +13,20 @@
 # limitations under the License.
 
 name: inspec-gcp-cis-benchmark
-title: "InSpec GCP CIS 1.2 Benchmark"
+title: "InSpec GCP CIS 4.0 Benchmark"
 maintainer: "Google Cloud Platform"
 copyright: "(c) 2022, Google, Inc."
 copyright_email: "copyright@google.com"
 license: "Apache-2.0"
-summary: "Inspec Google Cloud Platform Center for Internet Security Benchmark v1.2 Profile"
-version: 1.2.0-0
+summary: "Inspec Google Cloud Platform Center for Internet Security Benchmark v4.0 Profile"
+version: 4.0.0-0
 
 supports:
   - platform: gcp
 
 depends:
   - name: inspec-gcp-helpers
-    url: https://github.com/GoogleCloudPlatform/inspec-gcp-helpers/archive/1.0.9.tar.gz
-
+    url: https://github.com/lxndrblz/inspec-gcp-helpers/archive/1.0.11.tar.gz
 inputs:
   # {{gcp_project_id}}
   # must be defined at runtime by the user
@@ -39,7 +38,7 @@ inputs:
 
   - name: cis_version
     description: "The short version of the GCP CIS Benchmark"
-    value: "1.2"
+    value: "4.0"
     type: String
 
   - name: cis_url

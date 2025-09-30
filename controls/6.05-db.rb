@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title 'Database Server should accept connections only from trusted Network(s)/IP(s) and restrict access from the world'
+title 'Ensure That Cloud SQL Database Instances Do Not Implicitly Whitelist All Public IP Addresses'
 
 gcp_project_id = input('gcp_project_id')
 cis_version = input('cis_version')
@@ -26,10 +26,12 @@ sql_instance_names = sql_cache.instance_names
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 'medium'
 
-  title "[#{control_abbrev.upcase}] Database Server should accept connections only from trusted Network(s)/IP(s) and restrict access from the world"
+  title "[#{control_abbrev.upcase}] Ensure That Cloud SQL Database Instances Do Not Implicitly Whitelist All Public IP Addresses"
 
-  desc 'Database Server should accept connections only from trusted Network(s)/IP(s) and restrict access from the world.'
-  desc 'rationale', 'To minimize attack surface on a Database server instance, only trusted/known and required IP(s) should be white-listed to connect to it.'
+  desc 'Database Server should accept connections only from trusted Network(s)/IP(s) and restrict access from public IP addresses.'
+  desc 'rationale', 'To minimize attack surface on a Database server instance, only trusted/known and required IP(s) should be
+        white-listed to connect to it. An authorized network should not have IPs/networks configured to \'0.0.0.0/0\' which will allow
+        access to the instance from anywhere in the world. Note that authorized networks apply only to instances with public IPs.'
 
   tag cis_scored: true
   tag cis_level: 1
@@ -40,6 +42,9 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/mysql/configure-ip'
+  ref 'GCP Docs', url: 'https://console.cloud.google.com/iam-admin/orgpolicies/sql-restrictAuthorizedNetworks'
+  ref 'GCP Docs', url: 'https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints'
+  ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/mysql/connection-org-policy'
 
   if sql_instance_names.empty?
     impact 'none'

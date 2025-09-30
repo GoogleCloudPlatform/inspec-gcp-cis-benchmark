@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title 'Ensure API keys are restricted to only APIs that application needs access'
+title 'Ensure API Keys Are Restricted to Only APIs That Application Needs Access'
 
 gcp_project_id = input('gcp_project_id')
 cis_version = input('cis_version')
@@ -38,7 +38,7 @@ In order to reduce attack surface by providing least privileges, API-Keys can be
 restricted to use (call) only APIs required by an application."
 
   tag cis_scored: false
-  tag cis_level: 1
+  tag cis_level: 2
   tag cis_gcp: control_id.to_s
   tag cis_version: cis_version.to_s
   tag project: gcp_project_id.to_s

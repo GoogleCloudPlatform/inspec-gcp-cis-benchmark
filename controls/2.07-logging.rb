@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title 'Ensure log metric filter and alerts exists for VPC Network Firewall rule changes'
+title 'Ensure That the Log Metric Filter and Alerts Exist for VPC Network Firewall Rule Changes'
 
 gcp_project_id = input('gcp_project_id')
 cis_version = input('cis_version')
@@ -23,13 +23,13 @@ control_abbrev = 'logging'
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 'low'
 
-  title "[#{control_abbrev.upcase}] Ensure log metric filter and alerts exists for VPC Network Firewall rule changes"
+  title "[#{control_abbrev.upcase}] Ensure That the Log Metric Filter and Alerts Exist for VPC Network Firewall Rule Changes"
 
-  desc 'It is recommended that a metric filter and alarm be established for VPC Network Firewall rule changes.'
-  desc 'rationale', 'Monitoring for Create or Update firewall rule events gives insight network access changes and may reduce the time it takes to detect suspicious activity.'
+  desc 'It is recommended that a metric filter and alarm be established for Virtual Private Cloud (VPC) Network Firewall rule changes.'
+  desc 'rationale', 'Monitoring for Create or Update Firewall rule events gives insight to network access changes and may reduce the time it takes to detect suspicious activity.'
 
   tag cis_scored: true
-  tag cis_level: 1
+  tag cis_level: 2
   tag cis_gcp: control_id.to_s
   tag cis_version: cis_version.to_s
   tag project: gcp_project_id.to_s

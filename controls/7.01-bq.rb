@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title 'Ensure that BigQuery datasets are not anonymously or publicly accessible'
+title 'Ensure That BigQuery datasets are not anonymously or publicly accessible'
 
 gcp_project_id = input('gcp_project_id')
 cis_version = input('cis_version')
@@ -23,7 +23,7 @@ control_abbrev = 'storage'
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 'high'
 
-  title "[#{control_abbrev.upcase}] Ensure that BigQuery datasets are not anonymously or publicly accessible"
+  title "[#{control_abbrev.upcase}] Ensure That BigQuery datasets are not anonymously or publicly accessible"
 
   desc 'It is recommended that the IAM policy on BigQuery datasets does not allow anonymous and/or public access.'
   desc 'rationale', 'Granting permissions to allUsers or allAuthenticatedUsers allows anyone to access the dataset. Such access might not be desirable if sensitive data is being stored in the dataset. Therefore, ensure that anonymous and/or public access to a dataset is not allowed.'
@@ -36,8 +36,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   tag nist: ['AC-3']
 
   ref 'CIS Benchmark', url: cis_url.to_s
-  ref 'GCP Docs', url: 'https://cloud.google.com/storage/docs/access-control/iam-reference'
-  ref 'GCP Docs', url: 'https://cloud.google.com/storage/docs/access-control/making-data-public'
+  ref 'GCP Docs', url: 'https://cloud.google.com/bigquery/docs/dataset-access-controls'
 
   if google_bigquery_datasets(project: gcp_project_id).ids.empty?
     impact 'none'

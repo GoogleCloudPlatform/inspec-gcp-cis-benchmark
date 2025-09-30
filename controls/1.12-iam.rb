@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title 'Ensure API keys are not created for a project'
+title 'Ensure API Keys Only Exist for Active Services'
 
 gcp_project_id = input('gcp_project_id')
 cis_version = input('cis_version')
@@ -23,17 +23,13 @@ control_abbrev = 'iam'
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 'medium'
 
-  title "[#{control_abbrev.upcase}] Ensure API keys are not created for a project"
+  title "[#{control_abbrev.upcase}] Ensure API Keys Only Exist for Active Services"
 
-  desc 'Keys are insecure because they can be viewed publicly, such as from within a browser, or they can be accessed on a device where the key resides. It is recommended to use standard authentication flow instead.'
-  desc 'rationale', "Security risks involved in using API-Keys are below:
-
-- API keys are a simple encrypted strings
-- API keys do not identify the user or the application making the API request
-- API keys are typically accessible to clients, making it easy to discover and steal an API key
-
-To avoid security risk by using API keys, it is recommended to use standard authentication
-flow instead."
+  desc 'API Keys should only be used for services in cases where other authentication methods are unavailable. Unused keys with their permissions in tact may still exist within a project. Keys are insecure because they can be viewed publicly, such as from within a browser, or they can be accessed on a device where the key resides. It is recommended to use standard authentication flow instead.'
+  desc 'rationale', "To avoid the security risk in using API keys, it is recommended to use standard authentication flow instead. Security risks involved in using API-Keys appear below:
+  - API keys are simple encrypted strings
+  - API keys do not identify the user or the application making the API request
+  - API keys are typically accessible to clients, making it easy to discover and steal an API key"
 
   tag cis_scored: false
   tag cis_level: 2
@@ -44,7 +40,9 @@ flow instead."
 
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/docs/authentication/api-keys'
-
+  ref 'GCP Docs', url: 'https://cloud.google.com/sdk/gcloud/reference/services/api-keys/list'
+  ref 'GCP Docs', url: 'https://cloud.google.com/docs/authentication'
+  ref 'GCP Docs', url: 'https://cloud.google.com/sdk/gcloud/reference/services/api-keys/delete'
   describe 'This control is not scored' do
     skip 'This control is not scored'
   end

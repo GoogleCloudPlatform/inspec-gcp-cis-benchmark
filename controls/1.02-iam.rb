@@ -1,3 +1,5 @@
+# controls/1.02-iam.rb (assuming 1.02 is the actual file name)
+
 # Copyright 2019 The inspec-gcp-cis-benchmark Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,18 +19,17 @@ title 'Ensure that multi-factor authentication is enabled for all non-service ac
 gcp_project_id = input('gcp_project_id')
 cis_version = input('cis_version')
 cis_url = input('cis_url')
-control_id = '1.2'
+control_id = '1.2' # This should match the actual control ID
 control_abbrev = 'iam'
 
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 'medium'
-
   title "[#{control_abbrev.upcase}] Ensure that multi-factor authentication is enabled for all non-service accounts"
-
   desc 'Setup multi-factor authentication for Google Cloud Platform accounts.'
-  desc 'rationale', 'Multi-factor authentication requires more than one mechanism to authenticate a user. This secures your logins from attackers exploiting stolen or weak credentials.'
+  desc 'rationale', 'Multi-factor authentication requires more than one mechanism to authenticate a user. This secures user logins from attackers exploiting stolen or weak credentials.'
+  desc 'notes', 'This control generally requires manual verification because InSpec does not directly query user MFA status from Cloud Identity or Google Workspace. Verification steps are provided in the references.'
 
-  tag cis_scored: false
+  tag cis_scored: false # Keep this as false
   tag cis_level: 1
   tag cis_gcp: control_id.to_s
   tag cis_version: cis_version.to_s
@@ -37,6 +38,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/solutions/securing-gcp-account-u2f'
+  ref 'GCP Docs', url: 'https://support.google.com/accounts/answer/185839'
 
   describe 'This control is not scored' do
     skip 'This control is not scored'

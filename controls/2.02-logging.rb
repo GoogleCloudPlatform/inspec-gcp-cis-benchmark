@@ -25,8 +25,8 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   title "[#{control_abbrev.upcase}] Ensure that sinks are configured for all Log entries"
 
-  desc 'It is recommended to create sink which will export copies of all the log entries.'
-  desc 'rationale', 'Log entries are held in Stackdriver Logging for a limited time known as the retention period. After that, the entries are deleted. To keep log entries longer, sink can export them outside of Stackdriver Logging. Exporting involves writing a filter that selects the log entries to export, and choosing a destination in Cloud Storage, BigQuery, or Cloud Pub/Sub.  The filter and destination are held in an object called a sink. To ensure all log entries are exported using sink ensure that there is no filter configured for a sink. Sinks can be created in projects, organizations, folders, and billing accounts.'
+  desc 'It is recommended to create a sink that will export copies of all the log entries. This can help aggregate logs from multiple projects and export them to a Security Information and Event Management (SIEM).'
+  desc 'rationale', 'Log entries are held in Cloud Logging. To aggregate logs, export them to a SIEM. To keep them longer, it is recommended to set up a log sink. Exporting involves writing a filter that selects the log entries to export, and choosing a destination in Cloud Storage, BigQuery, or Cloud Pub/Sub. The filter and destination are held in an object called a sink. To ensure all log entries are exported to sinks, ensure that there is no filter configured for a sink. Sinks can be created in projects, organizations, folders, and billing accounts.'
 
   tag cis_scored: true
   tag cis_level: 1
@@ -41,6 +41,8 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   ref 'GCP Docs', url: 'https://cloud.google.com/logging/docs/export/'
   ref 'GCP Docs', url: 'https://cloud.google.com/logging/docs/export/using_exported_logs'
   ref 'GCP Docs', url: 'https://cloud.google.com/logging/docs/export/configure_export_v2'
+  ref 'GCP Docs', url: 'https://cloud.google.com/logging/docs/export/aggregated_exports'
+  ref 'GCP Docs', url: 'https://cloud.google.com/sdk/gcloud/reference/beta/logging/sinks/list'
 
   empty_filter_sinks = []
   google_logging_project_sinks(project: gcp_project_id).names.each do |sink_name|

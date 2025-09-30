@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title 'Ensure legacy networks do not exists for a project'
+title 'Ensure Legacy Networks Do Not Exist for Older Projects'
 
 gcp_project_id = input('gcp_project_id')
 cis_version = input('cis_version')
@@ -23,10 +23,10 @@ control_abbrev = 'networking'
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 'medium'
 
-  title "[#{control_abbrev.upcase}] Ensure legacy networks does not exists for a project"
+  title "[#{control_abbrev.upcase}] Ensure Legacy Networks Do Not Exist for Older Projects"
 
-  desc 'In order to prevent use of legacy networks, a project should not have a legacy network configured.'
-  desc 'rationale', 'Legacy networks have a single network IPv4 prefix range and a single gateway IP address for the whole network. The network is global in scope and spans all cloud regions. You cannot create subnetworks in a legacy network or switch from legacy to auto or custom subnet networks. Legacy networks can thus have an impact for high network traffic projects and subject to the single point of contention or failure.'
+  desc 'In order to prevent use of legacy networks, a project should not have a legacy network configured. As of now, Legacy Networks are gradually being phased out, and you can no longer create projects with them. This recommendation is to check older projects to ensure that they are not using Legacy Networks.'
+  desc 'rationale', 'Legacy networks have a single network IPv4 prefix range and a single gateway IP address for the whole network. The network is global in scope and spans all cloud regions. Subnetworks cannot be created in a legacy network and are unable to switch from legacy to auto or custom subnet networks. Legacy networks can have an impact for high network traffic projects and are subject to a single point of contention or failure.'
 
   tag cis_scored: true
   tag cis_level: 1
@@ -37,7 +37,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/compute/docs/networking#creating_a_legacy_network'
-  ref 'GCP Docs', url: 'https://cloud.google.com/compute/docs/networking#legacy_non-subnet_network'
+  ref 'GCP Docs', url: 'https://cloud.google.com/vpc/docs/using-legacy#deleting_a_legacy_network'
 
   network_names = google_compute_networks(project: gcp_project_id).network_names
 

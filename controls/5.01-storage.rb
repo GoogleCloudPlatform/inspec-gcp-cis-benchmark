@@ -25,8 +25,8 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   title "[#{control_abbrev.upcase}] Ensure that Cloud Storage bucket is not anonymously or publicly accessible"
 
-  desc 'It is recommended that IAM policy on Cloud Storage bucket does not allows anonymous and/or public access.'
-  desc 'rationale', 'Allowing anonymous and/or public access grants permissions to anyone to access bucket content. Such access might not be desired if you are storing any sensitive data. Hence, ensure that anonymous and/or public access to a bucket is not allowed.'
+  desc 'It is recommended that IAM policy on Cloud Storage bucket does not allows anonymous or public access.'
+  desc 'rationale', 'Allowing anonymous or public access grants permissions to anyone to access bucket content. Such access might not be desired if you are storing any sensitive data. Hence, ensure that anonymous or public access to a bucket is not allowed.'
 
   tag cis_scored: true
   tag cis_level: 1
@@ -38,6 +38,7 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/storage/docs/access-control/iam-reference'
   ref 'GCP Docs', url: 'https://cloud.google.com/storage/docs/access-control/making-data-public'
+  ref 'GCP Docs', url: 'https://cloud.google.com/storage/docs/gsutil/commands/iam'
 
   storage_buckets = google_storage_buckets(project: gcp_project_id).bucket_names
 
