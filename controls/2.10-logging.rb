@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title 'Ensure log metric filter and alerts exists for Cloud Storage IAM permission changes'
+title 'Ensure That the Log Metric Filter and Alerts Exist for Cloud Storage IAM Permission Changes'
 
 gcp_project_id = input('gcp_project_id')
 cis_version = input('cis_version')
@@ -23,13 +23,13 @@ control_abbrev = 'logging'
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 'low'
 
-  title "[#{control_abbrev.upcase}] Ensure log metric filter and alerts exists for Cloud Storage IAM permission changes"
+  title "[#{control_abbrev.upcase}] Ensure That the Log Metric Filter and Alerts Exist for Cloud Storage IAM Permission Changes"
 
   desc 'It is recommended that a metric filter and alarm be established for Cloud Storage Bucket IAM changes.'
-  desc 'rationale', 'Monitoring changes to Cloud Storage bucket permissions may reduce time to detect and correct permissions on sensitive Cloud Storage bucket and objects inside the bucket.'
+  desc 'rationale', 'Monitoring changes to cloud storage bucket permissions may reduce the time needed to detect and correct permissions on sensitive cloud storage buckets and objects inside the bucket.'
 
   tag cis_scored: true
-  tag cis_level: 1
+  tag cis_level: 2
   tag cis_gcp: control_id.to_s
   tag cis_version: cis_version.to_s
   tag project: gcp_project_id.to_s

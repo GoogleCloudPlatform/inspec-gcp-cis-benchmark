@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-title 'Ensure that Cloud SQL database instances are configured with automated backups'
+title 'Ensure That Cloud SQL Database Instances Are Configured With Automated Backups'
 
 gcp_project_id = input('gcp_project_id')
 cis_version = input('cis_version')
@@ -25,12 +25,13 @@ sql_cache = CloudSQLCache(project: gcp_project_id)
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
   impact 'medium'
 
-  title "[#{control_abbrev.upcase}] Ensure that Cloud SQL database instances are configured with automated backups"
+  title "[#{control_abbrev.upcase}] Ensure That Cloud SQL Database Instances Are Configured With Automated Backups"
 
   desc 'It is recommended to have all SQL database instances set to enable automated backups.'
-  desc 'rationale', 'Backups provide a way to restore a Cloud SQL instance to recover lost data or recover from a problem
-                     with that instance. Automated backups need to be set for any instance that contains data that should
-                     be protected from loss or damage'
+  desc 'rationale', 'Backups provide a way to restore a Cloud SQL instance to recover lost data or recover from a
+        problem with that instance. Automated backups need to be set for any instance that contains data that should be
+        protected from loss or damage. This recommendation is applicable for SQL Server, PostgreSql, MySql generation 1
+        and MySql generation 2 instances.'
 
   tag cis_scored: true
   tag cis_level: 1
@@ -41,7 +42,11 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/mysql/backup-recovery/backups'
+  ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/backup-recovery/backups'
+  ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/sqlserver/backup-recovery/backups'
+  ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/mysql/backup-recovery/backing-up'
   ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/postgres/backup-recovery/backing-up'
+  ref 'GCP Docs', url: 'https://cloud.google.com/sql/docs/sqlserver/backup-recovery/backing-up'
 
   if sql_cache.instance_names.empty?
     impact 'none'

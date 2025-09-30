@@ -27,9 +27,8 @@ control "cis-gcp-#{control_id}-#{control_abbrev}" do
 
   title "[#{control_abbrev.upcase}] Ensure that ServiceAccount has no Admin privileges."
 
-  desc "A service account is a special Google account that belongs to your application or a VM, instead of to an individual end user. Your application uses the service account to call the Google API of a service, so that the users aren't directly involved. It's recommended not to use admin access for ServiceAccount."
-  desc 'rationale', "Service accounts represent service-level security of the Resources (application or a VM) which can be determined by the roles assigned to it. Enrolling ServiceAccount with Admin rights gives full access to assigned application or a VM, ServiceAccount Access holder can perform critical actions like delete, update change settings etc. without the intervention of user, so It's recommended not to have Admin rights.
-This recommendation is applicable only for User-Managed user created service account (Service account with nomenclature: SERVICE_ACCOUNT_NAME@PROJECT_ID.iam.gserviceaccount.com)."
+  desc "A service account is a special Google account that belongs to an application or a VM, instead of to an individual end-user. The application uses the service account to call the service's Google API so that users aren't directly involved. It's recommended not to use admin access for ServiceAccount."
+  desc 'rationale', "Service accounts represent service-level security of the Resources (application or a VM) which can be determined by the roles assigned to it. Enrolling ServiceAccount with Admin rights gives full access to an assigned application or a VM. A ServiceAccount Access holder can perform critical actions like delete, update change settings, etc. without user intervention. For this reason, it's recommended that service accounts not have Admin rights."
 
   tag cis_scored: true
   tag cis_level: 1

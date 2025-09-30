@@ -23,7 +23,7 @@ Continue on to the next step to start setting up your tutorial.
 
 ## Installing InSpec
 
-InSpec is distributed as a Docker image. All you need to do is pull the image from the repository and create a function to run Inspec:
+InSpec is distributed as a Docker image. All you need to do is pull the image from the repository and create a function to run InSpec:
 
 ```bash
 docker pull chef/inspec:5.22.80

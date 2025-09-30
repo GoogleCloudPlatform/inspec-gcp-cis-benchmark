@@ -20,25 +20,12 @@ cis_url = input('cis_url')
 control_id = '1.4'
 control_abbrev = 'iam'
 
-service_account_cache = ServiceAccountCache(project: gcp_project_id)
-
 control "cis-gcp-#{control_id}-#{control_abbrev}" do
-  impact 'none'
+  impact 'medium'
 
   title "[#{control_abbrev.upcase}] Ensure that there are only GCP-managed service account keys for each service account"
-
   desc 'User managed service account should not have user managed keys.'
-  desc 'rationale', 'Anyone who has access to the keys will be able to access resources through the service account. GCP-managed keys are used by Cloud Platform services such as App Engine and Compute Engine. These keys cannot be downloaded. Google will keep the keys and automatically rotate them on an approximately weekly basis. User-managed keys are created, downloadable, and managed by users. They expire 10 years from creation.
-
-For user-managed keys, user have to take ownership of key management activities which includes:
-- Key storage
-- Key distribution
-- Key revocation
-- Key rotation
-- Protecting the keys from unauthorized users
-- Key recovery
-
-Even after owners precaution, keys can be easily leaked by common development malpractices like checking keys into the source code or leaving them in Downloads directory, or accidentally leaving them on support blogs/channels.  It is recommended to prevent use of User-managed service account keys.'
+  desc 'rationale', 'Anyone who has access to the keys will be able to access resources through the service account. GCP-managed keys are used by Cloud Platform services such as App Engine and Compute Engine. These keys cannot be downloaded. Google will keep the keys and automatically rotate them on an approximately weekly basis. User-managed keys are created, downloadable, and managed by users. They expire 10 years from creation.  For user-managed keys, user have to take ownership of key management activities which includes: - Key storage - Key distribution - Key revocation - Key rotation - Protecting the keys from unauthorized users - Key recovery  Even after owners precaution, keys can be easily leaked by common development malpractices like checking keys into the source code or leaving them in Downloads directory, or accidentally leaving them on support blogs/channels.  It is recommended to prevent use of User-managed service account keys.'
 
   tag cis_scored: true
   tag cis_level: 1
@@ -49,17 +36,17 @@ Even after owners precaution, keys can be easily leaked by common development ma
 
   ref 'CIS Benchmark', url: cis_url.to_s
   ref 'GCP Docs', url: 'https://cloud.google.com/iam/docs/understanding-service-accounts#managing_service_account_keys'
+  ref 'GCP Docs', url: 'https://cloud.google.com/resource-manager/docs/organization-policy/restricting-service-accounts'
 
-  service_account_cache.service_account_emails.each do |sa_email|
-    if service_account_cache.service_account_keys[sa_email].key_names.count > 1
-      impact 'medium'
-      describe "[#{gcp_project_id}] Service Account: #{sa_email}" do
-        subject { service_account_cache.service_account_keys[sa_email] }
-        its('key_types') { should_not include 'USER_MANAGED' }
-      end
-    else
-      describe "[#{gcp_project_id}] ServiceAccount [#{sa_email}] does not have user-managed keys. This test is Not Applicable." do
-        skip "[#{gcp_project_id}] ServiceAccount [#{sa_email}] does not have user-managed keys."
+  # Use google_service_accounts instead of the custom cache.
+  google_service_accounts(project: gcp_project_id).service_account_emails.each do |service_account|
+    # Use google_service_account_keys to get key types directly.
+    keys = google_service_account_keys(project: gcp_project_id, service_account: service_account)
+
+    describe "[#{gcp_project_id}] Service Account: #{service_account}" do
+      subject { keys }
+      it 'should not have user-managed keys' do
+        expect(keys.key_types).to_not include('USER_MANAGED')
       end
     end
   end
