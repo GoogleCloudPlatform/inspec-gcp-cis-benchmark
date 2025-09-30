@@ -56,8 +56,9 @@ Use this Cloud Shell Walkthrough for a hands-on example.
 #### 💎 Ruby Gem
 
 ```
-# install inspec
-$ gem install inspec-bin -v 4.26.15 --no-document --quiet
+#install inspec
+$ gem install inspec-bin -v 6.8.24 --no-document --quiet
+
 ```
 
 ```
