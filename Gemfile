@@ -14,4 +14,4 @@
 
 source 'https://rubygems.org'
 
-gem 'inspec', '~> 6.8', '>= 6.8.24'
+gem 'inspec', '~> 7.0', '>= 7.0.95'
