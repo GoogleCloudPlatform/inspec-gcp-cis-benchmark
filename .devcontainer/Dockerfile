@@ -1,4 +1,4 @@
-FROM cincproject/auditor:6.8.24
+FROM cincproject/auditor:7.0.95
 
 RUN apt-get update && \
     apt-get install -y \
