@@ -81,8 +81,9 @@ steps:
 
 - id: 'Store json Report'
   waitFor: ['Test Compliance']
-  name: gcr.io/cloud-builders/gsutil
+  name: gcr.io/cloud-builders/gcloud
   args:
+    - storage
     - cp
     - /workspace/cis_report.json
     - gs://${_REPORTS_BUCKET}/cis_report-${BUILD_ID}.json
